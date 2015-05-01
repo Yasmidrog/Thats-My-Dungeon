@@ -1,0 +1,46 @@
+/*
+ * Did by Whizzpered. 
+ * All code is mine.
+ */
+package game.world;
+
+import main.utils.Textures;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+
+/**
+ *
+ * @author Юрий
+ */
+public class Block {
+
+    public static int size = 64;
+    public static Block[] block;
+    public Image sprite;
+
+    public static void setBlocks() {
+        block = new Block[128];
+        for (int i = 0; i < block.length; i++) {
+            block[i] = new Block();
+        }
+        
+        
+        initSprites();
+    }
+
+    public static void initSprites() {
+        block[1].sprite = Textures.image("floor/some.png").getScaledCopy(2f);
+        block[2].sprite = Textures.image("floor/wall.png").getScaledCopy(2f);
+        
+        for(int i = 1; i < 2; i ++){
+            block[i].sprite.setFilter(GL11.GL_NEAREST);
+        }
+    }
+
+    public void render(Graphics g, int x, int y) {
+        if (sprite != null) {
+            sprite.draw(x*size, y*size);
+        }
+    }
+}
