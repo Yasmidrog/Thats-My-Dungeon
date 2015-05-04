@@ -6,8 +6,9 @@
 package game.object;
 
 import game.creature.Creature;
+import game.creature.Raider;
 import game.main.scene.Dungeon;
-import static game.main.scene.Dungeon.sprite;
+import static game.main.scene.Dungeon.sprites;
 import static game.main.shell.Game.font;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -81,7 +82,7 @@ public class Bullet extends game.creature.Entity {
                 hit = true;
             }
         } else {
-            for (Creature raid : dung.getCreatures()) {
+            for (Raider raid : dung.getRaiders()) {
                 if (raid != owner && !raid.dead) {
                     if (Math.abs(x - raid.x) < raid.getWidth() / 2 && Math.abs(y - raid.y) < raid.getHeight() / 2) {
                         raid.hp -= owner.dmg;
@@ -96,7 +97,7 @@ public class Bullet extends game.creature.Entity {
         if (hit) {
             font.drawString((int) (x), (int) (y - tim), "-" + damage, Color.red);
         } else if (type == 1) {
-            sprite.get(0).draw((int) x, (int) y);
+            sprites.get(0).draw((int) x, (int) y);
         }
     }
 

@@ -59,9 +59,14 @@ public class Creature extends Entity {
         maxhp = (int) args[2];
         hp = maxhp;
         dmg = (int) args[3];
+        setTimer("dying", 1000);
     }
 
     public void initImages() {
+
+    }
+
+    public void initAbils() {
 
     }
 
@@ -69,6 +74,21 @@ public class Creature extends Entity {
     public void tick() {
         baseTick();
         move();
+    }
+
+    public void die() {
+        if (getTimer("dying").is()) {
+            //dung.report(nick + " left the game!", 500);
+            //dung.objects.add(new Modifier((int) x, (int) y, 1));
+            dung.raiders[index] = null;
+        }
+        if (dung.player.focus == this) {
+            dung.player.focus = null;
+        }
+    }
+
+    public void deadtick() {
+
     }
 
     public void move() {
@@ -119,6 +139,7 @@ public class Creature extends Entity {
         y += vy;
         if (hp <= 0) {
             dead = true;
+            getTimer("dying").start();
         }
         if (x < 0) {
             x = 0;
@@ -146,5 +167,9 @@ public class Creature extends Entity {
     public void render(Graphics g) {
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
+    }
+
+    public void deadrender(Graphics g) {
+        dung.sprites.get(2).draw((int) x - getWidth()/2, (int) y - 32);
     }
 }

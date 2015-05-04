@@ -5,10 +5,15 @@
  */
 package game.main.scene;
 
+import game.object.Flag;
 import game.creature.*;
+import game.main.gui.Chat;
 import game.object.Bullet;
 import game.world.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.utils.Textures;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -25,28 +30,32 @@ public class Dungeon extends Scene {
     Floor floor = new Floor();
     public Player player;
     public Flag flag = new Flag();
-    public Creature[] creatures = new Creature[50];
+    public Chat chat = new Chat();
+    public Raider[] raiders = new Raider[25];
     public int camx, camy;
 
-    public static ArrayList<Image> sprite = new ArrayList<>();
+    public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
 
-    public Creature[] getCreatures() {
+    public Raider[] getRaiders() {
         int i;
-        for (i = 0; i < creatures.length; i++) {
-            if (creatures[i] == null) {
+        for (i = 0; i < raiders.length; i++) {
+            if (raiders[i] == null) {
                 break;
             }
         }
-        Creature[] u = new Creature[i];
-        System.arraycopy(creatures, 0, u, 0, i);
+        Raider[] u = new Raider[i];
+        System.arraycopy(raiders, 0, u, 0, i);
 
         return u;
     }
 
     public Creature[] creaturesYSort() {
-        Creature[] u;
-        u = getCreatures();
+        Creature[] u = new Creature[getRaiders().length + 1];
+        u[0] = player;
+        for (int i = 1; i < u.length; i++) {
+            u[i] = getRaiders()[i - 1];
+        }
         for (int i = 0; i < u.length - 1; i++) {
             for (int j = i + 1; j < u.length; j++) {
                 if (u[i].y > u[j].y) {
@@ -74,10 +83,10 @@ public class Dungeon extends Scene {
         return floor.h * Block.size;
     }
 
-    public void add(Creature cr) {
-        for (int i = 0; i < creatures.length; i++) {
-            if (creatures[i] == null) {
-                creatures[i] = cr;
+    public void add(Raider cr) {
+        for (int i = 0; i < raiders.length; i++) {
+            if (raiders[i] == null) {
+                raiders[i] = cr;
                 cr.index = i;
                 break;
             }
@@ -88,26 +97,41 @@ public class Dungeon extends Scene {
     public void init() {
         Block.setBlocks();
         floor.init();
+        try {
+            chat.init(this);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initSprites();
         initCreatures();
     }
 
     public void initSprites() {
-        sprite.add(Textures.image("particles/sparkle3.png"));
-        sprite.add(Textures.image("gui/agro.png").getScaledCopy(2f));
-        sprite.get(1).setFilter(GL11.GL_NEAREST);
-        sprite.add(Textures.image("particles/rip.png"));
-        sprite.add(Textures.image("particles/flag.png").getScaledCopy(2f));
-        sprite.get(3).setFilter(GL11.GL_NEAREST);
+        sprites.add(Textures.image("particles/sparkle3.png"));
+        sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/rip.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));
+
+        for (Image im : sprites) {
+            im.setFilter(GL11.GL_NEAREST);
+        }
     }
 
     public void initCreatures() {
-        spawn(new Player(), 120.0, 120.0, 60, 9);
-        player = (Player) creatures[0];
-        spawn(new RaiderArc(), 120.0, 240.0, 90, 1);
+        player();
+        spawn(new RaiderArc(), 120.0, 240.0, 9, 1);
+        spawn(new RaiderPriest(), 240.0, 240.0, 9, 1);
+        spawn(new RaiderWar(), 240.0, 360.0, 20, 1);
     }
 
-    public void spawn(Creature cr, Object... args) {
+    public void player() {
+        player = new Player();
+        player.dung = this;
+        player.init(120.0, 120.0, 90, 9);
+        player.initImages();
+    }
+
+    public void spawn(Raider cr, Object... args) {
         cr.dung = this;
         cr.init(args);
         cr.initImages();
@@ -116,10 +140,14 @@ public class Dungeon extends Scene {
 
     @Override
     public void tick() {
-        for (Creature cr : getCreatures()) {
-            cr.tick();
+        for (Raider cr : getRaiders()) {
+            if (cr.dead) {
+                cr.deadtick();
+            } else {
+                cr.tick();
+            }
         }
-
+        player.tick();
         for (Bullet b : getBul()) {
             if (b != null) {
                 b.tick(this);
@@ -136,25 +164,26 @@ public class Dungeon extends Scene {
         double msx = player.x + mx * 2 - w - 8;
         double msy = player.y + my * 2 - h;
 
-        if (Mouse.isButtonDown(0)) {
-            if (player.focus != null) {
-                player.focus.focused = false;
-                player.focus = null;
-            }
-            for (Creature cr : getCreatures()) {
-                if (!cr.dead && cr != player) {
-                    if (Math.abs(cr.x - msx) < 80 && Math.abs(cr.y - msy) < 80) {
-                        flag.done = true;
-                        player.focussmth((Raider) cr);
-                        return;
+        if (player.agr == null) {
+            if (Mouse.isButtonDown(0)) {
+                if (player.focus != null) {
+                    player.focus.focused = false;
+                    player.focus = null;
+                }
+                for (Raider cr : getRaiders()) {
+                    if (!cr.dead) {
+                        if (Math.abs(cr.x - msx) < 80 && Math.abs(cr.y - msy) < 80) {
+                            flag.done = true;
+                            player.focussmth((Raider) cr);
+                            return;
+                        }
                     }
                 }
+                player.ex = msx;
+                player.ey = msy;
+                flag.set(player.ex, player.ey);
             }
-            player.ex = msx;
-            player.ey = msy;
-            flag.set(player.ex, player.ey);
         }
-
     }
 
     @Override
@@ -165,7 +194,11 @@ public class Dungeon extends Scene {
 
         floor.render(g);
         for (Creature cr : creaturesYSort()) {
-            cr.render(g);
+            if (cr.dead) {
+                cr.deadrender(g);
+            } else {
+                cr.render(g);
+            }
         }
         for (Bullet b : getBul()) {
             if (b != null) {
@@ -173,10 +206,10 @@ public class Dungeon extends Scene {
             }
         }
         if (flag != null) {
-            flag.render(g, sprite.get(3));
+            flag.render(g, sprites.get(3));
         }
         GL11.glTranslatef(-px, -py, 0);
-        
+
         player.healthbar.render(g, 20, 20, player.hp);
     }
 }

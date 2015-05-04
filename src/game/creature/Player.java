@@ -19,6 +19,7 @@ import org.newdawn.slick.SlickException;
 public class Player extends Creature {
 
     public Bar healthbar;
+    public RaiderWar agr;
     
     @Override
     public void initImages() {

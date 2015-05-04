@@ -5,6 +5,7 @@
  */
 package game.creature;
 
+import game.main.Ability;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
 import java.util.Random;
@@ -23,6 +24,7 @@ public class Raider extends Creature {
 
     public Random r = new Random();
     public Animation bar;
+    public Ability[] abils;
 
     @Override
     public int getWidth() {
@@ -45,7 +47,9 @@ public class Raider extends Creature {
         enemy = true;
         focus = dung.player;
         setTimer("kick", 120);
+        setTimer("chat", 600);
         speed = 3;
+        initAbils();
         //setNick();
         //dung.report(nick + " joined the game!", 500);
     }
@@ -53,8 +57,37 @@ public class Raider extends Creature {
     @Override
     public void tick() {
         super.tick();
-
+        for (Ability ab : abils) {
+            ab.tick();
+        }
+        useAbility();
         battle();
+    }
+
+    @Override
+    public void deadtick() {
+        checkTimers();
+        //chating();
+        die();
+    }
+
+    public void useAbility() {
+        for (Ability ab : abils) {
+            if (ab.ready()) {
+                ab.action();
+            }
+        }
+    }
+
+    public void emulateChat() {
+        if (getTimer("chat").is()) {
+            if (!dead) {
+                dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], "Cop"+index);
+            } else {
+                dung.chat.add(dung.chat.rage[r.nextInt(dung.chat.rage.length)], "Coppa"+index);
+            }
+            getTimer("chat").start();
+        }
     }
 
     @Override

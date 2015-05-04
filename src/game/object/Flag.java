@@ -3,7 +3,7 @@
  * This program is proprietary software: decompiling, reverse engineering and
  * sharing of that code are denied.
  */
-package game.creature;
+package game.object;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,6 +17,10 @@ public class Flag {
     public double x, y;
     public boolean done;
 
+    public Flag() {
+        done = true;
+    }
+    
     public void set(double x, double y) {
         done = false;
         this.x = x;
