@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.main.gui;
 
@@ -15,12 +16,12 @@ import org.newdawn.slick.Graphics;
  *
  * @author Yew_Mentzaki
  */
-public abstract class SwitchButton extends Button{
+public abstract class SwitchButton extends Button {
 
     public boolean value;
 
     public SwitchButton(int x, int y, int w, String text, boolean value) {
-        super(x, y, w, text, value?Color.green:Color.red);
+        super(x, y, w, text, value ? Color.green : Color.red);
         this.value = value;
     }
 
@@ -56,9 +57,12 @@ public abstract class SwitchButton extends Button{
     }
 
     @Override
-    public void click(){
+    public void click() {
         value = !value;
-        if(value)color = new Color(0, 1f, 0);
-        else color = new Color(1f, 0, 0);
+        if (value) {
+            color = new Color(0, 1f, 0);
+        } else {
+            color = new Color(1f, 0, 0);
+        }
     }
 }

@@ -1,12 +1,14 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.creature;
 
 import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
+import game.object.Bullet;
 import java.util.ArrayList;
 import main.utils.Timer;
 import org.newdawn.slick.Color;
@@ -19,8 +21,8 @@ import org.newdawn.slick.Graphics;
 public class Creature extends Entity {
 
     public double ex, ey;
-    public int hp, maxhp, dmg, index, range;
-    public boolean dead, ranged;
+    public int hp, maxhp, dmg, index, range, dmgDistance, speed;
+    public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public Creature focus;
     public Dungeon dung;
@@ -72,11 +74,11 @@ public class Creature extends Entity {
     public void move() {
         if (focus != null) {
             double dist = distance(x, y, focus.x, focus.y);
-            int damageDistance = range + getHeight() / 2 + focus.getWidth() / 2;
-            if (dist > damageDistance) {
+            dmgDistance = range + getHeight() / 2 + focus.getWidth() / 2;
+            if (dist >= dmgDistance) {
                 double angle = Math.atan2(focus.y - y, focus.x - x);
-                ex = (int) (focus.x - Math.cos(angle) * damageDistance);
-                ey = (int) (focus.y - Math.sin(angle) * damageDistance);
+                ex = (int) (focus.x - Math.cos(angle) * dmgDistance);
+                ey = (int) (focus.y - Math.sin(angle) * dmgDistance);
             }
         }
         if (ex != 0 && ey != 0) {
@@ -90,16 +92,29 @@ public class Creature extends Entity {
             } else {
                 side = Side.BACK;
             }
-            vx = Math.cos(angle) * 3;
-            vy = Math.sin(angle) * 3;
-            if (Math.abs(ex - x) < 3 && Math.abs(ey - y) < 3) {
-                vx = 0;
-                vy = 0;
+            vx = Math.cos(angle) * speed;
+            vy = Math.sin(angle) * speed;
+            if (Math.abs(ex - x) < speed && Math.abs(ey - y) < speed) {
+                reset();
             }
         }
     }
 
+    public void reset() {
+        vx = 0;
+        vy = 0;
+    }
+
+    public void battle() {
+        double dist = Math.sqrt(Math.pow(x - focus.x, 2) + Math.pow(y - focus.y, 2));
+        if (dist - 2 * speed <= dmgDistance && getTimer("kick").is()) {
+            dung.bullets.add(new Bullet((int) x, (int) y, focus, this));
+            getTimer("kick").start();
+        }
+    }
+
     public void baseTick() {
+        checkTimers();
         x += vx;
         y += vy;
         if (hp <= 0) {
@@ -120,7 +135,11 @@ public class Creature extends Entity {
     }
 
     public void checkTimers() {
-
+        for (Timer tim : timers) {
+            if (!tim.is()) {
+                tim.tick();
+            }
+        }
     }
 
     @Override

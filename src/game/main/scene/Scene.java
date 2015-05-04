@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.main.scene;
 
@@ -15,9 +16,9 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Scene {
-    
+
     ArrayList<Button> buttons = new ArrayList<>();
-    
+
     public static Image[] sprite;
     //public Player player;
 
@@ -32,5 +33,5 @@ public class Scene {
     public void render(Graphics g) {
 
     }
-    
+
 }

@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package main.utils;
 
@@ -18,12 +19,11 @@ public class Nick {
 
     public ArrayList<String> nicks = new ArrayList<String>();
     Random r = new Random();
-    
-    
+
     public void init() throws FileNotFoundException {
         Scanner scan = new Scanner(new File("res/text/nicknames.txt"));
-        String [] nick = scan.nextLine().split(" ");
-        for(String s : nick){
+        String[] nick = scan.nextLine().split(" ");
+        for (String s : nick) {
             nicks.add(s);
         }
     }

@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.world;
 

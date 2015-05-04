@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.main.gui;
 
@@ -14,9 +15,10 @@ import org.newdawn.slick.Graphics;
 
 /**
  *
- * @author Юрий
+ * @author Whizzpered
  */
 public abstract class Button {
+
     Game game = new Game();
     int x, y, w, wp = 1;
     String text;

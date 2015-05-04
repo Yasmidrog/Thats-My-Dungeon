@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.main.sprite;
 
@@ -28,9 +29,9 @@ public class Sprite {
         if (back == null) {
             back = Textures.image(s + "back.png").getScaledCopy(2f);
             back.setFilter(GL11.GL_NEAREST);
-            front =Textures.image(s + "front.png").getScaledCopy(2f);
+            front = Textures.image(s + "front.png").getScaledCopy(2f);
             front.setFilter(GL11.GL_NEAREST);
-            left =Textures.image(s + "left.png").getScaledCopy(2f);
+            left = Textures.image(s + "left.png").getScaledCopy(2f);
             left.setFilter(GL11.GL_NEAREST);
             right = Textures.image(s + "right.png").getScaledCopy(2f);
             right.setFilter(GL11.GL_NEAREST);

@@ -1,12 +1,13 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.main.shell;
 
 /**
  *
- * @author Юрий Whizzpered
+ * @author Whizzpered
  */
 import game.main.scene.*;
 import java.awt.Font;
@@ -42,15 +43,13 @@ public class Game extends BasicGame {
     public static Scene currScene = menu;
     public static Dungeon dungeon;
     public static TrueTypeFont font, chatfont;
-    
-    
 
     public static AppGameContainer app;
 
     public Game() {
         super("");
     }
-    
+
     public static void exit() {
         times++;
         File cfg = new File("conf.cfg");

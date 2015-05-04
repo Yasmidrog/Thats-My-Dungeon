@@ -5,26 +5,25 @@
  */
 package game.creature;
 
-import org.newdawn.slick.Graphics;
+import game.main.sprite.Sprite;
 
 /**
  *
  * @author Whizzpered
  */
-public abstract class Entity {
+public class RaiderArc extends Raider {
 
-    public double x, y, vx, vy;
+    @Override
+    public void initImages() {
+        super.initImages();
+        sprite = new Sprite("arc/");
+    }
 
+    @Override
     public void init(Object... args) {
-
-    }
-
-    public void tick() {
-
-    }
-
-    public void render(Graphics g) {
-
+        super.init(args);
+        ranged = true;
+        range = 200;
     }
 
 }

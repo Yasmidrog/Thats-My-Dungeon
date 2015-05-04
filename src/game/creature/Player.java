@@ -1,13 +1,14 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.creature;
 
+import game.main.gui.Bar;
 import game.main.sprite.Sprite;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
@@ -17,34 +18,50 @@ import org.newdawn.slick.SlickException;
  */
 public class Player extends Creature {
 
+    public Bar healthbar;
+    
     @Override
     public void initImages() {
         sprite = new Sprite("warrior/");
-        //healthbar = new Bar(maxhp, "Bar.png", "health.png");
+        healthbar = new Bar(maxhp, "Bar.png", "health.png");
     }
 
     @Override
     public void init(Object... args) {
         super.init(args);
+        speed = 2;
         ranged = false;
         range = getWidth() / 4;
+        setTimer("kick", 200);
     }
 
+    @Override
     public void reset() {
-        ex = 0;
-        ey = 0;
-        vx = 0;
-        vy = 0;
-        dung.flag = null;
+        super.reset();
+        dung.flag.done = true;
     }
 
     @Override
     public void tick() {
         super.tick();
+        if (focus != null) {
+            battle();
+        }
+    }
 
-        double dist = Math.sqrt(Math.pow(x - ex, 2) + Math.pow(y - ey, 2));
-        if (dist < 6) {
-            reset();
+    public void focussmth(Raider r) {
+        if (focus != null) {
+            focus.focused = false;
+            focus = null;
+        }
+        focus = r;
+        focus.focused = true;
+    }
+
+    public void unfocus() {
+        if (focus != null) {
+            focus.focused = false;
+            focus = null;
         }
     }
 

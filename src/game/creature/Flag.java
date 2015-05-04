@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.creature;
 
@@ -14,13 +15,17 @@ import org.newdawn.slick.Image;
 public class Flag {
 
     public double x, y;
+    public boolean done;
 
-    public Flag(double x, double y) {
+    public void set(double x, double y) {
+        done = false;
         this.x = x;
         this.y = y;
     }
 
     public void render(Graphics g, Image spr) {
-        spr.draw((int) x, (int) y);
+        if (!done) {
+            spr.draw((int) x, (int) y);
+        }
     }
 }

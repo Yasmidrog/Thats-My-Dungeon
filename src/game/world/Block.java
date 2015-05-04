@@ -1,6 +1,7 @@
-/*
- * Did by Whizzpered. 
- * All code is mine.
+/* Copyright (C) 2015, SHeart.  All rights reserved.
+ * ______________________________________________________________________________
+ * This program is proprietary software: decompiling, reverse engineering and
+ * sharing of that code are denied.
  */
 package game.world;
 
@@ -15,7 +16,7 @@ import org.newdawn.slick.Image;
  */
 public class Block {
 
-    public static int size = 64;
+    public static int size = 48;
     public static Block[] block;
     public Image sprite;
 
@@ -24,23 +25,22 @@ public class Block {
         for (int i = 0; i < block.length; i++) {
             block[i] = new Block();
         }
-        
-        
+
         initSprites();
     }
 
     public static void initSprites() {
-        block[1].sprite = Textures.image("floor/some.png").getScaledCopy(2f);
-        block[2].sprite = Textures.image("floor/wall.png").getScaledCopy(2f);
-        
-        for(int i = 1; i < 2; i ++){
+        block[1].sprite = Textures.image("floor/some.png");
+        block[2].sprite = Textures.image("floor/wall.png");
+
+        for (int i = 1; i < 2; i++) {
             block[i].sprite.setFilter(GL11.GL_NEAREST);
         }
     }
 
     public void render(Graphics g, int x, int y) {
         if (sprite != null) {
-            sprite.draw(x*size, y*size);
+            sprite.draw(x * size, y * size);
         }
     }
 }
