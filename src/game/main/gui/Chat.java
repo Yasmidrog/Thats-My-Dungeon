@@ -20,7 +20,7 @@ import org.newdawn.slick.Graphics;
  * @author Whizzpered
  */
 public class Chat {
-    
+
     public Dungeon dung;
     public String[] dialog, rage;
     public String[] alrdy = new String[7];
@@ -47,21 +47,23 @@ public class Chat {
                 alrdynick[i - 1] = alrdynick[i];
                 alrdy[i - 1] = alrdy[i];
             }
-            alrdy[6] = s;
-            alrdynick[6] = nick + ": ";
+            alrdy[alrdynick.length-2] = s;
+            alrdynick[alrdynick.length-2] = nick + ": ";
         }
     }
 
     public void render(Graphics g) {
-        int x = Display.getWidth() - 400;
-        int y = Display.getHeight() - 152;
+        int x = Display.getWidth() - 450;
+        int y = Display.getHeight() - 137;
         g.setColor(new Color(0, 0, 0, 128));
-        g.fillRect(x, y, 400, 152);
+        g.fillRect(x, y, 450, 137);
         for (int i = 0; i < alrdy.length; i++) {
             if (alrdy[i] != null && alrdynick[i] != null) {
                 chatfont.drawString(x + 5, y + 8 + i * 20 - 7, alrdynick[i], Color.orange);
-                chatfont.drawString(x + 5 + (alrdynick[i].length() * 10) + 4, y + 8 + i * 20 - 7, alrdy[i], Color.yellow);
+                chatfont.drawString(x + 5 + (alrdynick[i].length() * 10) + 4, y + 8 + i * 20 - 7,
+                                                     alrdy[i].replaceAll("\n",""), Color.yellow);
             }
         }
     }
 }
+

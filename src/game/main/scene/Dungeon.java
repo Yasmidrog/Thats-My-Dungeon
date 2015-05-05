@@ -203,7 +203,6 @@ public class Dungeon extends Scene {
                 waveTimer.start();
             }
         }
-        
         for (Raider cr : getRaiders()) {
             if (cr.dead) {
                 cr.deadtick();
@@ -212,19 +211,22 @@ public class Dungeon extends Scene {
             }
             cr.emulateChat();
         }
+        /*
         for (Advert ad : ads) {
             if (ad != null) {
                 ad.tick();
             }
         }
-
+        */
         player.tick();
         for (Bullet b : getBul()) {
             if (b != null) {
                 b.tick(this);
             }
         }
-        mousing();
+        try {
+            mousing();
+        }catch (IllegalStateException ignored){}
     }
 
     public void mousing() {
