@@ -24,8 +24,8 @@ public abstract class Ability {
     public char number;
     public int radius, d = -10;
     public int x, y;
-    
-     public boolean ready() {
+
+    public boolean ready() {
         return cd.is();
     }
 
@@ -95,7 +95,6 @@ public abstract class Ability {
             g.drawRect(x, y, 64, 64);
             g.drawRect(x + 1, y + 1, 62, 62);
         }
-
     }
 
     public void render(Graphics g) {

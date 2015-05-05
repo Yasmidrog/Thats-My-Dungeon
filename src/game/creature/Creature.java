@@ -24,6 +24,7 @@ public class Creature extends Entity {
     public int hp, maxhp, dmg, index, range, dmgDistance, speed;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
+    public String nick;
     public Creature focus;
     public Dungeon dung;
     public Side side = Side.FRONT;
@@ -77,14 +78,7 @@ public class Creature extends Entity {
     }
 
     public void die() {
-        if (getTimer("dying").is()) {
-            //dung.report(nick + " left the game!", 500);
-            //dung.objects.add(new Modifier((int) x, (int) y, 1));
-            dung.raiders[index] = null;
-        }
-        if (dung.player.focus == this) {
-            dung.player.focus = null;
-        }
+        
     }
 
     public void deadtick() {
@@ -127,7 +121,7 @@ public class Creature extends Entity {
 
     public void battle() {
         double dist = Math.sqrt(Math.pow(x - focus.x, 2) + Math.pow(y - focus.y, 2));
-        if (dist - 2 * speed <= dmgDistance && getTimer("kick").is()) {
+        if (dist - 2 * speed < dmgDistance && getTimer("kick").is()) {
             dung.bullets.add(new Bullet((int) x, (int) y, focus, this));
             getTimer("kick").start();
         }
@@ -139,6 +133,7 @@ public class Creature extends Entity {
         y += vy;
         if (hp <= 0) {
             dead = true;
+            focused = false;
             getTimer("dying").start();
         }
         if (x < 0) {

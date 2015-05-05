@@ -30,7 +30,7 @@ public class RaiderPriest extends Raider {
 
     @Override
     public void initAbils() {
-        abils[0] = new Ability(800, false, 0) {
+        abils[0] = new Ability(1200, false, 0) {
             @Override
             public void action() {
                 for (Raider raid : dung.getRaiders()) {

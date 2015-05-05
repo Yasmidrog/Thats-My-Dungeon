@@ -9,7 +9,9 @@ import game.main.gui.Bar;
 import game.main.sprite.Sprite;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.utils.Textures;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -20,10 +22,12 @@ public class Player extends Creature {
 
     public Bar healthbar;
     public RaiderWar agr;
+    public Image ded;
     
     @Override
     public void initImages() {
         sprite = new Sprite("warrior/");
+        ded = Textures.image("warrior/dead.png");
         healthbar = new Bar(maxhp, "Bar.png", "health.png");
     }
 
@@ -73,5 +77,10 @@ public class Player extends Creature {
         } catch (SlickException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @Override
+    public void deadrender(Graphics g) {
+        ded.draw((int) x - getWidth()/2, (int) y - 32);
     }
 }

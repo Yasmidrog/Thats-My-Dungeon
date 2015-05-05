@@ -37,14 +37,17 @@ public class RaiderArc extends Raider {
         abils[0] = new Ability(800, false, 0) {
             @Override
             public void action() {
-                 System.out.println("STEADE");
-                double dist = Math.sqrt(Math.pow(x - dung.player.x, 2) + Math.pow(y - dung.player.y, 2));
+                tripleShoot();
+                start();
+            }
+
+            private void tripleShoot() {
+                double dist = Math.sqrt(Math.pow(thisClass.x - dung.player.x, 2) + Math.pow(thisClass.y - dung.player.y, 2));
                 Player pl = dung.player;
                 if (dist < range + 96 && cd.is()) {
-                    dung.bullets.add(new Bullet((int) x, (int) y, pl, thisClass));
-                    dung.bullets.add(new Bullet((int) (x - 10), (int) y - 10, pl, thisClass));
-                    dung.bullets.add(new Bullet((int) (x - 20), (int) y - 20, pl, thisClass));
-                    start();
+                    dung.bullets.add(new Bullet((int) thisClass.x, (int) thisClass.y, pl, thisClass));
+                    dung.bullets.add(new Bullet((int) (thisClass.x - 10), (int) thisClass.y - 10, pl, thisClass));
+                    dung.bullets.add(new Bullet((int) (thisClass.x - 20), (int) thisClass.y - 20, pl, thisClass));
                 }
             }
         };

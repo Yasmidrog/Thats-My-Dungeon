@@ -25,6 +25,7 @@ public class Raider extends Creature {
     public Random r = new Random();
     public Animation bar;
     public Ability[] abils;
+    
 
     @Override
     public int getWidth() {
@@ -42,14 +43,28 @@ public class Raider extends Creature {
     }
 
     @Override
+    public void die() {
+        if (getTimer("dying").is()) {
+            dung.report(nick + " left the game!", 500);
+            //dung.objects.add(new Modifier((int) x, (int) y, 1));
+            dung.raiders[index] = null;
+        }
+        if (dung.player.focus == this) {
+            dung.player.focus = null;
+        }
+    }
+    
+    @Override
     public void init(Object... args) {
         super.init(args);
         enemy = true;
         focus = dung.player;
+        speed = 3;
+        nick = "cop"+index;
         setTimer("kick", 120);
         setTimer("chat", 600);
-        speed = 3;
         initAbils();
+        dung.report(nick + " joined the game!", 500);   
         //setNick();
         //dung.report(nick + " joined the game!", 500);
     }

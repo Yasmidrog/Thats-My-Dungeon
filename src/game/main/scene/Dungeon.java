@@ -7,13 +7,18 @@ package game.main.scene;
 
 import game.object.Flag;
 import game.creature.*;
+import game.main.gui.Advert;
 import game.main.gui.Chat;
 import game.object.Bullet;
 import game.world.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 import main.utils.Textures;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -35,6 +40,7 @@ public class Dungeon extends Scene {
     public int camx, camy;
 
     public static ArrayList<Image> sprites = new ArrayList<>();
+    public ArrayList<Advert> ads = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
 
     public Raider[] getRaiders() {
@@ -68,6 +74,18 @@ public class Dungeon extends Scene {
         return u;
     }
 
+    public Advert[] getAds() {
+        Advert[] u = new Advert[ads.size()];
+
+        try {
+            for (int i = 0; i < ads.size(); i++) {
+                u[i] = ads.get(i);
+            }
+        } catch (Exception e) {
+        }
+        return u;
+    }
+
     public Bullet[] getBul() {
         Bullet[] u = new Bullet[bullets.size()];
 
@@ -91,6 +109,10 @@ public class Dungeon extends Scene {
                 break;
             }
         }
+    }
+
+    public void report(String s, int dur) {
+        ads.add(new Advert(s, this, dur));
     }
 
     @Override
@@ -133,20 +155,69 @@ public class Dungeon extends Scene {
 
     public void spawn(Raider cr, Object... args) {
         cr.dung = this;
+        add(cr);
         cr.init(args);
         cr.initImages();
-        add(cr);
     }
 
+    Timer waveTimer = new Timer(1000, new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Random r = new Random();
+            if (waveTimerSeconds > 0) {
+                waveTimerSeconds--;
+                if (waveTimerSeconds > 0) {
+                    report(waveTimerSeconds + " seconds left!", 97);
+                } else {
+                    report("Let's go!", 300);
+                }
+            } else {
+                for (int i = 0; i < 4; i++) {
+                    switch (r.nextInt(3)) {
+                        case 0:
+                            spawn(new RaiderArc(), 600.0, 1200.0, 20, 4);
+                            break;
+                        case 1:
+                            spawn(new RaiderPriest(), 600.0, 1200.0, 20, 4);
+                            break;
+                        case 2:
+                            spawn(new RaiderWar(), 600.0, 1200.0, 40, 3);
+                            break;
+                    }
+
+                }
+                waveTimer.stop();
+            }
+        }
+    }
+    );
+
+    int waveTimerSeconds = 10;
+    
     @Override
     public void tick() {
+        if (getRaiders().length == 0) {
+            if (!waveTimer.isRunning()) {
+                waveTimerSeconds = 10;
+                waveTimer.start();
+            }
+        }
+        
         for (Raider cr : getRaiders()) {
             if (cr.dead) {
                 cr.deadtick();
             } else {
                 cr.tick();
             }
+            cr.emulateChat();
         }
+        for (Advert ad : ads) {
+            if (ad != null) {
+                ad.tick();
+            }
+        }
+
         player.tick();
         for (Bullet b : getBul()) {
             if (b != null) {
@@ -211,5 +282,9 @@ public class Dungeon extends Scene {
         GL11.glTranslatef(-px, -py, 0);
 
         player.healthbar.render(g, 20, 20, player.hp);
+        chat.render(g);
+        for (int i = 0; i < getAds().length; i++) {
+            getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
+        }
     }
 }
