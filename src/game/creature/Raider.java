@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.utils.Textures;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
@@ -131,6 +132,10 @@ public class Raider extends Creature {
                 bar.draw((int) x - getWidth() / 2, (int) y - getHeight() / 3);
             }
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+            g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
+            g.fillRect((float)x-48, (float)y-52, 96, 7);
+            g.setColor(org.newdawn.slick.Color.red);
+            g.fillRect((float)x-48, (float)y-52, 96 * hp / maxhp,7);
         } catch (SlickException ex) {
             Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
         }

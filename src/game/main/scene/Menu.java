@@ -107,8 +107,8 @@ public class Menu extends Scene {
             for (Button but : buttons) {
                 but.render(g);
             }
-            for (Name name : name) {
-                name.render(g);
+            for (Name n: name) {
+                n.render(g);
             }
             //player.render(g);
         }
