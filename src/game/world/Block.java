@@ -25,8 +25,6 @@ public class Block {
         for (int i = 0; i < block.length; i++) {
             block[i] = new Block();
         }
-
-        initSprites();
     }
 
     public static void initSprites() {

@@ -11,6 +11,7 @@ import game.main.gui.Advert;
 import game.main.gui.Chat;
 import game.object.Bullet;
 import game.world.*;
+import static game.world.Block.initSprites;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -101,16 +102,6 @@ public class Dungeon extends Scene {
         return floor.h * Block.size;
     }
 
-    public void add(Raider cr) {
-        for (int i = 0; i < raiders.length; i++) {
-            if (raiders[i] == null) {
-                raiders[i] = cr;
-                cr.index = i;
-                break;
-            }
-        }
-    }
-
     public void report(String s, int dur) {
         ads.add(new Advert(s, this, dur));
     }
@@ -133,10 +124,12 @@ public class Dungeon extends Scene {
         sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));
         sprites.add(Textures.image("particles/rip.png").getScaledCopy(2f));
         sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));
-
+        sprites.add(Textures.image("particles/sparkle2.png").getScaledCopy(2f));
         for (Image im : sprites) {
             im.setFilter(GL11.GL_NEAREST);
         }
+        
+        Block.initSprites();
     }
 
     public void initCreatures() {
@@ -149,7 +142,7 @@ public class Dungeon extends Scene {
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(120.0, 120.0, 90, 9);
+        player.init(120.0, 120.0, 900, 9);
         player.initImages();
     }
 
@@ -157,7 +150,33 @@ public class Dungeon extends Scene {
         cr.dung = this;
         add(cr);
         cr.init(args);
+        report(cr.nick + " joined the game!", 500);
         cr.initImages();
+    }
+
+    public void add(Raider cr) {
+        for (int i = 0; i < raiders.length; i++) {
+            if (raiders[i] == null) {
+                raiders[i] = cr;
+                cr.index = i;
+                break;
+            }
+        }
+    }
+
+    public void delete(int index) {
+        int s = 0;
+        for (int i = 0; i < raiders.length; i++) {
+            if (raiders[i].index == index) {
+                raiders[i] = null;
+                s = i + 1;
+                break;
+            }
+        }
+
+        for (int i = s; i < raiders.length; i++) {
+            raiders[i - 1] = raiders[i];
+        }
     }
 
     Timer waveTimer = new Timer(1000, new ActionListener() {
@@ -168,7 +187,7 @@ public class Dungeon extends Scene {
             if (waveTimerSeconds > 0) {
                 waveTimerSeconds--;
                 if (waveTimerSeconds > 0) {
-                    report(waveTimerSeconds + " seconds left!", 97);
+                    report(waveTimerSeconds + " seconds left!", 94);
                 } else {
                     report("Let's go!", 300);
                 }
@@ -176,13 +195,13 @@ public class Dungeon extends Scene {
                 for (int i = 0; i < 4; i++) {
                     switch (r.nextInt(3)) {
                         case 0:
-                            spawn(new RaiderArc(), 600.0, 1200.0, 20, 4);
+                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4);
                             break;
                         case 1:
-                            spawn(new RaiderPriest(), 600.0, 1200.0, 20, 4);
+                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4);
                             break;
                         case 2:
-                            spawn(new RaiderWar(), 600.0, 1200.0, 40, 3);
+                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2);
                             break;
                     }
 
@@ -194,7 +213,7 @@ public class Dungeon extends Scene {
     );
 
     int waveTimerSeconds = 10;
-    
+
     @Override
     public void tick() {
         if (getRaiders().length == 0) {
@@ -211,22 +230,25 @@ public class Dungeon extends Scene {
             }
             cr.emulateChat();
         }
-        /*
-        for (Advert ad : ads) {
+
+        for (Advert ad : getAds()) {
             if (ad != null) {
                 ad.tick();
             }
         }
-        */
+
         player.tick();
+
         for (Bullet b : getBul()) {
             if (b != null) {
                 b.tick(this);
             }
         }
+
         try {
             mousing();
-        }catch (IllegalStateException ignored){}
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     public void mousing() {
@@ -272,6 +294,10 @@ public class Dungeon extends Scene {
             } else {
                 cr.render(g);
             }
+
+            if (cr == player) {
+                player.abilsRender(g);
+            }
         }
         for (Bullet b : getBul()) {
             if (b != null) {
@@ -287,6 +313,9 @@ public class Dungeon extends Scene {
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
+        }
+        for (int i = 0; i < player.abils.size(); i++) {
+            player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 70 + i * 66, Display.getHeight() - 70);
         }
     }
 }

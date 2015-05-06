@@ -31,6 +31,9 @@ import org.sparkle.jcfg.JCFG;
 import org.sparkle.jcfg.Parser;
 import main.utils.FPScounter;
 import main.utils.Textures;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.sparkle.jcfg.Writer;
 
 public class Game extends BasicGame {
@@ -67,16 +70,17 @@ public class Game extends BasicGame {
         System.exit(0);
     }
 
-    public static void main(String[] arguments) throws SlickException {
+    public static void main(String[] arguments) throws SlickException, LWJGLException {
         setUpNatives();
         app = new AppGameContainer(new Game());
         Display.setResizable(true);
         setSources();
-
         app.setDefaultMouseCursor();
         app.setAlwaysRender(true);
         app.setShowFPS(false);
         app.start();
+        Keyboard.create();
+        Mouse.create();
     }
 
     public static void setSources() throws SlickException {

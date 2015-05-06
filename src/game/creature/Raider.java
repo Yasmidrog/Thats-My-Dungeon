@@ -26,7 +26,6 @@ public class Raider extends Creature {
     public Random r = new Random();
     public Animation bar;
     public Ability[] abils;
-    
 
     @Override
     public int getWidth() {
@@ -47,37 +46,36 @@ public class Raider extends Creature {
     public void die() {
         if (getTimer("dying").is()) {
             dung.report(nick + " left the game!", 500);
-            //dung.objects.add(new Modifier((int) x, (int) y, 1));
-            dung.raiders[index] = null;
+            dung.delete(index);
         }
         if (dung.player.focus == this) {
             dung.player.focus = null;
         }
     }
-    
+
     @Override
     public void init(Object... args) {
         super.init(args);
         enemy = true;
         focus = dung.player;
         speed = 3;
-        nick = "cop"+index;
+        nick = "cop" + index;
         setTimer("kick", 120);
         setTimer("chat", 600);
         initAbils();
-        dung.report(nick + " joined the game!", 500);   
         //setNick();
-        //dung.report(nick + " joined the game!", 500);
     }
 
     @Override
     public void tick() {
         super.tick();
-        for (Ability ab : abils) {
-            ab.tick();
+        if (!focus.dead) {
+            for (Ability ab : abils) {
+                ab.tick();
+            }
+            useAbility();
+            battle();
         }
-        useAbility();
-        battle();
     }
 
     @Override
@@ -98,9 +96,9 @@ public class Raider extends Creature {
     public void emulateChat() {
         if (getTimer("chat").is()) {
             if (!dead) {
-                dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], "Cop"+index);
+                dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], "Cop" + index);
             } else {
-                dung.chat.add(dung.chat.rage[r.nextInt(dung.chat.rage.length)], "Coppa"+index);
+                dung.chat.add(dung.chat.rage[r.nextInt(dung.chat.rage.length)], "Coppa" + index);
             }
             getTimer("chat").start();
         }
@@ -132,12 +130,16 @@ public class Raider extends Creature {
                 bar.draw((int) x - getWidth() / 2, (int) y - getHeight() / 3);
             }
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
-            g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
-            g.fillRect((float)x-48, (float)y-52, 96, 7);
-            g.setColor(org.newdawn.slick.Color.red);
-            g.fillRect((float)x-48, (float)y-52, 96 * hp / maxhp,7);
+            renderHP(g);
         } catch (SlickException ex) {
             Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void renderHP(Graphics g) {
+        g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
+        g.fillRect((float) x - 48, (float) y - 52, 96, 7);
+        g.setColor(Color.red);
+        g.fillRect((float) x - 48, (float) y - 52, 96 * hp / maxhp, 7);
     }
 }
