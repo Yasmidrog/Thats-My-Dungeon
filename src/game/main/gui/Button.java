@@ -24,7 +24,7 @@ public abstract class Button {
     String text;
     Color color;
     boolean bp;
-
+   protected  Button(){}
     public Button(int x, int y, int w, String text, Color c) {
         this.x = x;
         this.y = y;
