@@ -62,7 +62,6 @@ public class Player extends Creature {
     public void initAbils() {
         abils.add(new Active(1000, false, 0) {
             int d = -10;
-
             @Override
             public void action() {
                 System.out.println("Did Ability №1");
@@ -91,7 +90,7 @@ public class Player extends Creature {
                 }
             }
         });
-        abils.get(0).init('1', false, 0);
+        abils.get(0).init(1, false, 0);
         abils.get(0).initImages("charge.png", "energy.png");
 
         abils.add(new Target(1000, false, 0, this) {
@@ -102,7 +101,7 @@ public class Player extends Creature {
                 super.casting();
             }
         });
-        abils.get(1).init('2', false, 0);
+        abils.get(1).init(2, false, 0);
         abils.get(1).initImages("charge.png", "energy.png");
     }
 

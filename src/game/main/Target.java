@@ -6,11 +6,12 @@
 package game.main;
 
 import game.creature.Player;
+import game.main.shell.Game;
 import main.utils.Textures;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -19,7 +20,7 @@ import org.newdawn.slick.Color;
 public abstract class Target extends Ability {
 
     Player player;
-    int key;
+    int count;
     boolean pressed;
 
     @Override
@@ -36,13 +37,13 @@ public abstract class Target extends Ability {
 
     @Override
     public void tick() {
-        if (key > 0) {
-            key--;
+        if (count > 0) {
+            count--;
         }
         super.tick();
-        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(number + "")) && cd.is() && key == 0) {
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key + "")) && cd.is() && count == 0) {
             action();
-            key = 15;
+            count = 15;
         }
         if (Mouse.isButtonDown(1) && player.cast == this) {
             casting();
@@ -70,4 +71,5 @@ public abstract class Target extends Ability {
         player.cast = null;
         start();
     }
+
 }

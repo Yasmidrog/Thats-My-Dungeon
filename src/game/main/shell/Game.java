@@ -39,7 +39,7 @@ import org.sparkle.jcfg.Writer;
 public class Game extends BasicGame {
 
     Graphics g = new Graphics();
-    static JCFG conf = new JCFG();
+    public static JCFG conf = new JCFG();
     public static int times = 0;
     public static boolean paused;
     public static Menu menu = new Menu();
