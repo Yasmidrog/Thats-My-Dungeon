@@ -47,8 +47,8 @@ public class Chat {
                 alrdynick[i - 1] = alrdynick[i];
                 alrdy[i - 1] = alrdy[i];
             }
-            alrdy[alrdynick.length-2] = s;
-            alrdynick[alrdynick.length-2] = nick + ": ";
+            alrdy[alrdynick.length - 2] = s;
+            alrdynick[alrdynick.length - 2] = nick + ": ";
         }
     }
 
@@ -61,9 +61,8 @@ public class Chat {
             if (alrdy[i] != null && alrdynick[i] != null) {
                 chatfont.drawString(x + 5, y + 8 + i * 20 - 7, alrdynick[i], Color.orange);
                 chatfont.drawString(x + 5 + (alrdynick[i].length() * 10) + 4, y + 8 + i * 20 - 7,
-                                                     alrdy[i].replaceAll("\n",""), Color.yellow);
+                        alrdy[i].replaceAll("\n", ""), Color.yellow);
             }
         }
     }
 }
-

@@ -10,6 +10,8 @@ import game.main.gui.SwitchButton;
 import game.main.shell.Game;
 import static game.main.shell.Game.font;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.utils.Name;
 import main.utils.Textures;
 import org.lwjgl.opengl.Display;
@@ -28,6 +30,11 @@ public class Menu extends Scene {
     ArrayList<Button> settingsButtons = new ArrayList<>();
     Name[] name = new Name[3];
     private int currentMenu = 0;
+
+    public void reinit() {
+        Game.dungeon = new Dungeon();
+        Game.dungeon.init();
+    }
 
     @Override
     public void init() throws SlickException {
@@ -61,7 +68,8 @@ public class Menu extends Scene {
         buttons.add(new Button(-Display.getWidth() / 2 + 100, h - 125, 200, "Reinit", Color.green) {
             @Override
             public void click() {
-                //reinit();
+                reinit();
+                Game.currScene = Game.dungeon;
             }
         });
 
@@ -107,7 +115,7 @@ public class Menu extends Scene {
             for (Button but : buttons) {
                 but.render(g);
             }
-            for (Name n: name) {
+            for (Name n : name) {
                 n.render(g);
             }
             //player.render(g);

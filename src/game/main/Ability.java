@@ -22,7 +22,7 @@ public abstract class Ability {
     public boolean lng, trgt;
     public Image icon, strip;
     public char number;
-    public int radius, d = -10;
+    public int radius;
     public int x, y;
 
     public boolean ready() {
@@ -59,7 +59,6 @@ public abstract class Ability {
             if (!duration.is()) {
                 duration.tick();
             }
-
             if (!cd.is() && duration.is()) {
                 after();
             }
