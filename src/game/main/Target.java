@@ -25,7 +25,7 @@ public abstract class Target extends Ability {
     @Override
     public void initImages(String name1, String name2) {
         icon = Textures.image("abilities/" + name1).getScaledCopy(1f);
-        icon.setImageColor(99, 250, 120, 50);
+        icon.setImageColor(99, 50, 50);
         strip = Textures.image("abilities/" + name2);
     }
 

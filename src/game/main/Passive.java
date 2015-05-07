@@ -5,16 +5,25 @@
  */
 package game.main;
 
+import main.utils.Textures;
+
 /**
  *
- * @author Юрий
+ * @author Whizzpered
  */
 public abstract class Passive extends Ability {
+
+    @Override
+    public void initImages(String name1, String name2) {
+        icon = Textures.image("abilities/" + name1).getScaledCopy(1f);
+        icon.setImageColor(100, 100, 100);
+        strip = Textures.image("abilities/" + name2);
+    }
 
     public Passive() {
         super(0, false, 0);
     }
-    
+
     @Override
     public void tick() {
         action();

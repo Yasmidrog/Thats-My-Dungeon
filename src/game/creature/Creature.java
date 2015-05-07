@@ -5,6 +5,7 @@
  */
 package game.creature;
 
+import game.main.Modifier;
 import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
@@ -20,8 +21,8 @@ import org.newdawn.slick.Graphics;
  */
 public class Creature extends Entity {
 
-    public double ex, ey;
-    public int hp, maxhp, dmg, index, range, dmgDistance, speed;
+    public double ex, ey,hp;
+    public int maxhp, dmg, index, range, dmgDistance, speed, realhp;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
@@ -31,6 +32,7 @@ public class Creature extends Entity {
 
     ArrayList<Timer> timers = new ArrayList<>();
     ArrayList<String> timnames = new ArrayList<>();
+    public ArrayList<Modifier> mods = new ArrayList<>();
 
     public void setTimer(String name, int tim) {
         timers.add(new Timer(tim));
@@ -39,6 +41,12 @@ public class Creature extends Entity {
 
     public Timer getTimer(String name) {
         return timers.get(timnames.indexOf(name));
+    }
+
+    public Modifier[] getMods() {
+        Modifier[] a = new Modifier[mods.size()];
+        mods.toArray(a);
+        return a;
     }
 
     public int getWidth() {
@@ -58,6 +66,7 @@ public class Creature extends Entity {
         x = (Double) args[0];
         y = (Double) args[1];
         maxhp = (int) args[2];
+        realhp = maxhp;
         hp = maxhp;
         dmg = (int) args[3];
         setTimer("dying", 1000);
@@ -71,14 +80,26 @@ public class Creature extends Entity {
 
     }
 
+    public void setStats() {
+        maxhp = realhp;
+
+        for (Modifier mod : getMods()) {
+            mod.aply(this);
+        }
+    }
+
     @Override
     public void tick() {
+        setStats();
         baseTick();
         move();
+        for (Modifier mod : getMods()) {
+            mod.tick(this);
+        }
     }
 
     public void die() {
-        
+
     }
 
     public void deadtick() {
@@ -165,6 +186,6 @@ public class Creature extends Entity {
     }
 
     public void deadrender(Graphics g) {
-        dung.sprites.get(2).draw((int) x - getWidth()/2, (int) y - 32);
+        dung.sprites.get(2).draw((int) x - getWidth() / 2, (int) y - 32);
     }
 }

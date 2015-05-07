@@ -134,9 +134,9 @@ public class Dungeon extends Scene {
 
     public void initCreatures() {
         player();
-        spawn(new RaiderArc(), 120.0, 240.0, 9, 1);
-        spawn(new RaiderPriest(), 240.0, 240.0, 9, 1);
-        spawn(new RaiderWar(), 240.0, 360.0, 20, 1);
+        spawn(new RaiderArc(), 120.0, 240.0, 9, 4);
+        spawn(new RaiderPriest(), 240.0, 240.0, 9, 3);
+        spawn(new RaiderWar(), 240.0, 360.0, 20, 2);
     }
 
     public void player() {
@@ -309,7 +309,7 @@ public class Dungeon extends Scene {
         }
         GL11.glTranslatef(-px, -py, 0);
 
-        player.healthbar.render(g, 20, 20, player.hp);
+        player.healthbar.render(g, 20, 20, (int)player.hp);
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
