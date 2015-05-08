@@ -38,7 +38,7 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy;
+    public int camx, camy, flx, fly;
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
@@ -128,15 +128,15 @@ public class Dungeon extends Scene {
         for (Image im : sprites) {
             im.setFilter(GL11.GL_NEAREST);
         }
-        
+
         Block.initSprites();
     }
 
     public void initCreatures() {
         player();
-        spawn(new RaiderArc(), 120.0, 240.0, 9, 1);
-        spawn(new RaiderPriest(), 240.0, 240.0, 9, 1);
-        spawn(new RaiderWar(), 240.0, 360.0, 20, 1);
+        spawn(new RaiderArc(), 120.0, 240.0, 9, 4);
+        spawn(new RaiderPriest(), 240.0, 240.0, 9, 3);
+        spawn(new RaiderWar(), 240.0, 360.0, 20, 2);
     }
 
     public void player() {
@@ -256,7 +256,9 @@ public class Dungeon extends Scene {
         int mx = Mouse.getX(), my = h - Mouse.getY();
         camx = w - (int) player.x - mx;
         camy = h - (int) player.y - my;
-        double msx = player.x + mx * 2 - w - 8;
+        flx = (int) player.x + mx - w;
+        fly = (int) player.y + my - h;
+        double msx = player.x + mx * 2 - w;
         double msy = player.y + my * 2 - h;
 
         if (player.agr == null) {
@@ -287,7 +289,7 @@ public class Dungeon extends Scene {
 
         GL11.glTranslatef(px, py, 0);
 
-        floor.render(g);
+        floor.render(g, flx, fly);
         for (Creature cr : creaturesYSort()) {
             if (cr.dead) {
                 cr.deadrender(g);
@@ -302,6 +304,7 @@ public class Dungeon extends Scene {
         for (Bullet b : getBul()) {
             if (b != null) {
                 b.render(g);
+
             }
         }
         if (flag != null) {
@@ -309,7 +312,7 @@ public class Dungeon extends Scene {
         }
         GL11.glTranslatef(-px, -py, 0);
 
-        player.healthbar.render(g, 20, 20, player.hp);
+        player.healthbar.render(g, 20, 20, (int) player.hp);
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);

@@ -7,6 +7,8 @@ package game.creature;
 
 import game.main.Ability;
 import game.main.Active;
+import game.main.Modifier;
+import game.main.Passive;
 import game.main.Target;
 import game.main.gui.Bar;
 import game.main.shell.Game;
@@ -103,6 +105,34 @@ public class Player extends Creature {
         });
         abils.get(1).init(2, false, 0);
         abils.get(1).initImages("charge.png", "energy.png");
+
+        abils.add(new Passive() {
+            int n = 0;
+            @Override
+            public void action() {
+                mods.add(new Modifier() {
+                    @Override
+                    public void aply(Creature unit) {
+                        if (unit.hp < unit.maxhp) {
+                            unit.hp += 3;
+                        }
+                        timer = 1;
+                    }
+                });
+            }
+            
+            @Override
+            public void tick() {
+                if(n>0){
+                    n--;
+                } else {
+                    action();
+                    n = 50;
+                }
+            }
+        });
+        abils.get(2).init('3', false, 0);
+        abils.get(2).initImages("charge.png", "energy.png");
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.newdawn.slick.Image;
 
 /**
  *
- * @author Юрий Whizzpered
+ * @author Whizzpered
  */
 public class Flag {
 

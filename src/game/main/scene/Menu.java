@@ -156,7 +156,9 @@ public class Menu extends Scene {
 
     @Override
     public void render(Graphics g) {
+        GL11.glDisable(GL11.GL_BLEND);
         sprite[3].draw(0, 0, Display.getWidth(), Display.getHeight());
+        GL11.glEnable(GL11.GL_BLEND);
         if (currentMenu == 0) {
             font.drawString(Display.getWidth() - 300, 0, "Welcome back in " + Game.times + " time!", Color.yellow);
             for (Button but : buttons) {
