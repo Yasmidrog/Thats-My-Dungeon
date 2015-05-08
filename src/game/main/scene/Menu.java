@@ -61,15 +61,19 @@ public class Menu extends Scene {
 
     public void initButtons(int h) {
         int start=h/7;
+        int sx=-150;
         for(int i=1;i<10;i++){
             final String n=String.valueOf(i);
             final int j=i;
-            abilitySettings.add(new ValueButton(Button.buttonState.CENTRE,start,150,"Ability "+i,Color.blue) {
+            if(start>Display.getHeight()-Display.getHeight()/4) {
+                sx+=250; start=h/7;
+            }
+            abilitySettings.add(new ValueButton(sx,start,150,"Ability "+i,Color.blue) {
                 @Override
                 public  void initValue(){
                     try{
                         String val= ((String)Game.conf.get(n).getValue());
-                        if(val==null){
+                        if(val.isEmpty()||val==null){
                             value=n.toCharArray()[0];
                         }else{
                             value=val.toCharArray()[0];
@@ -86,13 +90,11 @@ public class Menu extends Scene {
                             dungeon.player.abils.get(j - 1).key = value;
                     } catch (IndexOutOfBoundsException ignored) {
                     }catch (NullPointerException ignored){}
-
                 }
             });
             start+=70;
         }
-        start+=100;
-        abilitySettings.add(new Button(Button.buttonState.CENTRE,start,150,"Exit",Color.green) {
+        abilitySettings.add(new Button(sx,start,150,"Exit",Color.green) {
             @Override
             public void click() {
                 currentMenu=0;
