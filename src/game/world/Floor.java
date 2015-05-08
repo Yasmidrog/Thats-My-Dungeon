@@ -5,6 +5,7 @@
  */
 package game.world;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -50,9 +51,9 @@ public class Floor {
         }
     }
 
-    public void render(Graphics g) {
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
+    public void render(Graphics g, int camx, int camy) {
+        for (int x = (camx) / Block.size - 1; x < (camx + Display.getWidth()) / Block.size + 1; x++) {
+            for (int y = (camy) / Block.size - 1; y < (camy + Display.getHeight()) / Block.size + 1; y++) {
                 Block.block[get(x, y)].render(g, x, y);
             }
         }

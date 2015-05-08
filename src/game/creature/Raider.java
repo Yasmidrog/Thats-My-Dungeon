@@ -140,6 +140,6 @@ public class Raider extends Creature {
         g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
         g.fillRect((float) x - 48, (float) y - 52, 96, 7);
         g.setColor(Color.red);
-        g.fillRect((float) x - 48, (float) y - 52, 96 * hp / maxhp, 7);
+        g.fillRect((float) x - 48, (float) y - 52, 96 * (int)hp / maxhp, 7);
     }
 }
