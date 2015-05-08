@@ -21,7 +21,7 @@ import org.newdawn.slick.Graphics;
  */
 public class Creature extends Entity {
 
-    public double ex, ey,hp;
+    public double ex, ey, hp;
     public int maxhp, dmg, index, range, dmgDistance, speed, realhp;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
@@ -82,9 +82,13 @@ public class Creature extends Entity {
 
     public void setStats() {
         maxhp = realhp;
+        double arr = hp / maxhp;
 
         for (Modifier mod : getMods()) {
             mod.aply(this);
+        }
+        if (maxhp > realhp) {
+            hp = arr * maxhp;
         }
     }
 

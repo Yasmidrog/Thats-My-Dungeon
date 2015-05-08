@@ -38,7 +38,9 @@ public class Block {
 
     public void render(Graphics g, int x, int y) {
         if (sprite != null) {
+            GL11.glDisable(GL11.GL_BLEND);
             sprite.draw(x * size, y * size);
+            GL11.glEnable(GL11.GL_BLEND);
         }
     }
 }
