@@ -105,7 +105,7 @@ public class Player extends Creature {
             }
         });
         abils.get(1).init('2', false, 0);
-        abils.get(1).initImages("charge.png", "energy.png");
+        abils.get(1).initImages("throw.png", "energy.png");
 
         abils.add(new Passive() {
             int n = 0;
@@ -133,7 +133,7 @@ public class Player extends Creature {
             }
         });
         abils.get(2).init('3', false, 0);
-        abils.get(2).initImages("charge.png", "energy.png");
+        abils.get(2).initImages("regen.png", "energy.png");
     }
 
     @Override
