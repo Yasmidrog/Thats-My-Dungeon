@@ -20,9 +20,12 @@ public abstract class Active extends Ability {
     @Override
     public void tick() {
         super.tick();
-        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(number + "")) && cd.is()) {
-            action();
-        }
+        try {
+
+            if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key + "")) && cd.is()) {
+                action();
+            }
+        }catch (IllegalStateException ignored){}
     }
 
 }
