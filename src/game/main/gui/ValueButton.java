@@ -35,9 +35,9 @@ public abstract class ValueButton extends Button{
     public void render(Graphics g){
         int x;
         if(state==buttonState.LEFT){
-            x=0;
+            x=w/2;
         }else  if(state==buttonState.RIGHT) {
-            x= Display.getWidth()-w;
+            x= Display.getWidth()-w/2;
         }else if(state==buttonState.CENTRE) {
             x= cx;
         }
@@ -57,8 +57,8 @@ public abstract class ValueButton extends Button{
             sprite[1].draw(x - w / 2, y, w, 50);
             sprite[2].draw(x + w / 2, y);
         }else if(state==buttonState.RIGHT){
-            sprite[0].draw(x - w / 2, y, w, 50);
-            sprite[1].draw(x + w / 2, y);
+            sprite[0].draw(x-w/2 , y, sprite[0].getWidth() , 50);
+            sprite[1].draw(x-w/2+sprite[0].getWidth() , y, w, 50);
         }
         g.setColor(Color.white);
         if(reading) {
