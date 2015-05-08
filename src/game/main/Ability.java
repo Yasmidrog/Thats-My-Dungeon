@@ -40,8 +40,11 @@ public abstract class Ability {
     public void init(int but, boolean trg, int radius) {
         try {
             key = ((String) Game.conf.get(String.valueOf(but)).getValue()).toUpperCase().toCharArray()[0];
-        }catch (ClassCastException e){
+        }catch (ClassCastException ex){
             key = String.valueOf((Game.conf.get(String.valueOf(but)).getValue())).toUpperCase().toCharArray()[0];
+        }
+        catch (Exception e){
+           e.printStackTrace();
         }
         number = but;
         if (trg) {

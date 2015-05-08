@@ -84,7 +84,7 @@ public class Menu extends Scene {
                 }
                 @Override
                 public void changeSet() {
-                    Game.conf.set(n, value);
+                    Game.conf.set(n, String.valueOf(value));
                     try {
                         if (dungeon.player.abils.get(j - 1) != null)
                             dungeon.player.abils.get(j - 1).key = value;
