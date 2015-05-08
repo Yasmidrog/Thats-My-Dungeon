@@ -17,12 +17,12 @@ import static game.main.scene.Menu.sprite;
 public abstract class ValueButton extends Button{
     public char value;
     private boolean reading=false;
-    public ValueButton(int x, int y, int w, String text, Color c) {
-        super(x, y, w,text,c);
+    public ValueButton(int x, int y, int width, String text, Color c) {
+        super(x, y, width,text,c);
         initValue();
     }
-    public ValueButton(buttonState st, int y, int w, String text, Color c) {
-        super(st, y, w,text,c);
+    public ValueButton(buttonState st, int y, int width, String text, Color c) {
+        super(st, y, width,text,c);
         initValue();
     }
     public  void click(){
