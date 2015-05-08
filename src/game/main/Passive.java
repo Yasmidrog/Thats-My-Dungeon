@@ -6,6 +6,7 @@
 package game.main;
 
 import main.utils.Textures;
+import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -15,6 +16,7 @@ public abstract class Passive extends Ability {
 
     @Override
     public void initImages(String name1, String name2) {
+        key=' ';
         icon = Textures.image("abilities/" + name1).getScaledCopy(1f);
         icon.setImageColor(100, 100, 100);
         strip = Textures.image("abilities/" + name2);
@@ -28,5 +30,8 @@ public abstract class Passive extends Ability {
     public void tick() {
         action();
     }
+    @Override
+    public void render(Graphics g) {
 
+    }
 }
