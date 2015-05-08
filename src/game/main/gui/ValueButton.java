@@ -18,11 +18,11 @@ public abstract class ValueButton extends Button{
     public char value;
     private boolean reading=false;
     public ValueButton(int x, int y, int w, String text, Color c) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.text = text;
-        this.color = c;
+        super(x, y, w,text,c);
+        initValue();
+    }
+    public ValueButton(buttonState st, int y, int w, String text, Color c) {
+        super(st, y, w,text,c);
         initValue();
     }
     public  void click(){
@@ -33,18 +33,33 @@ public abstract class ValueButton extends Button{
     public void initValue(){value=' ';}
     @Override
     public void render(Graphics g){
-        int x = this.x + Display.getWidth() / 2;
+        int x;
+        if(state==buttonState.LEFT){
+            x=w/2;
+        }else  if(state==buttonState.RIGHT) {
+            x= Display.getWidth()-w/2;
+        }else if(state==buttonState.CENTRE) {
+            x= cx;
+        }
+        else x=0;
         int y = this.y;
         int w = this.w + wp;
         int mx = Mouse.getX();
         int my = Display.getHeight() - Mouse.getY();
-
         sprite[0].setImageColor(color.r, color.g, color.b);
         sprite[1].setImageColor(color.r, color.g, color.b);
         sprite[2].setImageColor(color.r, color.g, color.b);
-        sprite[0].draw(x - w / 2 - 16, y);
-        sprite[1].draw(x - w / 2, y, w, 50);
-        sprite[2].draw(x + w / 2, y);
+        if(state==buttonState.CENTRE) {
+            sprite[0].draw(x - w / 2 - 16, y);
+            sprite[1].draw(x - w / 2, y, w, 50);
+            sprite[2].draw(x + w / 2, y);
+        }else if(state==buttonState.LEFT){
+            sprite[1].draw(x - w / 2, y, w, 50);
+            sprite[2].draw(x + w / 2, y);
+        }else if(state==buttonState.RIGHT){
+            sprite[0].draw(x-w/2 , y, sprite[0].getWidth() , 50);
+            sprite[1].draw(x-w/2+sprite[0].getWidth() , y, w, 50);
+        }
         g.setColor(Color.white);
         if(reading) {
             Game.font.drawString(x - (text.length() * 8), y + 13, text, Color.white);
