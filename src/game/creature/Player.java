@@ -44,7 +44,7 @@ public class Player extends Creature {
     @Override
     public void initImages() {
         sprite = new Sprite("warrior/");
-        ded = Textures.image("warrior/dead.png");
+        ded = Textures.image("warrior/dead.png").getScaledCopy(2f);
         healthbar = new Bar(maxhp, "Bar.png", "health.png");
     }
 
@@ -104,7 +104,7 @@ public class Player extends Creature {
             }
         });
         abils.get(1).init(2, false, 0);
-        abils.get(1).initImages("charge.png", "energy.png");
+        abils.get(1).initImages("regen.png", "energy.png");
 
         abils.add(new Passive() {
             int n = 0;
