@@ -73,6 +73,10 @@ public class Creature extends Entity {
         hp = maxhp;
         dmg = (int) args[3];
         level=(int) args[4];
+        if(level<0) {
+            dmg = (int) (level * 1.7);
+            hp = (int) (level * 1.7);
+        }
         setTimer("dying", 1000);
     }
 
