@@ -134,15 +134,15 @@ public class Dungeon extends Scene {
 
     public void initCreatures() {
         player();
-        spawn(new RaiderArc(), 120.0, 240.0, 9, 4);
-        spawn(new RaiderPriest(), 240.0, 240.0, 9, 3);
-        spawn(new RaiderWar(), 240.0, 360.0, 20, 2);
+            spawn(new RaiderArc(), 120.0, 240.0, 9, 4, 1);
+            spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
+            spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
     }
 
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(120.0, 120.0, 90, 9);
+        player.init(120.0, 120.0, 90, 9,1);
         player.initImages();
     }
 
@@ -178,7 +178,7 @@ public class Dungeon extends Scene {
             raiders[i - 1] = raiders[i];
         }
     }
-
+    int level=2;
     Timer waveTimer = new Timer(1000, new ActionListener() {
 
         @Override
@@ -195,13 +195,13 @@ public class Dungeon extends Scene {
                 for (int i = 0; i < 4; i++) {
                     switch (r.nextInt(3)) {
                         case 0:
-                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4);
+                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4,level);
                             break;
                         case 1:
-                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4);
+                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4,level);
                             break;
                         case 2:
-                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2);
+                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2,level);
                             break;
                     }
 
