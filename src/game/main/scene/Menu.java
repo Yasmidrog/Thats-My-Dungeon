@@ -7,10 +7,7 @@ package game.main.scene;
 
 import game.main.gui.Button;
 import game.main.gui.SwitchButton;
-import game.main.gui.ValueButton;
 import game.main.shell.Game;
-
-import static game.main.shell.Game.dungeon;
 import static game.main.shell.Game.font;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -29,7 +26,7 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Menu extends Scene {
-    private ArrayList<Button> abilitySettings =new ArrayList<Button>();
+
     ArrayList<Button> settingsButtons = new ArrayList<>();
     Name[] name = new Name[3];
     private int currentMenu = 0;
@@ -60,55 +57,15 @@ public class Menu extends Scene {
     }
 
     public void initButtons(int h) {
-        int start=h/7;
-        int sx=-150;
-        for(int i=1;i<10;i++){
-            final String n=String.valueOf(i);
-            final int j=i;
-            if(start>Display.getHeight()-Display.getHeight()/4) {
-                sx+=250; start=h/7;
-            }
-            abilitySettings.add(new ValueButton(sx,start,150,"Ability "+i,Color.blue) {
-                @Override
-                public  void initValue(){
-                    try{
-                        String val= ((String)Game.conf.get(n).getValue());
-                        if(val.isEmpty()){
-                            value=n.toCharArray()[0];
-                        }else{
-                            value=val.toCharArray()[0];
-                        }
-                    }catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-                }
-                @Override
-                public void changeSet() {
-                    Game.conf.set(n, String.valueOf(value));
-                    try {
-                        if (dungeon.player.abils.get(j - 1) != null)
-                            dungeon.player.abils.get(j - 1).key = value;
-                    } catch (IndexOutOfBoundsException ignored) {
-                    }catch (NullPointerException ignored){}
-                }
-            });
-            start+=70;
-        }
-        abilitySettings.add(new Button(sx,start,150,"Exit",Color.green) {
-            @Override
-            public void click() {
-                currentMenu=0;
-            }
-        });
 
-        buttons.add(new Button(Button.buttonState.LEFT, h / 2 + 100, 200, "Exit", Color.red) {
+        buttons.add(new Button(-Display.getWidth() / 2 + 100, h / 2 + 100, 200, "Exit", Color.red) {
             @Override
             public void click() {
                 Game.exit();
             }
         });
 
-        buttons.add(new Button(Button.buttonState.LEFT, h - 125, 200, "Reinit", Color.green) {
+        buttons.add(new Button(-Display.getWidth() / 2 + 100, h - 125, 200, "Reinit", Color.green) {
             @Override
             public void click() {
                 reinit();
@@ -116,7 +73,7 @@ public class Menu extends Scene {
             }
         });
 
-        buttons.add(new Button(Button.buttonState.LEFT, h / 2 - 25, 200, "Play", Color.green) {
+        buttons.add(new Button(-Display.getWidth() / 2 + 100, h / 2 - 25, 200, "Play", Color.green) {
             @Override
             public void click() {
                 if (Game.dungeon == null) {
@@ -127,14 +84,14 @@ public class Menu extends Scene {
             }
         });
 
-        buttons.add(new Button(Button.buttonState.LEFT, h / 2 + 38, 200, "Settings", Color.green) {
+        buttons.add(new Button(-Display.getWidth() / 2 + 100, h / 2 + 38, 200, "Settings", Color.green) {
             @Override
             public void click() {
                 currentMenu = 1;
             }
         });
 
-        settingsButtons.add(new SwitchButton(Button.buttonState.CENTRE, h / 2 - 82, 200, "Fullscreen",false) {
+        settingsButtons.add(new SwitchButton(-30, h / 2 - 25, 200, "Fullscreen", false) {
             @Override
             public void click() {
                 super.click();
@@ -142,13 +99,7 @@ public class Menu extends Scene {
             }
         });
 
-        settingsButtons.add(new Button(Button.buttonState.CENTRE, h / 2 - 25, 200, "Keyboard", Color.green) {
-            @Override
-            public void click() {
-                currentMenu = 2;
-            }
-        });
-        settingsButtons.add(new Button(Button.buttonState.CENTRE, h / 2 + 38, 200, "Agree", Color.red) {
+        settingsButtons.add(new Button(-30, h / 2 + 38, 200, "Agree", Color.green) {
             @Override
             public void click() {
                 currentMenu = 0;
@@ -158,9 +109,7 @@ public class Menu extends Scene {
 
     @Override
     public void render(Graphics g) {
-        GL11.glDisable(GL11.GL_BLEND);
         sprite[3].draw(0, 0, Display.getWidth(), Display.getHeight());
-        GL11.glEnable(GL11.GL_BLEND);
         if (currentMenu == 0) {
             font.drawString(Display.getWidth() - 300, 0, "Welcome back in " + Game.times + " time!", Color.yellow);
             for (Button but : buttons) {
@@ -173,11 +122,6 @@ public class Menu extends Scene {
         }
         if (currentMenu == 1) {
             for (Button but : settingsButtons) {
-                but.render(g);
-            }
-        }
-        if(currentMenu == 2) {
-            for (Button but : abilitySettings) {
                 but.render(g);
             }
         }

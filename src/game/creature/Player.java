@@ -92,7 +92,7 @@ public class Player extends Creature {
                 }
             }
         });
-        abils.get(0).init(1, false, 0);
+        abils.get(0).init('1', false, 0);
         abils.get(0).initImages("charge.png", "energy.png");
 
         abils.add(new Target(1000, false, 0, this) {

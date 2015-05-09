@@ -29,7 +29,7 @@ public class Flag {
 
     public void render(Graphics g, Image spr) {
         if (!done) {
-            spr.draw((int) x, (int) y);
+            spr.draw((int) x-8, (int) y);
         }
     }
 }
