@@ -30,13 +30,14 @@ public abstract class Passive extends Ability {
     public void tick() {
         action();
     }
-    
+
     @Override
     public void renderIcon(Graphics g, int x, int y) {
         for (int i = 0; i < 31; i++) {
             strip.draw(x + 1, y - i * 2 + 62);
         }
         icon.draw(x, y);
+        font.drawString(x + 32, y + 44, number + "", Color.white);
     }
 
 }
