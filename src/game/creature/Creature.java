@@ -11,6 +11,8 @@ import game.main.sprite.Side;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
 import java.util.ArrayList;
+import java.util.Random;
+
 import main.utils.Timer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -22,7 +24,7 @@ import org.newdawn.slick.Graphics;
 public class Creature extends Entity {
 
     public double ex, ey, hp;
-    public int maxhp, dmg, index, range, dmgDistance, speed, realhp;
+    public int maxhp, dmg, index, range, dmgDistance, speed, realhp,misschance=0;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
@@ -145,9 +147,13 @@ public class Creature extends Entity {
     }
 
     public void battle() {
+        boolean miss;
         double dist = Math.sqrt(Math.pow(x - focus.x, 2) + Math.pow(y - focus.y, 2));
         if (dist - 2 * speed < dmgDistance && getTimer("kick").is()) {
-            dung.bullets.add(new Bullet((int) x, (int) y, focus, this));
+            if(new Random().nextInt(100)<=misschance)
+                miss=true;
+            else miss=false;
+            dung.bullets.add(new Bullet((int) x, (int) y, focus, this,miss));
             getTimer("kick").start();
         }
     }
