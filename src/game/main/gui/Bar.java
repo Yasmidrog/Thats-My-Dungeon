@@ -31,9 +31,7 @@ public class Bar {
     }
 
     public void render(Graphics g, int x, int y, int value) {
-        for (int i = 0; i < (value * Math.pow(maxvalue, -1)) * 94; i++) {
-            scale.draw(x + i * 2 + 4, y + 17);
-        }
+        g.fillRect(x + 4, y + 17, (bar.getWidth()-10) * value / maxvalue, scale.getHeight(), scale,1,1);
         bar.draw(x, y);
     }
 }

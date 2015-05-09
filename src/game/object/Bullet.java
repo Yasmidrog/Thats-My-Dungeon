@@ -112,8 +112,11 @@ public class Bullet extends game.creature.Entity {
         }
     }
    protected double getAngle(){
-       int dx = (int) (target.x - x);
-       int dy = (int) (target.y - y);
-       return Math.atan2(dy, dx);
+       if(target!=null) {
+           int dx = (int) (target.x - x);
+           int dy = (int) (target.y - y);
+           return Math.atan2(dy, dx);
+       }
+       return 0;
    }
 }
