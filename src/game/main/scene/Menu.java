@@ -73,7 +73,7 @@ public class Menu extends Scene {
                 public  void initValue(){
                     try{
                         String val= ((String)Game.conf.get(n).getValue());
-                        if(val.isEmpty()||val==null){
+                        if(val.isEmpty()){
                             value=n.toCharArray()[0];
                         }else{
                             value=val.toCharArray()[0];
