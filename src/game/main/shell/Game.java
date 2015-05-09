@@ -69,6 +69,10 @@ public class Game extends BasicGame {
         }
         System.exit(0);
     }
+    
+    public boolean closeRequested(){
+        return false;
+    }
 
     public static void main(String[] arguments) throws SlickException, LWJGLException {
         setUpNatives();
@@ -140,6 +144,7 @@ public class Game extends BasicGame {
         }
     }
 
+    
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
