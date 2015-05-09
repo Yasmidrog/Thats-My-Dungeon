@@ -41,9 +41,9 @@ public abstract class Target extends Ability {
             count--;
         }
         super.tick();
-        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(number + "")) && cd.is() && count == 0) {
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key + "")) && cd.is() && count == 0) {
             action();
-            count = 20;
+            count = 15;
         }
         if (Mouse.isButtonDown(1) && player.cast == this) {
             casting();

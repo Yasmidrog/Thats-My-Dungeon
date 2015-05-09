@@ -6,6 +6,8 @@
 package game.main;
 
 import static game.main.shell.Game.font;
+
+import game.main.shell.Game;
 import main.utils.Textures;
 import main.utils.Timer;
 import org.newdawn.slick.Color;
@@ -21,7 +23,8 @@ public abstract class Ability {
     public Timer cd, duration;
     public boolean lng, trgt;
     public Image icon, strip;
-    public char number;
+    public int number;
+    public char key;
     public int radius;
     public int x, y;
 
@@ -34,7 +37,15 @@ public abstract class Ability {
         strip = Textures.image("abilities/" + name2);
     }
 
-    public void init(char but, boolean trg, int radius) {
+    public void init(int but, boolean trg, int radius) {
+        try {
+            key = ((String) Game.conf.get(String.valueOf(but)).getValue()).toUpperCase().toCharArray()[0];
+        }catch (ClassCastException ex){
+            key = String.valueOf((Game.conf.get(String.valueOf(but)).getValue())).toUpperCase().toCharArray()[0];
+        }
+        catch (Exception e){
+           e.printStackTrace();
+        }
         number = but;
         if (trg) {
             trgt = trg;
@@ -88,7 +99,7 @@ public abstract class Ability {
             strip.draw(x + 1, y - i * 2 + 62);
         }
         icon.draw(x, y);
-        font.drawString(x + 32, y + 44, number + "", Color.white);
+        font.drawString(x+10,y+44,key+"    "+number, Color.white);
         if (cd.is()) {
             g.setColor(Color.green);
             g.drawRect(x, y, 64, 64);

@@ -142,7 +142,7 @@ public class Dungeon extends Scene {
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(120.0, 120.0, 900, 9);
+        player.init(120.0, 120.0, 90, 9);
         player.initImages();
     }
 

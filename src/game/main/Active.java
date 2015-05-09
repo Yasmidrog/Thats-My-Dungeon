@@ -21,7 +21,8 @@ public abstract class Active extends Ability {
     public void tick() {
         super.tick();
         try {
-            if (Keyboard.isKeyDown(Keyboard.getKeyIndex(number+ "")) && cd.is()) {
+
+            if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key + "")) && cd.is()) {
                 action();
             }
         }catch (IllegalStateException ignored){}
