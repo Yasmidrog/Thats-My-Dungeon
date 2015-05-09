@@ -69,12 +69,13 @@ public class Game extends BasicGame {
         }
         System.exit(0);
     }
+    
     @Override
-    public boolean closeRequested()
-    {
-        exit(); // Use this if you want to quit the app.
+    public boolean closeRequested(){
+        exit();
         return false;
     }
+
     public static void main(String[] arguments) throws SlickException, LWJGLException {
         setUpNatives();
         app = new AppGameContainer(new Game());
@@ -145,6 +146,7 @@ public class Game extends BasicGame {
         }
     }
 
+    
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
         GL11.glMatrixMode(GL11.GL_PROJECTION);

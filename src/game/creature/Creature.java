@@ -10,6 +10,7 @@ import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
+import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -80,6 +81,21 @@ public class Creature extends Entity {
         setTimer("dying", 1000);
     }
 
+    public void collision() {
+        for (Raider r : dung.getRaiders()) {
+            if (!r.dead) {
+                double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
+                if (d < getWidth()/3) {
+                    double a = atan2(r.y - y, r.x - x);
+                    r.x += cos(a) * (getWidth() - d) / 4;
+                    r.y += sin(a) * (getWidth() - d) / 4;
+                    x -= cos(a) * (getWidth() - d) / 4;
+                    y -= sin(a) * (getWidth() - d) / 4;
+                }
+            }
+        }
+    }
+    
     public void initImages() {
 
     }
@@ -105,6 +121,7 @@ public class Creature extends Entity {
         setStats();
         baseTick();
         move();
+        collision();
         for (Modifier mod : getMods()) {
             mod.tick(this);
         }
