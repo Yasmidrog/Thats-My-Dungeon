@@ -22,7 +22,7 @@ import org.newdawn.slick.Graphics;
  * @author Whizzpered
  */
 public class Creature extends Entity {
-
+    public Random missrand=new Random();
     public double ex, ey, hp;
     public int maxhp, dmg, index, range, dmgDistance, speed, realhp,misschance=0;
     public boolean dead, ranged, enemy, focused;
@@ -147,17 +147,15 @@ public class Creature extends Entity {
     }
 
     public void battle() {
-        boolean miss;
         double dist = Math.sqrt(Math.pow(x - focus.x, 2) + Math.pow(y - focus.y, 2));
         if (dist - 2 * speed < dmgDistance && getTimer("kick").is()) {
-            if(new Random().nextInt(100)<=misschance)
-                miss=true;
-            else miss=false;
-            dung.bullets.add(new Bullet((int) x, (int) y, focus, this,miss));
-            getTimer("kick").start();
+            shoot();
         }
     }
-
+    public void shoot(){
+            dung.bullets.add(new Bullet((int) x, (int) y, focus, this,miss()));
+            getTimer("kick").start();
+    }
     public void baseTick() {
         checkTimers();
         x += vx;
@@ -193,6 +191,9 @@ public class Creature extends Entity {
     public void render(Graphics g) {
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
+    }
+    protected boolean miss() {
+        return missrand.nextInt(100) <= misschance;
     }
 
     public void deadrender(Graphics g) {
