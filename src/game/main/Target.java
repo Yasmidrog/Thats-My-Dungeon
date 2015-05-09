@@ -41,7 +41,7 @@ public abstract class Target extends Ability {
             count--;
         }
         super.tick();
-        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key + "")) && cd.is() && count == 0) {
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key)) && cd.is() && count == 0) {
             action();
             count = 15;
         }

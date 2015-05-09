@@ -6,6 +6,7 @@
 package game.creature;
 
 import game.main.Ability;
+import game.main.shell.Game;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
 import java.util.Random;
@@ -26,7 +27,6 @@ public class Raider extends Creature {
     public Random r = new Random();
     public Animation bar;
     public Ability[] abils;
-
     @Override
     public int getWidth() {
         return 96;
@@ -64,6 +64,7 @@ public class Raider extends Creature {
         setTimer("chat", 600);
         initAbils();
         //setNick();
+
     }
 
     @Override
@@ -131,6 +132,7 @@ public class Raider extends Creature {
             }
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
             renderHP(g);
+            Game.font.drawString( (int) x - getWidth() / 2, (int) y - getHeight() / 2-40,"Level "+level);
         } catch (SlickException ex) {
             Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
         }

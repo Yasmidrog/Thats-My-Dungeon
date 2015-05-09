@@ -24,7 +24,7 @@ import org.newdawn.slick.Graphics;
 public class Creature extends Entity {
     public Random missrand=new Random();
     public double ex, ey, hp;
-    public int maxhp, dmg, index, range, dmgDistance, speed, realhp,misschance=0;
+    public int maxhp, dmg, index, range, dmgDistance, speed, realhp,level,misschance=0;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
@@ -68,9 +68,15 @@ public class Creature extends Entity {
         x = (Double) args[0];
         y = (Double) args[1];
         maxhp = (int) args[2];
+
         realhp = maxhp;
         hp = maxhp;
         dmg = (int) args[3];
+        level=(int) args[4];
+        if(level<0) {
+            dmg = (int) (level * 1.7);
+            hp = (int) (level * 1.7);
+        }
         setTimer("dying", 1000);
     }
 
