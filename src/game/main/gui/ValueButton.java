@@ -62,7 +62,7 @@ public abstract class ValueButton extends Button{
         }
         g.setColor(Color.white);
         if(reading) {
-            Game.font.drawString(x - (text.length() * 8), y + 13, text, Color.white);
+            Game.font.drawString(x - (text.length() * 10), y + 13, text, Color.white);
             if(Keyboard.getEventKeyState()) {
                 value = Keyboard.getKeyName(Keyboard.getEventKey());
                 reading = false;
@@ -70,7 +70,7 @@ public abstract class ValueButton extends Button{
                 changeSet();
             }
         }else{
-            Game.font.drawString(x - (text.length() * 8), y + 13, text + ": " + value, Color.white);
+            Game.font.drawString(x - (text.length() * 10), y + 13, text + ": " + value, Color.white);
             if (Math.abs(mx - x) < (w + wp) / 2 && Math.abs(y + 25 - my) < 25) {
                 if (wp < 16) {
                     wp *= 2;
@@ -86,5 +86,4 @@ public abstract class ValueButton extends Button{
             bp = Mouse.isButtonDown(0);
         }
     }
-
 }

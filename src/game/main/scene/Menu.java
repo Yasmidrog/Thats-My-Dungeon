@@ -55,7 +55,7 @@ public class Menu extends Scene {
         initButtons(h);
 
         name[0] = new Name(Display.getWidth() / 2 - 150, Display.getHeight() - 120, "Whizzpered", Color.white, "Founder, Teamleader", Color.magenta);
-        name[1] = new Name(Display.getWidth() / 2 - 100, Display.getHeight() - 80, "Yew_mentzaki", Color.white, "Programmist", Color.magenta);
+        name[1] = new Name(Display.getWidth() / 2 - 100, Display.getHeight() - 80, "Yew_mentzaki", Color.white, "Programmister", Color.magenta);
         name[2] = new Name(Display.getWidth() / 2 - 100, Display.getHeight() - 40, "Todo_Asano", Color.white, "Designer", Color.magenta);
     }
 
