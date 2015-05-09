@@ -15,7 +15,7 @@ import static game.main.scene.Menu.sprite;
  * Created by yasmidrog on 27.04.15.
  */
 public abstract class ValueButton extends Button{
-    public char value;
+    public String value;
     private boolean reading=false;
     public ValueButton(int x, int y, int width, String text, Color c) {
         super(x, y, width,text,c);
@@ -28,9 +28,9 @@ public abstract class ValueButton extends Button{
     public  void click(){
         if(!reading) reading=true;
     }
-    public void setValue(char c){value=c;}
+    public void setValue(String c){value=c;}
     public abstract void changeSet();//when value set
-    public void initValue(){value=' ';}
+    public void initValue(){value=" ";}
     @Override
     public void render(Graphics g){
         int x;
@@ -64,7 +64,7 @@ public abstract class ValueButton extends Button{
         if(reading) {
             Game.font.drawString(x - (text.length() * 8), y + 13, text, Color.white);
             if(Keyboard.getEventKeyState()) {
-                value = Keyboard.getEventCharacter();
+                value = Keyboard.getKeyName(Keyboard.getEventKey());
                 reading = false;
                 bp = false;
                 changeSet();

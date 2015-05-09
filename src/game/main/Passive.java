@@ -18,7 +18,7 @@ public abstract class Passive extends Ability {
 
     @Override
     public void initImages(String name1, String name2) {
-        key=' ';
+        key="";
         icon = Textures.image("abilities/" + name1);
         strip = Textures.image("abilities/passive.png");
     }
