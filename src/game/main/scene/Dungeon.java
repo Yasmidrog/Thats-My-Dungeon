@@ -178,7 +178,7 @@ public class Dungeon extends Scene {
             raiders[i - 1] = raiders[i];
         }
     }
-    int level=1;
+    int level=2;
     Timer waveTimer = new Timer(1000, new ActionListener() {
 
         @Override
@@ -208,7 +208,6 @@ public class Dungeon extends Scene {
                 }
                 waveTimer.stop();
             }
-
         }
     }
     );
