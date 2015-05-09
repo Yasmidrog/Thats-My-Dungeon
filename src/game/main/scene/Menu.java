@@ -61,14 +61,14 @@ public class Menu extends Scene {
 
     public void initButtons(int h) {
         int start=h/7;
-        int sx=-150;
+        int sx=-240;
         for(int i=1;i<10;i++){
             final String n=String.valueOf(i);
             final int j=i;
             if(start>Display.getHeight()-Display.getHeight()/4) {
-                sx+=250; start=h/7;
+                sx+=300; start=h/7;
             }
-            abilitySettings.add(new ValueButton(sx,start,150,"Ability "+i,Color.blue) {
+            abilitySettings.add(new ValueButton(sx,start,240,"Ability "+i,Color.blue) {
                 @Override
                 public  void initValue(){
                     try{
