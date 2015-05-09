@@ -28,7 +28,7 @@ public class Magic extends Bullet {
     }
 
     public Magic(int x1, int y1, Creature creature, double angle) {
-        super(x1, y1, null, creature);
+        super(x1, y1, null, creature,false);
         this.angle = angle;
         type = 1;
         speed = 7;
