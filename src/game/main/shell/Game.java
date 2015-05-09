@@ -70,7 +70,9 @@ public class Game extends BasicGame {
         System.exit(0);
     }
     
+    @Override
     public boolean closeRequested(){
+        exit();
         return false;
     }
 
