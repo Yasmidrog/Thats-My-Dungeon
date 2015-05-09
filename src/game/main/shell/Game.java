@@ -69,6 +69,12 @@ public class Game extends BasicGame {
         }
         System.exit(0);
     }
+    @Override
+    public boolean closeRequested()
+    {
+        exit(); // Use this if you want to quit the app.
+        return false;
+    }
 
     public static void main(String[] arguments) throws SlickException, LWJGLException {
         setUpNatives();
