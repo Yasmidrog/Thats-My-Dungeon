@@ -3,6 +3,7 @@ package main.utils;
 
 import game.main.scene.Dungeon;
 import game.object.Object;
+import org.newdawn.slick.Image;
 
 import java.io.*;
 
@@ -42,6 +43,11 @@ public class DungeonParser {
                     case '*':
                         System.out.print("*");
                         objs[j][i]=new Object(64*j,64*(i-1),dung);
+                        objs[j][i].initImage(Textures.image("floor/wall.png"));
+                        break;
+                    default:
+                        objs[j][i]=new Object(64*j,64*(i-1),dung);
+                        objs[j][i].initImage(Textures.image("floor/some.png"));
                         break;
                 }
             }

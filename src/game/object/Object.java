@@ -7,6 +7,9 @@ package game.object;
 
 import game.creature.Raider;
 import game.main.scene.Dungeon;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+
 import static java.lang.Math.*;
 
 /**
@@ -16,7 +19,7 @@ import static java.lang.Math.*;
 public class Object extends game.creature.Entity {
 
     public Dungeon dung;
-
+    private Image image;
     public int getSize() {
         return 64;
     }
@@ -26,7 +29,9 @@ public class Object extends game.creature.Entity {
         this.x = x;
         this.y = y;
     }
-
+    public void initImage(Image im){
+        image=im;
+    }
     public void collision() {
         for (Raider r : dung.getRaiders()) {
             if (!r.dead) {
@@ -38,6 +43,10 @@ public class Object extends game.creature.Entity {
                 }
             }
         }
+    }
+    @Override
+    public void render(Graphics g){
+        image.draw((float)x,(float)y);
     }
 
 }
