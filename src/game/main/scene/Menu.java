@@ -74,9 +74,9 @@ public class Menu extends Scene {
                     try{
                         String val= ((String)Game.conf.get(n).getValue());
                         if(val.isEmpty()||val==null){
-                            value=n.toCharArray()[0];
+                            value=n;
                         }else{
-                            value=val.toCharArray()[0];
+                            value=val;
                         }
                     }catch (Exception ex){
                         ex.printStackTrace();

@@ -24,7 +24,7 @@ public abstract class Ability {
     public boolean lng, trgt;
     public Image icon, strip;
     public int number;
-    public char key;
+    public String key;
     public int radius;
     public int x, y;
 
@@ -39,9 +39,9 @@ public abstract class Ability {
 
     public void init(int but, boolean trg, int radius) {
         try {
-            key = ((String) Game.conf.get(String.valueOf(but)).getValue()).toUpperCase().toCharArray()[0];
+            key = ((String) Game.conf.get(String.valueOf(but)).getValue()).toUpperCase();
         }catch (ClassCastException ex){
-            key = String.valueOf((Game.conf.get(String.valueOf(but)).getValue())).toUpperCase().toCharArray()[0];
+            key = String.valueOf((Game.conf.get(String.valueOf(but)).getValue())).toUpperCase();
         }
         catch (Exception e){
            e.printStackTrace();
@@ -99,7 +99,7 @@ public abstract class Ability {
             strip.draw(x + 1, y - i * 2 + 62);
         }
         icon.draw(x, y);
-        font.drawString(x+10,y+44,key+"    "+number, Color.white);
+        font.drawString(x,y+44,key+"    "+number, Color.white);
         if (cd.is()) {
             g.setColor(Color.green);
             g.drawRect(x, y, 64, 64);
