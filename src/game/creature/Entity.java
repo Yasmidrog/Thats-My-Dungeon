@@ -18,6 +18,7 @@ public abstract class Entity {
     public void init(Object... args) {
 
     }
+    
 
     public void tick() {
 
