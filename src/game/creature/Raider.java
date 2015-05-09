@@ -64,6 +64,7 @@ public class Raider extends Creature {
         setTimer("chat", 600);
         initAbils();
         //setNick();
+
     }
 
     @Override

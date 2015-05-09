@@ -34,7 +34,6 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Player extends Creature {
-
     public Bar healthbar;
     public RaiderWar agr;
     public Image ded;

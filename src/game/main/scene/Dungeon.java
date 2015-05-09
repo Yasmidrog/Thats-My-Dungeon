@@ -38,7 +38,7 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly;
+    public int camx, camy, flx, fly,level=1;
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
@@ -178,7 +178,7 @@ public class Dungeon extends Scene {
             raiders[i - 1] = raiders[i];
         }
     }
-    int level=2;
+
     Timer waveTimer = new Timer(1000, new ActionListener() {
 
         @Override
@@ -190,6 +190,7 @@ public class Dungeon extends Scene {
                     report(waveTimerSeconds + " seconds left!", 94);
                 } else {
                     report("Let's go!", 300);
+                    level++;
                 }
             } else {
                 for (int i = 0; i < 4; i++) {
