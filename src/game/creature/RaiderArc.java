@@ -26,7 +26,7 @@ public class RaiderArc extends Raider {
         super.init(args);
         ranged = true;
         range = 200;
-        misschance=50;
+        misschance=35;
     }
 
     Raider thisClass = this;
