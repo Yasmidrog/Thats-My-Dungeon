@@ -81,10 +81,8 @@ public class Bullet extends game.creature.Entity {
         if(!miss) {
             if (owner.enemy) {
                 if (Math.abs(x - dung.player.x) < dung.player.getWidth() / 2 && Math.abs(y - dung.player.y) < dung.player.getHeight() / 2) {
-
                     dung.player.hp -= owner.dmg;
                     hit = true;
-
                 }
 
             } else {
@@ -97,8 +95,10 @@ public class Bullet extends game.creature.Entity {
                     }
                 }
             }
+        }else{
+            angle+=0.005;
         }
-        if (x < 0 || x > 2000 || y < 0 || y > 2000) {
+        if (x < 0 || x > dung.getWidth() || y < 0 || y > dung.getHeight()) {
             dung.bullets.remove(this);
         }
     }

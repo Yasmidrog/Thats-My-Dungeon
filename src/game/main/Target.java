@@ -6,12 +6,9 @@
 package game.main;
 
 import game.creature.Player;
-import game.main.shell.Game;
 import main.utils.Textures;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -62,7 +59,6 @@ public abstract class Target extends Ability {
             player.cast = null;
             pressed = false;
         }
-
     }
 
     public void casting() {

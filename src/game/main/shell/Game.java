@@ -125,7 +125,6 @@ public class Game extends BasicGame {
         Textures.load();
         currScene.init();
         sceneTimer();
-
     }
 
     public static void sceneTimer() {
@@ -146,7 +145,6 @@ public class Game extends BasicGame {
         }
     }
 
-    
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -169,9 +167,7 @@ public class Game extends BasicGame {
 
             Field fieldSysPath = ClassLoader.class
                     .getDeclaredField("sys_paths");
-            fieldSysPath.setAccessible(
-                    true);
-
+            fieldSysPath.setAccessible(true);
             try {
                 fieldSysPath.set(null, null);
             } catch (IllegalArgumentException ex) {
