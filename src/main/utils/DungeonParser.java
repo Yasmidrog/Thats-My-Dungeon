@@ -45,6 +45,7 @@ public class DungeonParser {
                         objs.get(objs.size()-1).initImage(Textures.image("floor/wall.png"));
                         break;
                     default:
+                        System.out.print(" ");
                         objs.add(new Object(64*j,64*(i-1),dung,false));
                         objs.get(objs.size()-1).initImage(Textures.image("floor/some.png"));
                         break;
