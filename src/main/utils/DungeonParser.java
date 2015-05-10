@@ -5,6 +5,7 @@ import game.main.scene.Dungeon;
 import game.object.Object;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by yasmidrog on 09.05.15.
@@ -12,6 +13,7 @@ import java.io.*;
 public class DungeonParser {
     private int w,h;
     private Dungeon dung;
+    private ArrayList<Object> objects;
     public DungeonParser(File file, Dungeon dng){
         dung=dng;
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -28,29 +30,29 @@ public class DungeonParser {
             ex.printStackTrace();
         }
     }
-    public Object[][] parse(String lines[]){
+    public void parse(String lines[]){
         char[] colons;
         w=Integer.valueOf(lines[0].split(" ")[0]);
         h=Integer.valueOf(lines[0].split(" ")[1])+1;
-        Object[][] objs=new Object[w][h+1];
+        ArrayList<Object> objs=new ArrayList<Object>();
         for(int i=1;i<h;i++) {
             colons=lines[i].toCharArray();
             for (int j = 0; j < w; j++) {
                 switch (colons[j]) {
                     case '*':
                         System.out.print("*");
-                        objs[j][i]=new Object(64*j,64*(i-1),dung,true);
-                        objs[j][i].initImage(Textures.image("floor/wall.png"));
+                       objs.add(new Object(64*j,64*(i-1),dung,true));
+                        objs.get(objs.size()-1).initImage(Textures.image("floor/wall.png"));
                         break;
                     default:
-                        objs[j][i]=new Object(64*j,64*(i-1),dung,false);
-                        objs[j][i].initImage(Textures.image("floor/some.png"));
+                        objs.add(new Object(64*j,64*(i-1),dung,false));
+                        objs.get(objs.size()-1).initImage(Textures.image("floor/some.png"));
                         break;
                 }
             }
             System.out.println();
         }
-        return objs;
+        objects= objs;
     }
     public int getWidth() {
         return w;
@@ -58,6 +60,8 @@ public class DungeonParser {
     public int getHeight() {
         return h;
     }
-
+    public ArrayList<Object> getObjects(){
+        return objects;
+    }
 
 }

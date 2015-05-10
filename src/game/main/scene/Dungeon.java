@@ -4,14 +4,12 @@
  * sharing of that code are denied.
  */
 package game.main.scene;
-
 import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
 import game.main.gui.Chat;
 import game.object.Bullet;
 import game.world.*;
-import static game.world.Block.initSprites;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -43,7 +41,6 @@ public class Dungeon extends Scene {
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-
     public Raider[] getRaiders() {
         int i;
         for (i = 0; i < raiders.length; i++) {
