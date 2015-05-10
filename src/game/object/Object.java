@@ -6,7 +6,6 @@
 package game.object;
 
 import game.creature.Creature;
-import game.creature.Player;
 import game.creature.Raider;
 import game.main.scene.Dungeon;
 import org.newdawn.slick.Graphics;
@@ -43,6 +42,12 @@ public class Object extends game.creature.Entity {
                     }
                 }
             collide(dung.player);
+            for(Bullet b:dung.getBullets()){
+                double d = sqrt(Math.pow(b.x - x, 2) + pow(b.y - y, 2));
+                if (d < getSize() / 3 ) {
+                    dung.bullets.remove(b);
+                }
+              }
             }
         }
 
