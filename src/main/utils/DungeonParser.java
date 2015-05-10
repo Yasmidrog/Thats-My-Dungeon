@@ -3,7 +3,6 @@ package main.utils;
 
 import game.main.scene.Dungeon;
 import game.object.Object;
-import org.newdawn.slick.Image;
 
 import java.io.*;
 
@@ -11,8 +10,7 @@ import java.io.*;
  * Created by yasmidrog on 09.05.15.
  */
 public class DungeonParser {
-
-    int w,h;
+    private int w,h;
     private Dungeon dung;
     public DungeonParser(File file, Dungeon dng){
         dung=dng;
@@ -30,7 +28,6 @@ public class DungeonParser {
             ex.printStackTrace();
         }
     }
-
     public Object[][] parse(String lines[]){
         char[] colons;
         w=Integer.valueOf(lines[0].split(" ")[0]);
@@ -42,11 +39,11 @@ public class DungeonParser {
                 switch (colons[j]) {
                     case '*':
                         System.out.print("*");
-                        objs[j][i]=new Object(64*j,64*(i-1),dung);
+                        objs[j][i]=new Object(64*j,64*(i-1),dung,true);
                         objs[j][i].initImage(Textures.image("floor/wall.png"));
                         break;
                     default:
-                        objs[j][i]=new Object(64*j,64*(i-1),dung);
+                        objs[j][i]=new Object(64*j,64*(i-1),dung,false);
                         objs[j][i].initImage(Textures.image("floor/some.png"));
                         break;
                 }
@@ -55,4 +52,12 @@ public class DungeonParser {
         }
         return objs;
     }
+    public int getWidth() {
+        return w;
+    }
+    public int getHeight() {
+        return h;
+    }
+
+
 }
