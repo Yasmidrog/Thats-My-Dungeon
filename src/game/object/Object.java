@@ -42,11 +42,8 @@ public class Object extends game.creature.Entity {
                    collide(r);
                     }
                 }
+            collide(dung.player);
             }
-        /*
-        collide(dung.player);
-        */
-
         }
 
     @Override
@@ -55,10 +52,10 @@ public class Object extends game.creature.Entity {
     }
     private void collide(Creature r) {
         double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
-        if (d < getSize() / 2 + r.getHeight() / 2) {
+        if (d < getSize() / 3 + r.getHeight() / 3) {
             double a = atan2(r.y - y, r.x - x);
-            r.x += cos(a) * (r.getWidth() / 2 - d) / 4;
-            r.y += sin(a) * (r.getWidth() / 2 - d) / 4;
+            r.x += cos(a) * (r.getWidth() - d) / 20;
+            r.y += sin(a) * (r.getWidth() - d) / 20;
         }
     }
 }

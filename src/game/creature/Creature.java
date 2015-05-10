@@ -32,7 +32,6 @@ public class Creature extends Entity {
     public Creature focus;
     public Dungeon dung;
     public Side side = Side.FRONT;
-
     ArrayList<Timer> timers = new ArrayList<>();
     ArrayList<String> timnames = new ArrayList<>();
     public ArrayList<Modifier> mods = new ArrayList<>();
@@ -187,18 +186,6 @@ public class Creature extends Entity {
             dead = true;
             focused = false;
             getTimer("dying").start();
-        }
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        if (x > dung.getWidth()) {
-            x = dung.getWidth();
-        }
-        if (y > dung.getHeight()) {
-            y = dung.getHeight();
         }
     }
 
