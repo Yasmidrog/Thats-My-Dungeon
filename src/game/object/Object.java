@@ -5,6 +5,7 @@
  */
 package game.object;
 
+import game.creature.Creature;
 import game.creature.Raider;
 import game.main.scene.Dungeon;
 import org.newdawn.slick.Graphics;
@@ -41,19 +42,30 @@ public class Object extends game.creature.Entity {
         if (solid) {
             for (Raider r : dung.getRaiders()) {
                 if (!r.dead) {
-                    double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
-                    if (d < getSize() / 2 + r.getHeight() / 2) {
-                        double a = atan2(r.y - y, r.x - x);
-                        r.x -= cos(a) * (r.getWidth() - d) / 4;
-                        r.y -= sin(a) * (r.getWidth() - d) / 4;
+                   collide(r);
                     }
                 }
+            collide(dung.player);
+            for(Bullet b:dung.getBullets()){
+                double d = sqrt(Math.pow(b.x - x, 2) + pow(b.y - y, 2));
+                if (d < getSize() / 3 ) {
+                    dung.bullets.remove(b);
+                }
+              }
             }
         }
-    }
+
 
     @Override
     public void render(Graphics g) {
         image.draw((float) x, (float) y);
+    }
+    private void collide(Creature r) {
+        double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
+        if (d < getSize() / 3 + r.getHeight() / 3) {
+            double a = atan2(r.y - y, r.x - x);
+            r.x += cos(a) * (r.getWidth() - d) / 20;
+            r.y += sin(a) * (r.getWidth() - d) / 20;
+        }
     }
 }
