@@ -23,15 +23,17 @@ import org.newdawn.slick.Graphics;
  * @author Whizzpered
  */
 public class Creature extends Entity {
-    public Random missrand=new Random();
+
+    public Random missrand = new Random();
     public double ex, ey, hp;
-    public int maxhp, dmg, index, range, dmgDistance, speed, realhp,level,misschance=0;
+    public int maxhp, dmg, index, range, dmgDistance, speed, realhp, level, misschance = 0;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
     public Creature focus;
     public Dungeon dung;
     public Side side = Side.FRONT;
+
     ArrayList<Timer> timers = new ArrayList<>();
     ArrayList<String> timnames = new ArrayList<>();
     public ArrayList<Modifier> mods = new ArrayList<>();
@@ -72,8 +74,8 @@ public class Creature extends Entity {
         realhp = maxhp;
         hp = maxhp;
         dmg = (int) args[3];
-        level=(int) args[4];
-        if(level<0) {
+        level = (int) args[4];
+        if (level < 0) {
             dmg = (int) (level * 1.7);
             hp = (int) (level * 1.7);
         }
@@ -84,7 +86,7 @@ public class Creature extends Entity {
         for (Raider r : dung.getRaiders()) {
             if (!r.dead) {
                 double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
-                if (d < getWidth()/3) {
+                if (d < getWidth() / 3) {
                     double a = atan2(r.y - y, r.x - x);
                     r.x += cos(a) * (getWidth() - d) / 4;
                     r.y += sin(a) * (getWidth() - d) / 4;
@@ -94,7 +96,7 @@ public class Creature extends Entity {
             }
         }
     }
-    
+
     public void initImages() {
 
     }
@@ -174,10 +176,12 @@ public class Creature extends Entity {
             shoot();
         }
     }
-    public void shoot(){
-            dung.bullets.add(new Bullet((int) x, (int) y, focus, this,miss()));
-            getTimer("kick").start();
+
+    public void shoot() {
+        dung.bullets.add(new Bullet((int) x, (int) y, focus, this, miss()));
+        getTimer("kick").start();
     }
+
     public void baseTick() {
         checkTimers();
         x += vx;
@@ -186,6 +190,18 @@ public class Creature extends Entity {
             dead = true;
             focused = false;
             getTimer("dying").start();
+        }
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (x > dung.getWidth()) {
+            x = dung.getWidth();
+        }
+        if (y > dung.getHeight()) {
+            y = dung.getHeight();
         }
     }
 
@@ -202,6 +218,7 @@ public class Creature extends Entity {
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
     }
+
     protected boolean miss() {
         return missrand.nextInt(100) <= misschance;
     }

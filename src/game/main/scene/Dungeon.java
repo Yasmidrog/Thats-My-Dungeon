@@ -11,6 +11,7 @@ import game.main.gui.Chat;
 import game.object.Bullet;
 import game.object.Flag;
 import game.object.Object;
+import game.world.*;
 import main.utils.DungeonParser;
 import main.utils.Textures;
 import org.lwjgl.input.Mouse;
@@ -37,6 +38,7 @@ public class Dungeon extends Scene {
     public Player player;
     public Flag flag = new Flag();
     public Chat chat = new Chat();
+    public Floor floor = new Floor();
     public Raider[] raiders = new Raider[25];
     public int camx, camy, flx, fly, dunglevel = 1, wavenumber = 1;
     public ArrayList<Object> objs = new ArrayList<>();
@@ -57,17 +59,19 @@ public class Dungeon extends Scene {
 
         return u;
     }
-    public Bullet[] getBullets(){
-            int i;
-            for (i = 0; i < bullets.size(); i++) {
-                if (bullets.get(i) == null) {
-                    break;
-                }
+
+    public Bullet[] getBullets() {
+        int i;
+        for (i = 0; i < bullets.size(); i++) {
+            if (bullets.get(i) == null) {
+                break;
             }
-            Bullet[] u = new Bullet[i];
-            System.arraycopy(bullets.toArray(), 0, u, 0, i);
-            return u;
+        }
+        Bullet[] u = new Bullet[i];
+        System.arraycopy(bullets.toArray(), 0, u, 0, i);
+        return u;
     }
+
     public Creature[] creaturesYSort() {
         Creature[] u = new Creature[getRaiders().length + 1];
         u[0] = player;
@@ -106,11 +110,11 @@ public class Dungeon extends Scene {
     }
 
     public int getWidth() {
-        return h * 64;
+        return floor.h * Block.size;
     }
 
     public int getHeight() {
-        return w * 64;
+        return floor.w * Block.size;
     }
 
     public void report(String s, int dur) {
@@ -119,10 +123,14 @@ public class Dungeon extends Scene {
 
     @Override
     public void init() {
-        DungeonParser d = new DungeonParser(new File(String.valueOf("res/text/dungeons/" + dunglevel)), this);
-        objs = d.getObjects();
-        w = d.getWidth();
-        h = d.getHeight();
+        DungeonParser d;
+        try {
+            d = new DungeonParser(this, dunglevel + "");
+            floor.w = d.w;
+            floor.h = d.h;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             chat.init(this);
@@ -301,6 +309,7 @@ public class Dungeon extends Scene {
     public void render(Graphics g) {
         int py = camy, px = camx;
         GL11.glTranslatef(px, py, 0);
+        floor.render(g, flx, fly);
         for (Object o : objs) {
             o.render(g);
         }

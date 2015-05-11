@@ -36,7 +36,7 @@ import org.newdawn.slick.SlickException;
 public class Player extends Creature {
     public Bar healthbar;
     public RaiderWar agr;
-    public Image ded;
+    public static Image ded;
     public ArrayList<Ability> abils = new ArrayList<>();
     public Target cast;
 
