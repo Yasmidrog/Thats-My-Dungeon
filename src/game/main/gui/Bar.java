@@ -17,8 +17,8 @@ import org.newdawn.slick.SlickException;
  */
 public class Bar {
 
-    public int maxvalue ;        
-    public Image bar, scale;
+    public int maxvalue;
+    public static Image bar, scale;
 
     public Bar(int max, String bar, String scale) {
         maxvalue = max;
@@ -31,7 +31,7 @@ public class Bar {
     }
 
     public void render(Graphics g, int x, int y, int value) {
-        g.fillRect(x + 4, y + 17, (bar.getWidth()-10) * value / maxvalue, scale.getHeight(), scale,1,1);
+        g.fillRect(x + 4, y + 17, (bar.getWidth() - 10) * value / maxvalue, scale.getHeight(), scale, 1, 1);
         bar.draw(x, y);
     }
 }

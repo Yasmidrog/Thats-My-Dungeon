@@ -21,7 +21,7 @@ public class Object extends game.creature.Entity {
 
     public boolean solid;
     public Dungeon dung;
-    private Image image;
+    private static Image image;
 
     public int getSize() {
         return 64;
@@ -46,7 +46,7 @@ public class Object extends game.creature.Entity {
                     }
                 }
             collide(dung.player);
-            for(Bullet b:dung.getBullets()){
+            for(Bullet b:dung.getBul()){
                 double d = sqrt(Math.pow(b.x - x, 2) + pow(b.y - y, 2));
                 if (d < getSize() / 3 ) {
                     dung.bullets.remove(b);

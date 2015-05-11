@@ -5,13 +5,21 @@
  */
 package game.main.scene;
 
+import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
 import game.main.gui.Chat;
 import game.object.Bullet;
-import game.object.Flag;
-import game.object.Object;
-import main.utils.DungeonParser;
+import game.world.*;
+import static game.world.Block.initSprites;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Timer;
 import main.utils.Textures;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -19,31 +27,22 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
+ *
  * @author Юрий
  */
 public class Dungeon extends Scene {
 
+    Floor floor = new Floor();
     public Player player;
     public Flag flag = new Flag();
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly, dunglevel = 1, wavenumber = 1;
-    public ArrayList<Object> objs = new ArrayList<>();
+    public int camx, camy, flx, fly, level = 1;
+
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    private int w, h;
 
     public Raider[] getRaiders() {
         int i;
@@ -57,17 +56,7 @@ public class Dungeon extends Scene {
 
         return u;
     }
-    public Bullet[] getBullets(){
-            int i;
-            for (i = 0; i < bullets.size(); i++) {
-                if (bullets.get(i) == null) {
-                    break;
-                }
-            }
-            Bullet[] u = new Bullet[i];
-            System.arraycopy(bullets.toArray(), 0, u, 0, i);
-            return u;
-    }
+
     public Creature[] creaturesYSort() {
         Creature[] u = new Creature[getRaiders().length + 1];
         u[0] = player;
@@ -106,11 +95,11 @@ public class Dungeon extends Scene {
     }
 
     public int getWidth() {
-        return h * 64;
+        return floor.w * Block.size;
     }
 
     public int getHeight() {
-        return w * 64;
+        return floor.h * Block.size;
     }
 
     public void report(String s, int dur) {
@@ -119,11 +108,8 @@ public class Dungeon extends Scene {
 
     @Override
     public void init() {
-        DungeonParser d = new DungeonParser(new File(String.valueOf("res/text/dungeons/" + dunglevel)), this);
-        objs = d.getObjects();
-        w = d.getWidth();
-        h = d.getHeight();
-
+        Block.setBlocks();
+        floor.init();
         try {
             chat.init(this);
         } catch (FileNotFoundException ex) {
@@ -142,11 +128,13 @@ public class Dungeon extends Scene {
         for (Image im : sprites) {
             im.setFilter(GL11.GL_NEAREST);
         }
+
+        Block.initSprites();
     }
 
     public void initCreatures() {
         player();
-        spawn(new RaiderArc(), 400.0, 240.0, 9, 4, 1);
+        spawn(new RaiderArc(), 120.0, 240.0, 9, 4, 1);
         spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
         spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
     }
@@ -154,11 +142,11 @@ public class Dungeon extends Scene {
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(190.0, 190.0, 90, 9, 1);
+        player.init(120.0, 120.0, 90, 9, 1);
         player.initImages();
     }
 
-    public void spawn(Raider cr, java.lang.Object... args) {
+    public void spawn(Raider cr, Object... args) {
         cr.dung = this;
         add(cr);
         cr.init(args);
@@ -202,21 +190,22 @@ public class Dungeon extends Scene {
                     report(waveTimerSeconds + " seconds left!", 94);
                 } else {
                     report("Let's go!", 300);
-                    wavenumber++;
+                    level++;
                 }
             } else {
                 for (int i = 0; i < 4; i++) {
                     switch (r.nextInt(3)) {
                         case 0:
-                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, wavenumber);
+                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, level);
                             break;
                         case 1:
-                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, wavenumber);
+                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, level);
                             break;
                         case 2:
-                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2, wavenumber);
+                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2, level);
                             break;
                     }
+
                 }
                 waveTimer.stop();
             }
@@ -250,9 +239,7 @@ public class Dungeon extends Scene {
         }
 
         player.tick();
-        for (Object o : objs) {
-            o.collision();
-        }
+
         for (Bullet b : getBul()) {
             if (b != null) {
                 b.tick(this);
@@ -300,16 +287,17 @@ public class Dungeon extends Scene {
     @Override
     public void render(Graphics g) {
         int py = camy, px = camx;
+
         GL11.glTranslatef(px, py, 0);
-        for (Object o : objs) {
-            o.render(g);
-        }
+
+        floor.render(g, flx, fly);
         for (Creature cr : creaturesYSort()) {
             if (cr.dead) {
                 cr.deadrender(g);
             } else {
                 cr.render(g);
             }
+
             if (cr == player) {
                 player.abilsRender(g);
             }
@@ -324,6 +312,7 @@ public class Dungeon extends Scene {
             flag.render(g, sprites.get(3));
         }
         GL11.glTranslatef(-px, -py, 0);
+
         player.healthbar.render(g, 20, 20, (int) player.hp);
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
