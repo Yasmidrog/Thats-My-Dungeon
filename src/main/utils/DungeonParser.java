@@ -18,9 +18,6 @@ public class DungeonParser {
         aim = new File("res/text/dungeons/" + name);
         this.dung = dung;
         Scanner sc = new Scanner(aim);
-
-        w = sc.nextInt();
-        h = sc.nextInt();
         sc.nextLine();
         world = new char[h][w];
         for (int i = 0; i < h; i++) {
@@ -37,7 +34,8 @@ public class DungeonParser {
                     case (' '):
                         break;
                     case ('*'):
-                        dung.objs.add(new game.object.Object(x*64,y*64,dung,true));
+                        //dung.objs.add(new game.object.Object(x*64,y*64,dung,true));
+                        //dung.objs.get(dung.objs.size()-1).initImage("wall.png");
                         break;
                 }
             }

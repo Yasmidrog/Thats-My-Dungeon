@@ -83,6 +83,11 @@ public class Creature extends Entity {
     }
 
     public void collision() {
+        crCollision();
+        objCollision();
+    }
+    
+    public void crCollision() {
         for (Raider r : dung.getRaiders()) {
             if (!r.dead) {
                 double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
@@ -95,6 +100,10 @@ public class Creature extends Entity {
                 }
             }
         }
+    }
+    
+    public void objCollision(){
+        
     }
 
     public void initImages() {

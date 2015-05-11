@@ -22,7 +22,7 @@ public abstract class Ability {
 
     public Timer cd, duration;
     public boolean lng, trgt;
-    public static Image icon, strip;
+    public Image icon, strip;
     public int number;
     public String key;
     public int radius;
