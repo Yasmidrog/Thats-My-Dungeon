@@ -9,12 +9,14 @@ import java.util.Scanner;
  */
 public class DungeonParser {
 
-    private static int w, h;
+    public static int w, h;
     private static File aim;
     private static char[][] world;
+    static Dungeon dung;
 
     public DungeonParser(Dungeon dung, String name) throws FileNotFoundException {
-        aim = new File("res/text/dungeons/"+name);
+        aim = new File("res/text/dungeons/" + name);
+        this.dung = dung;
         Scanner sc = new Scanner(aim);
 
         w = sc.nextInt();
@@ -33,10 +35,9 @@ public class DungeonParser {
             for (int y = 0; y < h; y++) {
                 switch (world[y][x]) {
                     case (' '):
-                        world[y][x] = 'E';
                         break;
                     case ('*'):
-                        world[y][x] = 'O';
+                        dung.objs.add(new game.object.Object(x*64,y*64,dung,true));
                         break;
                 }
             }
