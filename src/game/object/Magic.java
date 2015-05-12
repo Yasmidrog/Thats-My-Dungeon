@@ -36,7 +36,7 @@ public class Magic extends Bullet {
     }
 
     @Override
-    public void mtick(Dungeon dung) {
+    public void tick(Dungeon dung) {
         x += Math.cos(angle) * speed;
         y += Math.sin(angle) * speed;
 

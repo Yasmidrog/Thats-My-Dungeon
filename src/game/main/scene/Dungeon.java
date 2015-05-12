@@ -9,9 +9,9 @@ import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
 import game.main.gui.Chat;
+import game.main.gui.FloatText;
 import game.object.Bullet;
 import game.world.*;
-import static game.world.Block.initSprites;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -43,6 +43,7 @@ public class Dungeon extends Scene {
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
+    public ArrayList<FloatText> text = new ArrayList<>();
 
     public Raider[] getRaiders() {
         int i;
@@ -54,6 +55,18 @@ public class Dungeon extends Scene {
         Raider[] u = new Raider[i];
         System.arraycopy(raiders, 0, u, 0, i);
 
+        return u;
+    }
+    
+    public FloatText[] getText() {
+        FloatText[] u = new FloatText[text.size()];
+
+        try {
+            for (int i = 0; i < text.size(); i++) {
+                u[i] = text.get(i);
+            }
+        } catch (Exception e) {
+        }
         return u;
     }
 
