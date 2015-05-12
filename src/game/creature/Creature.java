@@ -10,6 +10,7 @@ import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
+import game.world.Block;
 import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -103,7 +104,22 @@ public class Creature extends Entity {
     }
     
     public void objCollision(){
-        
+        for (int i = (int) ((y - getHeight()/2) / Block.size); i < (y + getHeight()/2) / Block.size; i++) {
+            if (Block.block[dung.floor.get((int) ((x - getWidth() / 2) / Block.size), (int) (i))].solid) {
+                x = (int) ((x - getWidth() / 2) / Block.size + 1) * Block.size + getWidth() / 2 + 1;
+            }
+            if (Block.block[dung.floor.get((int) ((x + getWidth() / 2) / Block.size), (int) (i))].solid) {
+                x = (int) ((x + getWidth() / 2) / Block.size) * Block.size - getWidth() / 2 - 1;
+            }
+        }
+        for (int i = (int) ((x - getWidth()/2) / Block.size); i < (x + getWidth()/2) / Block.size; i++) {
+            if (Block.block[dung.floor.get((int) (i), (int) ((y - getHeight() / 2) / Block.size))].solid) {
+                y = (int) ((y - getHeight() / 2) / Block.size + 1) * Block.size + getHeight() / 2 + 1;
+            }
+            if (Block.block[dung.floor.get((int) (i), (int) ((y + getHeight() / 2) / Block.size))].solid) {
+                y = (int) ((y + getHeight() / 2) / Block.size) * Block.size - getHeight() / 2 - 1;
+            }
+        }
     }
 
     public void initImages() {
