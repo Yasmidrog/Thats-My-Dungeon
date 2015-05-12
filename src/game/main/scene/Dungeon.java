@@ -33,7 +33,7 @@ import org.newdawn.slick.Image;
  */
 public class Dungeon extends Scene {
 
-    Floor floor = new Floor();
+    public Floor floor = new Floor();
     public Player player;
     public Flag flag = new Flag();
     public Chat chat = new Chat();
