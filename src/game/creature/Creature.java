@@ -245,6 +245,7 @@ public class Creature extends Entity {
     }
 
     protected boolean miss() {
+        
         return missrand.nextInt(100) <= misschance;
     }
 

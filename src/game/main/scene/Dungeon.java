@@ -321,6 +321,9 @@ public class Dungeon extends Scene {
 
             }
         }
+        for(FloatText ft :getText()){
+            ft.render(g);
+        }
         if (flag != null) {
             flag.render(g, sprites.get(3));
         }
