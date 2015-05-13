@@ -29,7 +29,6 @@ public class Bullet extends game.creature.Entity {
         x = x1;
         y = y1;
         this.miss = miss;
-
         this.owner = creature;
         this.target = target;
         if (miss) {

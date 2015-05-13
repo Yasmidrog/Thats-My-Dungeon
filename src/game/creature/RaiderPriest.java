@@ -64,7 +64,6 @@ public class RaiderPriest extends Raider {
                 if (raid.hp >= raid.maxhp) {
                     raid.hp = raid.maxhp;
                 }
-                System.out.println("READE");
                 start();
             }
 

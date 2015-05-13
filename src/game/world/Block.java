@@ -22,9 +22,10 @@ public class Block {
     public boolean solid;
 
     public Block(String sprite, boolean solid) {
-        this.sprite = Textures.image(sprite);
+        this.sprite = Textures.image(sprite).getScaledCopy(2f);
         this.sprite.setFilter(GL11.GL_NEAREST);
         this.solid = solid;
+        size = this.sprite.getHeight();
     }
 
     public Block() {
