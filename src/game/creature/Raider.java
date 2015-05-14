@@ -115,14 +115,6 @@ public class Raider extends Creature {
         if (dist > dmgDistance || dist < Math.max(dmgDistance / 2, focus.dmgDistance / 3 * 2)) {
             ex = focus.x - Math.cos(angle) * dmgDistance;
             ey = focus.y - Math.sin(angle) * dmgDistance;
-            if (ex < 0 || ex >= 1024 || ey < 0 || ey >= 1024) {
-                ex = focus.x - Math.cos(angle + Math.PI) * dmgDistance;
-                ey = focus.y - Math.sin(angle + Math.PI) * dmgDistance;
-            }
-            if (ex < 0 || ex >= 1024 || ey < 0 || ey >= 1024) {
-                ex = focus.x - Math.cos(angle - Math.PI) * dmgDistance;
-                ey = focus.y - Math.sin(angle - Math.PI) * dmgDistance;
-            }
         }
     }
 
