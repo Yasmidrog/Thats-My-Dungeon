@@ -209,7 +209,11 @@ public class Dungeon extends Scene {
                         report(waveTimerSeconds + " seconds left!", 94);
                     }
                 } else {
-                    report("Let's go!", 300);
+                    if (level > end) {
+                        report("No Go to hell, Loser :3", 60);
+                    } else {
+                        report("Lets Go", 60);
+                    }
                 }
             } else {
                 if (level == end) {
