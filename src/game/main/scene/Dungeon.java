@@ -10,6 +10,7 @@ import game.creature.*;
 import game.main.gui.Advert;
 import game.main.gui.Chat;
 import game.main.gui.FloatText;
+import game.main.shell.Game;
 import game.object.Bullet;
 import game.world.*;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -38,7 +40,7 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly,level=1;
+    public int camx, camy, flx, fly, level = 1, end = 5;
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
@@ -57,7 +59,7 @@ public class Dungeon extends Scene {
 
         return u;
     }
-    
+
     public FloatText[] getText() {
         FloatText[] u = new FloatText[text.size()];
 
@@ -147,15 +149,15 @@ public class Dungeon extends Scene {
 
     public void initCreatures() {
         player();
-            spawn(new RaiderArc(), 120.0, 240.0, 9, 4, 1);
-            spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
-            spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
+        //spawn(new RaiderArc(), 120.0, 240.0, 9, 4, 1);
+        //spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
+        //spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
     }
 
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(120.0, 120.0, 90, 9,1);
+        player.init(120.0, 120.0, 90, 9, 1);
         player.initImages();
     }
 
@@ -196,29 +198,62 @@ public class Dungeon extends Scene {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
+
             Random r = new Random();
             if (waveTimerSeconds > 0) {
                 waveTimerSeconds--;
                 if (waveTimerSeconds > 0) {
-                    report(waveTimerSeconds + " seconds left!", 94);
+                    if (level > end) {
+                        report("YOU WON!!", 60);
+                    } else {
+                        report(waveTimerSeconds + " seconds left!", 94);
+                    }
                 } else {
                     report("Let's go!", 300);
-                    level++;
                 }
             } else {
-                for (int i = 0; i < 4; i++) {
-                    switch (r.nextInt(3)) {
-                        case 0:
-                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4,level);
-                            break;
-                        case 1:
-                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4,level);
-                            break;
-                        case 2:
-                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2,level);
-                            break;
-                    }
+                if (level == end) {
+                    spawn(new RaiderWar() {
+                        @Override
+                        public void init(Object... args) {
+                            super.init(args);
+                            nick = "FUGKING CHEATER";
 
+                        }
+
+                        @Override
+                        public void render(Graphics g) {
+                            try {
+                                if (focused) {
+                                    bar.draw((int) x - getWidth() / 2, (int) y - getHeight() / 3);
+                                }
+                                sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+                                renderHP(g);
+                                Game.font.drawString((int) x - getWidth() / 2 - 12, (int) y - getHeight() / 2 - 40, nick);
+                            } catch (SlickException ex) {
+                                Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }, (double) (getWidth() / 2 + 48), (double) (getHeight() - 64), 200 + level * 3, 6 + level, level
+                    );
+                } else if (level > end) {
+                    Game.dungeon = null;
+                    Game.currScene = Game.menu;
+                } else {
+                    for (int i = 0; i < 4; i++) {
+                        switch (r.nextInt(3)) {
+                            case 0:
+                                spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, +(int) (level / 3), level);
+                                break;
+                            case 1:
+                                spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 4 + (int) (level / 5), level);
+                                break;
+                            case 2:
+                                spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40 + level * 4, 2 + (int) (level / 5), level);
+                                break;
+                        }
+
+                    }
                 }
                 waveTimer.stop();
             }
@@ -233,6 +268,9 @@ public class Dungeon extends Scene {
         if (getRaiders().length == 0) {
             if (!waveTimer.isRunning()) {
                 waveTimerSeconds = 10;
+                level++;
+                player.dmg++;
+                player.maxhp += 10;
                 waveTimer.start();
             }
         }
@@ -321,7 +359,7 @@ public class Dungeon extends Scene {
 
             }
         }
-        for(FloatText ft :getText()){
+        for (FloatText ft : getText()) {
             ft.render(g);
         }
         if (flag != null) {

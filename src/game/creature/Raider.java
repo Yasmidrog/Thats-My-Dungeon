@@ -27,6 +27,7 @@ public class Raider extends Creature {
     public Random r = new Random();
     public Animation bar;
     public Ability[] abils;
+
     @Override
     public int getWidth() {
         return 96;
@@ -60,6 +61,7 @@ public class Raider extends Creature {
         focus = dung.player;
         speed = 3;
         nick = "cop" + index;
+        level = (int) args[4];
         setTimer("kick", 120);
         setTimer("chat", 600);
         initAbils();
@@ -97,9 +99,9 @@ public class Raider extends Creature {
     public void emulateChat() {
         if (getTimer("chat").is()) {
             if (!dead) {
-                dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], "Cop" + index);
+                dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], nick);
             } else {
-                dung.chat.add(dung.chat.rage[r.nextInt(dung.chat.rage.length)], "Coppa" + index);
+                dung.chat.add(dung.chat.rage[r.nextInt(dung.chat.rage.length)], nick);
             }
             getTimer("chat").start();
         }
@@ -132,7 +134,7 @@ public class Raider extends Creature {
             }
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
             renderHP(g);
-            Game.font.drawString( (int) x - getWidth() / 2, (int) y - getHeight() / 2-40,"Level "+level);
+            Game.font.drawString((int) x - getWidth() / 2 - 12, (int) y - getHeight() / 2 - 40, nick + "  Level " + level);
         } catch (SlickException ex) {
             Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -142,6 +144,6 @@ public class Raider extends Creature {
         g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
         g.fillRect((float) x - 48, (float) y - 52, 96, 7);
         g.setColor(Color.red);
-        g.fillRect((float) x - 48, (float) y - 52, 96 * (int)hp / maxhp, 7);
+        g.fillRect((float) x - 48, (float) y - 52, 96 * (int) hp / maxhp, 7);
     }
 }
