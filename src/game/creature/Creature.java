@@ -10,14 +10,18 @@ import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
+import game.object.Item;
 import game.world.Block;
 import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import main.utils.Timer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -34,6 +38,8 @@ public class Creature extends Entity {
     public Creature focus;
     public Dungeon dung;
     public Side side = Side.FRONT;
+
+    public Item[] items = new Item[1];
 
     ArrayList<Timer> timers = new ArrayList<>();
     ArrayList<String> timnames = new ArrayList<>();
@@ -70,9 +76,9 @@ public class Creature extends Entity {
     public void init(Object... args) {
         x = (Double) args[0];
         y = (Double) args[1];
-        maxhp = (int) args[2];
+        realhp = (int) args[2];
 
-        realhp = maxhp;
+        maxhp = realhp;
         hp = maxhp;
         dmg = (int) args[3];
         setTimer("dying", 1000);
@@ -127,16 +133,17 @@ public class Creature extends Entity {
 
     public void setStats() {
         maxhp = realhp;
-        double arr = hp / maxhp;
+
+        for (Item item : items) {
+            if (item != null) {
+                item.aply(this);
+            }
+        }
 
         for (Modifier mod : getMods()) {
             mod.aply(this);
         }
-        
-        
-        if (maxhp > realhp) {
-            hp = arr * maxhp;
-        }
+
     }
 
     @Override
@@ -213,6 +220,10 @@ public class Creature extends Entity {
             focused = false;
             getTimer("dying").start();
         }
+        if (hp >= maxhp) {
+            hp = maxhp;
+        }
+
         if (x < 0) {
             x = 0;
         }
@@ -244,6 +255,18 @@ public class Creature extends Entity {
     protected boolean miss() {
 
         return missrand.nextInt(100) <= misschance;
+    }
+
+    public void renderItems(Graphics g) {
+        try {
+            for (Item item : items) {
+                if (item != null) {
+                    item.render(g, this);
+                }
+            }
+        } catch (SlickException ex) {
+            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void deadrender(Graphics g) {

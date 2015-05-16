@@ -7,6 +7,7 @@ package game.object;
 
 import game.creature.Creature;
 import game.main.sprite.Sprite;
+import main.utils.Textures;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -21,7 +22,12 @@ public abstract class Item {
     public Image icon;
     public Sprite sprite;
 
-    abstract void aply();
+    public Item(String name) {
+        icon = Textures.image("items/" + name + "/icon.png");
+        sprite = new Sprite("items/" + name + "/");
+    }
+
+    public abstract void aply(Creature cr);
 
     public void renderIcon(Graphics g, int x, int y) {
         icon.draw(x, y);

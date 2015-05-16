@@ -61,9 +61,7 @@ public class RaiderPriest extends Raider {
 
             public void heal(Raider raid) {
                 raid.hp += level*3;
-                if (raid.hp >= raid.maxhp) {
-                    raid.hp = raid.maxhp;
-                }
+                
                 start();
             }
 

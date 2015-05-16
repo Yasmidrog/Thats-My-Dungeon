@@ -13,6 +13,7 @@ import game.main.Target;
 import game.main.gui.Bar;
 import game.main.shell.Game;
 import game.main.sprite.Sprite;
+import game.object.Item;
 import game.object.Magic;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +35,7 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Player extends Creature {
+
     public Bar healthbar;
     public RaiderWar agr;
     public Image ded;
@@ -50,22 +52,34 @@ public class Player extends Creature {
     @Override
     public void init(Object... args) {
         super.init(args);
+        System.out.println(maxhp + " " + realhp);
         speed = 2;
         ranged = false;
         range = getWidth() / 4;
         setTimer("kick", 200);
         initAbils();
+        initItems();
     }
 
     public Player thisClass = this;
+
+    public void initItems() {
+        items[0] = new Item("pants") {
+            @Override
+            public void aply(Creature cr) {
+                cr.maxhp += 20;
+            }
+        };
+    }
 
     @Override
     public void initAbils() {
         abils.add(new Active(1000, false, 0) {
             int d = -10;
+
             @Override
             public void action() {
-                System.out.println("Did Ability №1");
+
                 unfocus();
                 for (Raider r : dung.getRaiders()) {
                     if (!r.dead) {
@@ -107,6 +121,7 @@ public class Player extends Creature {
 
         abils.add(new Passive() {
             int n = 0;
+
             @Override
             public void action() {
                 mods.add(new Modifier() {
@@ -119,10 +134,10 @@ public class Player extends Creature {
                     }
                 });
             }
-            
+
             @Override
             public void tick() {
-                if(n>0){
+                if (n > 0) {
                     n--;
                 } else {
                     action();
@@ -169,6 +184,7 @@ public class Player extends Creature {
     public void tick() {
         if (!dead) {
             super.tick();
+            healthbar.maxvalue = maxhp;
             if (focus != null) {
                 battle();
             }
@@ -208,6 +224,11 @@ public class Player extends Creature {
     public void render(Graphics g) {
         try {
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+            for (Item item : items) {
+                if (item != null) {
+                    item.render(g, this);
+                }
+            }
         } catch (SlickException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }

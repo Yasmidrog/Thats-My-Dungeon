@@ -125,6 +125,7 @@ public class Raider extends Creature {
                 bar.draw((int) x - getWidth() / 2, (int) y - getHeight() / 3);
             }
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+            renderItems(g);
             renderHP(g);
             Game.font.drawString((int) x - getWidth() / 2 - 12, (int) y - getHeight() / 2 - 40, nick + "  Level " + level);
         } catch (SlickException ex) {

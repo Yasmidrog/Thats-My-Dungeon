@@ -8,6 +8,7 @@ package game.main.scene;
 import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
+import game.main.gui.Button;
 import game.main.gui.Chat;
 import game.main.gui.FloatText;
 import game.main.shell.Game;
@@ -22,9 +23,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
 import main.utils.Textures;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -131,7 +134,18 @@ public class Dungeon extends Scene {
             Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
         }
         initSprites();
+        initButtons();
         initCreatures();
+    }
+    
+    public void initButtons() {
+        buttons.add(new Button(Display.getWidth() / 2 - 110, 20, 100, "Pause", Color.green) {
+            @Override
+            public void click() {
+                Game.currScene = Game.menu;
+            }
+        });
+
     }
 
     public void initSprites() {
@@ -303,6 +317,7 @@ public class Dungeon extends Scene {
 
         try {
             mousing();
+            button();
         } catch (IllegalStateException ignored) {
         }
     }
@@ -339,6 +354,12 @@ public class Dungeon extends Scene {
         }
     }
 
+    public void button() {
+        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            Game.currScene = Game.menu;
+        }
+    }
+    
     @Override
     public void render(Graphics g) {
         int py = camy, px = camx;
