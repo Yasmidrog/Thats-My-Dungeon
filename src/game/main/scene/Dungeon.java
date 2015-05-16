@@ -13,6 +13,7 @@ import game.main.gui.Chat;
 import game.main.gui.FloatText;
 import game.main.shell.Game;
 import game.object.Bullet;
+import game.object.Item;
 import game.world.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +44,7 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly, level = 1, end = 5;
+    public int camx, camy, flx, fly, level = 1, end = 5, kk;
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
@@ -137,7 +138,7 @@ public class Dungeon extends Scene {
         initButtons();
         initCreatures();
     }
-    
+
     public void initButtons() {
         buttons.add(new Button(Display.getWidth() / 2 - 110, 20, 100, "Pause", Color.green) {
             @Override
@@ -355,11 +356,28 @@ public class Dungeon extends Scene {
     }
 
     public void button() {
+        if (kk > 0) {
+            kk--;
+        }
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             Game.currScene = Game.menu;
         }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {
+            if (player.items[0] != null) {
+                player.items[0] = null;
+            } else {
+                player.items[0] = new Item("pants") {
+                    @Override
+                    public void aply(Creature cr) {
+                        cr.maxhp += 20;
+                    }
+                };
+            }
+            kk = 30;
+        }
     }
-    
+
     @Override
     public void render(Graphics g) {
         int py = camy, px = camx;
