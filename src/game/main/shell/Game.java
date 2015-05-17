@@ -124,7 +124,8 @@ public class Game extends BasicGame {
         awtFont = new Font("ITALIC", Font.TRUETYPE_FONT, 18);
         chatfont = new TrueTypeFont(awtFont, false);
         Textures.load();
-        currScene.init();
+        menu.init();
+        inventory.init();
         sceneTimer();
 
     }

@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.utils.Name;
 import main.utils.Textures;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -31,39 +33,54 @@ import org.newdawn.slick.SlickException;
  */
 public class Inventory extends Scene {
 
-    ArrayList<Slot> slots = new ArrayList<>();
+    public boolean escape = false;
+    public ArrayList<Slot> slots = new ArrayList<>();
     Name[] name = new Name[3];
     private int currentMenu = 0;
 
     @Override
     public void init() throws SlickException {
-        GL11.glLoadIdentity();
-        for (int i = 0; i < 8; i++) {
-            slots.add(new Slot(64 * i + 32, 32));
-            slots.add(new Slot(64 * i + 32, 96));
-        }
         for (int i = 0; i < 4; i++) {
-            slots.add(new Slot(64 * i + 32, 96) {
+            slots.add(new Slot(64 * i - 140, 96) {
 
                 @Override
                 public void render(Graphics g) {
-                    System.out.println("KILL US");
                     y = Display.getHeight() - 32 - 64;
-                    super.render(g); 
+                    super.render(g);
                 }
-                
+
             });
         }
+        for (int i = 0; i < 8; i++) {
+            slots.add(new Slot(64 * i - 268, 32));
+            slots.add(new Slot(64 * i - 268, 96));
+        }
+        
     }
 
     @Override
     public void render(Graphics g) {
-        super.render(g); //To change body of generated methods, choose Tools | Templates.
+        Game.dungeon.render(g);
+        GL11.glLoadIdentity();
+        g.setColor(new Color(0, 0, 0, 0.5f));
+        g.fillRect(0, 0, Display.getWidth(), Display.getHeight());
         for (Slot s : slots) {
             s.render(g);
         }
+        if(Slot.inHand != null){
+            Slot.inHand.renderIcon(g, Mouse.getX(), Display.getHeight()-Mouse.getY());
+        }
+        for (int i = 0; i < 4; i++) {
+        Game.dungeon.player.items[i] = slots.get(i).item;
+        }
+        if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+            if(escape){
+                Game.currScene = Game.dungeon;
+                escape = false;
+            }
+        }else{
+            escape = true;
+        }
     }
-    
-    
 
 }

@@ -30,11 +30,11 @@ public abstract class Item {
     public abstract void aply(Creature cr);                 //Method for alrdy weared item
 
     public void renderIcon(Graphics g, int x, int y) {
-        icon.draw(x, y);                                    //Just icon render method with  non-fixed coors
+        icon.draw(x-16, y, 32, 32);                    //Just icon render method with  non-fixed coors
     }
 
     public void render(Graphics g, Creature cr) throws SlickException {
-        sprite.render(cr.side, (int) (cr.x - cr.getWidth() / 2), (int) (cr.y - cr.getHeight() / 2));  
+        sprite.render(cr.side, (int) (cr.x - cr.getWidth() / 2), (int) (cr.y - cr.getHeight() / 2));
         // Render on Creature's sized pic item
     }
 }

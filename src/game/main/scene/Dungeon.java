@@ -40,6 +40,8 @@ import org.newdawn.slick.SlickException;
  */
 public class Dungeon extends Scene {
 
+    private boolean escape = true;
+    
     public Floor floor = new Floor();
     public Player player;
     public Flag flag = new Flag();              //Moving flag, for Player
@@ -365,8 +367,14 @@ public class Dungeon extends Scene {
             Game.currScene = Game.menu;
         }
         
-        if (Keyboard.isKeyDown(Keyboard.KEY_I)) {              //Getting to Menu
-            Game.currScene = Game.inventory;
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+            if(escape){
+                Game.currScene = Game.inventory;
+                escape = false;
+            }
+        }else{
+            escape = true;
         }
         
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {        //actualy doing nothing, but must delete all items from boss

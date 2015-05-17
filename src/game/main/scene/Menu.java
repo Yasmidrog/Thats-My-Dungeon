@@ -134,7 +134,7 @@ public class Menu extends Scene {
             }
         });
 
-        settingsButtons.add(new SwitchButton(Button.buttonState.CENTRE, h / 2 - 82, 200, "Fullscreen",false) {
+        settingsButtons.add(new SwitchButton(Button.buttonState.CENTER, h / 2 - 82, 200, "Fullscreen",false) {
             @Override
             public void click() {
                 super.click();
@@ -142,13 +142,13 @@ public class Menu extends Scene {
             }
         });
 
-        settingsButtons.add(new Button(Button.buttonState.CENTRE, h / 2 - 25, 200, "Keyboard", Color.green) {
+        settingsButtons.add(new Button(Button.buttonState.CENTER, h / 2 - 25, 200, "Keyboard", Color.green) {
             @Override
             public void click() {
                 currentMenu = 2;
             }
         });
-        settingsButtons.add(new Button(Button.buttonState.CENTRE, h / 2 + 38, 200, "Agree", Color.red) {
+        settingsButtons.add(new Button(Button.buttonState.CENTER, h / 2 + 38, 200, "Agree", Color.red) {
             @Override
             public void click() {
                 currentMenu = 0;
