@@ -65,8 +65,6 @@ public class Raider extends Creature {
         setTimer("kick", 120);
         setTimer("chat", 600);
         initAbils();
-        //setNick();
-
     }
 
     @Override
@@ -74,7 +72,9 @@ public class Raider extends Creature {
         super.tick();
         if (!focus.dead) {
             for (Ability ab : abils) {
-                ab.tick();
+                if (ab != null) {
+                    ab.tick();
+                }
             }
             useAbility();
             battle();
@@ -84,7 +84,6 @@ public class Raider extends Creature {
     @Override
     public void deadtick() {
         checkTimers();
-        //chating();
         die();
     }
 

@@ -31,7 +31,9 @@ public class Creature extends Entity {
 
     public Random missrand = new Random();
     public double ex, ey, hp;
-    public int maxhp, dmg, index, range, dmgDistance, speed, realhp, level, misschance = 0;
+    public int index, range, dmgDistance, speed, level, misschance = 0;
+    public int maxhp, dmg;
+    public int realhp, realdmg;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
@@ -77,10 +79,10 @@ public class Creature extends Entity {
         x = (Double) args[0];
         y = (Double) args[1];
         realhp = (int) args[2];
-
+        realdmg = (int) args[3];
+        dmg = realdmg;
         maxhp = realhp;
         hp = maxhp;
-        dmg = (int) args[3];
         setTimer("dying", 1000);
     }
 
@@ -133,7 +135,7 @@ public class Creature extends Entity {
 
     public void setStats() {
         maxhp = realhp;
-
+        dmg = realdmg;
         for (Item item : items) {
             if (item != null) {
                 item.aply(this);

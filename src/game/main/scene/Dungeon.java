@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
+import main.utils.DungeonParser;
 import main.utils.Textures;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -35,7 +36,7 @@ import org.newdawn.slick.SlickException;
 
 /**
  *
- * @author Юрий
+ * @author Whizzpered
  */
 public class Dungeon extends Scene {
 
@@ -128,8 +129,10 @@ public class Dungeon extends Scene {
     @Override
     public void init() {
         Block.setBlocks();
-        floor.init();
         try {
+            DungeonParser dp = new DungeonParser(this, "1");
+            System.out.println("WORKER");
+            dp.aply();
             chat.init(this);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,10 +181,11 @@ public class Dungeon extends Scene {
 
     public void spawn(Raider cr, Object... args) {
         cr.dung = this;
-        add(cr);
-        cr.init(args);
-        report(cr.nick + " joined the game!", 500);
         cr.initImages();
+        cr.init(args);
+        add(cr);
+        report(cr.nick + " joined the game!", 500);
+
     }
 
     public void add(Raider cr) {
@@ -237,7 +241,6 @@ public class Dungeon extends Scene {
                         public void init(Object... args) {
                             super.init(args);
                             nick = "FUGKING CHEATER";
-
                         }
 
                         @Override
@@ -365,12 +368,26 @@ public class Dungeon extends Scene {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {
             if (player.items[0] != null) {
-                player.items[0] = null;
+                for (Item it : player.items) {
+                    it = null;
+                }
             } else {
                 player.items[0] = new Item("pants") {
                     @Override
                     public void aply(Creature cr) {
                         cr.maxhp += 20;
+                    }
+                };
+                player.items[1] = new Item("arms") {
+                    @Override
+                    public void aply(Creature cr) {
+                        cr.maxhp += 10;
+                    }
+                };
+                player.items[2] = new Item("braces") {
+                    @Override
+                    public void aply(Creature cr) {
+                        cr.dmg += 5;
                     }
                 };
             }

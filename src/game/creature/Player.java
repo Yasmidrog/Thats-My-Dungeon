@@ -64,10 +64,23 @@ public class Player extends Creature {
     public Player thisClass = this;
 
     public void initItems() {
+        items = new Item[3];
         items[0] = new Item("pants") {
             @Override
             public void aply(Creature cr) {
                 cr.maxhp += 20;
+            }
+        };
+        items[1] = new Item("arms") {
+            @Override
+            public void aply(Creature cr) {
+                cr.maxhp += 10;
+            }
+        };
+        items[2] = new Item("braces") {
+            @Override
+            public void aply(Creature cr) {
+                cr.dmg += 5;
             }
         };
     }
