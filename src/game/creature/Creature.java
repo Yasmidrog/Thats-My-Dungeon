@@ -56,18 +56,19 @@ public class Creature extends Entity {
         return timers.get(timnames.indexOf(name));
     }
 
-    public Modifier[] getMods() {
+    public Modifier[] getMods() {           //Gettin' Array of Modifiers for executing
+        //CurrentModificator Esception
         Modifier[] a = new Modifier[mods.size()];
         mods.toArray(a);
         return a;
     }
 
     public int getWidth() {
-        return 128;
+        return 128;                           //Returns Size
     }
 
     public int getHeight() {
-        return 128;
+        return 128;                            //Returns Size
     }
 
     protected double distance(double x1, double y1, double x2, double y2) {
@@ -78,7 +79,7 @@ public class Creature extends Entity {
     public void init(Object... args) {
         x = (Double) args[0];
         y = (Double) args[1];
-        realhp = (int) args[2];
+        realhp = (int) args[2];                 //For Modifiers
         realdmg = (int) args[3];
         dmg = realdmg;
         maxhp = realhp;
@@ -86,9 +87,9 @@ public class Creature extends Entity {
         setTimer("dying", 1000);
     }
 
-    public void collision() {
-        crCollision();
-        objCollision();
+    public void collision() {               //Two kinds of Collision :
+        crCollision();                      //For other Creatures
+        objCollision();                     //For blocks and objects
     }
 
     public void crCollision() {
@@ -134,15 +135,15 @@ public class Creature extends Entity {
     }
 
     public void setStats() {
-        maxhp = realhp;
+        maxhp = realhp;             //Getting native Stats
         dmg = realdmg;
-        for (Item item : items) {
+        for (Item item : items) {   //Apply items
             if (item != null) {
                 item.aply(this);
             }
         }
 
-        for (Modifier mod : getMods()) {
+        for (Modifier mod : getMods()) {    //Aply Buffs and Debuffs
             mod.aply(this);
         }
 
@@ -151,8 +152,8 @@ public class Creature extends Entity {
     @Override
     public void tick() {
         setStats();
-        baseTick();
-        move();
+        baseTick();             //Base actions for Creature
+        move();                 //Method of Movings. For focusing and for just patrool
         collision();
         for (Modifier mod : getMods()) {
             mod.tick(this);
@@ -160,11 +161,11 @@ public class Creature extends Entity {
     }
 
     public void die() {
-
+        //DIIIIE MTHRFCKR
     }
 
     public void deadtick() {
-
+        //ARE YOU STILL ALIVE????WTF
     }
 
     public void move() {
@@ -199,6 +200,7 @@ public class Creature extends Entity {
     public void reset() {
         vx = 0;
         vy = 0;
+        //IDK just for fun
     }
 
     public void battle() {
@@ -206,6 +208,7 @@ public class Creature extends Entity {
         if (dist - 2 * speed < dmgDistance && getTimer("kick").is()) {
             shoot();
         }
+        //SHOOT THIS NIGGA IF YOU SEE HIM
     }
 
     public void shoot() {
@@ -250,6 +253,7 @@ public class Creature extends Entity {
 
     @Override
     public void render(Graphics g) {
+        //Dong see there, THATS EMPTY !!!
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
     }
@@ -259,7 +263,7 @@ public class Creature extends Entity {
         return missrand.nextInt(100) <= misschance;
     }
 
-    public void renderItems(Graphics g) {
+    public void renderItems(Graphics g) {  //Rendering weared items
         try {
             for (Item item : items) {
                 if (item != null) {
@@ -271,7 +275,7 @@ public class Creature extends Entity {
         }
     }
 
-    public void deadrender(Graphics g) {
+    public void deadrender(Graphics g) { //GRAAAAVE
         dung.sprites.get(2).draw((int) x - getWidth() / 2, (int) y - 32);
     }
 }

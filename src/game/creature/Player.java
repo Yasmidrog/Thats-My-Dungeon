@@ -45,14 +45,13 @@ public class Player extends Creature {
     @Override
     public void initImages() {
         sprite = new Sprite("warrior/");
-        ded = Textures.image("warrior/dead.png").getScaledCopy(2f);
+        ded = Textures.image("warrior/dead.png").getScaledCopy(2f);   //This GrandPa overriding dead sprite of Creature
         healthbar = new Bar(maxhp, "Bar.png", "health.png");
     }
 
     @Override
     public void init(Object... args) {
         super.init(args);
-        System.out.println(maxhp + " " + realhp);
         speed = 2;
         ranged = false;
         range = getWidth() / 4;
@@ -63,7 +62,7 @@ public class Player extends Creature {
 
     public Player thisClass = this;
 
-    public void initItems() {
+    public void initItems() {  //Oh, shi, pls, kill this Indian
         items = new Item[3];
         items[0] = new Item("pants") {
             @Override
@@ -83,10 +82,10 @@ public class Player extends Creature {
                 cr.dmg += 5;
             }
         };
-    }
+    }   
 
     @Override
-    public void initAbils() {
+    public void initAbils() {  //This is Indian Shit too.
         abils.add(new Active(1000, false, 0) {
             int d = -10;
 
@@ -163,12 +162,12 @@ public class Player extends Creature {
     }
 
     @Override
-    public void reset() {
+    public void reset() { //Reseting of Moving to delete move flag
         super.reset();
         dung.flag.done = true;
     }
 
-    Timer deathTimer = new Timer(1000, new ActionListener() {
+    Timer deathTimer = new Timer(1000, new ActionListener() {  //Timer of death to agony and letting stupid user know what he died
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -197,7 +196,7 @@ public class Player extends Creature {
     public void tick() {
         if (!dead) {
             super.tick();
-            healthbar.maxvalue = maxhp;
+            healthbar.maxvalue = maxhp;                 //cause we have a tons of modificators
             if (focus != null) {
                 battle();
             }
@@ -213,7 +212,7 @@ public class Player extends Creature {
         }
     }
 
-    public void focussmth(Raider r) {
+    public void focussmth(Raider r) {     //Look, nigga, he's gonna pick up yo mom!
         if (focus != null) {
             focus.focused = false;
             focus = null;
@@ -222,7 +221,7 @@ public class Player extends Creature {
         focus.focused = true;
     }
 
-    public void unfocus() {
+    public void unfocus() {                 //Nah, nevermind, i duno what that was your faza
         if (focus != null) {
             if (agr != null) {
                 agr.agro = false;
@@ -252,7 +251,7 @@ public class Player extends Creature {
         ded.draw((int) x - getWidth() / 2, (int) y - 32);
     }
 
-    public void abilsRender(Graphics g) {
+    public void abilsRender(Graphics g) {               //Rendering Ability icons
         for (Ability ab : abils) {
             ab.render(g);
         }

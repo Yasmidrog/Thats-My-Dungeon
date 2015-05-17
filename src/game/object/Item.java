@@ -19,21 +19,22 @@ import org.newdawn.slick.SlickException;
 public abstract class Item {
 
     public int type;
-    public Image icon;
-    public Sprite sprite;
+    public Image icon;                              //For rendering on inventory or dropped on floor
+    public Sprite sprite;                           //For rendering when weared on Creature
 
     public Item(String name) {
-        icon = Textures.image("items/" + name + "/icon.png");
-        sprite = new Sprite("items/" + name + "/");
+        icon = Textures.image("items/" + name + "/icon.png"); // Getting textures from <Name> folder
+        sprite = new Sprite("items/" + name + "/");           // Just like Creature sprite
     }
 
-    public abstract void aply(Creature cr);
+    public abstract void aply(Creature cr);                 //Method for alrdy weared item
 
     public void renderIcon(Graphics g, int x, int y) {
-        icon.draw(x, y);
+        icon.draw(x, y);                                    //Just icon render method with  non-fixed coors
     }
 
     public void render(Graphics g, Creature cr) throws SlickException {
-        sprite.render(cr.side, (int) (cr.x - cr.getWidth() / 2), (int) (cr.y - cr.getHeight() / 2));
+        sprite.render(cr.side, (int) (cr.x - cr.getWidth() / 2), (int) (cr.y - cr.getHeight() / 2));  
+        // Render on Creature's sized pic item
     }
 }

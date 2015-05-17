@@ -24,7 +24,7 @@ import org.newdawn.slick.SlickException;
  */
 public class Raider extends Creature {
 
-    public Random r = new Random();
+    public Random r = new Random();             //Nah, i dunno why
     public Animation bar;
     public Ability[] abils;
 
@@ -39,12 +39,12 @@ public class Raider extends Creature {
     }
 
     @Override
-    public void initImages() {
+    public void initImages() {                  //Initialization of focus Bar
         bar = Textures.animation("anim").slickAnimation;
     }
 
     @Override
-    public void die() {
+    public void die() {                         // Raiders will die specifical
         if (getTimer("dying").is()) {
             dung.report(nick + " left the game!", 500);
             dung.delete(index);
@@ -60,7 +60,7 @@ public class Raider extends Creature {
         enemy = true;
         focus = dung.player;
         speed = 3;
-        nick = "cop" + index;
+        nick = "cop" + index;           //Just case we're NIGGAS
         level = (int) args[4];
         setTimer("kick", 120);
         setTimer("chat", 600);
@@ -87,7 +87,7 @@ public class Raider extends Creature {
         die();
     }
 
-    public void useAbility() {
+    public void useAbility() {          //Spam all of abils
         for (Ability ab : abils) {
             if (ab.ready()) {
                 ab.action();
@@ -95,7 +95,7 @@ public class Raider extends Creature {
         }
     }
 
-    public void emulateChat() {
+    public void emulateChat() {             //Ya, so good 
         if (getTimer("chat").is()) {
             if (!dead) {
                 dung.chat.add(dung.chat.dialog[r.nextInt(dung.chat.dialog.length)], nick);
@@ -107,7 +107,7 @@ public class Raider extends Creature {
     }
 
     @Override
-    public void move() {
+    public void move() {                //mooving like a Creature, but with отступания
         super.move();
         double dist = distance(x, y, focus.x, focus.y);
         double angle = Math.atan2(focus.y - y, focus.x - x);
@@ -132,7 +132,7 @@ public class Raider extends Creature {
         }
     }
 
-    public void renderHP(Graphics g) {
+    public void renderHP(Graphics g) {                  //rendering healthbar
         g.setColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 100));
         g.fillRect((float) x - 48, (float) y - 52, 96, 7);
         g.setColor(Color.red);

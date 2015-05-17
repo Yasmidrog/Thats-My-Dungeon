@@ -42,10 +42,10 @@ public class Dungeon extends Scene {
 
     public Floor floor = new Floor();
     public Player player;
-    public Flag flag = new Flag();
+    public Flag flag = new Flag();              //Moving flag, for Player
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly, level = 1, end = 5, kk;
+    public int camx, camy, flx, fly, level = 1, end = 5, kk;      //flx, fly - cam for floor, dont touch kk!!!
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
@@ -128,12 +128,11 @@ public class Dungeon extends Scene {
 
     @Override
     public void init() {
-        Block.setBlocks();
+        Block.setBlocks();      //Initializating blocks for building
         try {
-            DungeonParser dp = new DungeonParser(this, "1");
-            System.out.println("WORKER");
-            dp.aply();
-            chat.init(this);
+            DungeonParser dp = new DungeonParser(this, "1");    //Getting plan of level from file
+            dp.aply();                                          //aplying this plan
+            chat.init(this);                                    //Getting цитаты from file
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -179,7 +178,7 @@ public class Dungeon extends Scene {
         player.initImages();
     }
 
-    public void spawn(Raider cr, Object... args) {
+    public void spawn(Raider cr, Object... args) {          //Use this for spawn
         cr.dung = this;
         cr.initImages();
         cr.init(args);
@@ -188,7 +187,7 @@ public class Dungeon extends Scene {
 
     }
 
-    public void add(Raider cr) {
+    public void add(Raider cr) {                            //Dont touch
         for (int i = 0; i < raiders.length; i++) {
             if (raiders[i] == null) {
                 raiders[i] = cr;
@@ -198,7 +197,7 @@ public class Dungeon extends Scene {
         }
     }
 
-    public void delete(int index) {
+    public void delete(int index) {                         //Yo, nigga, so good crap
         int s = 0;
         for (int i = 0; i < raiders.length; i++) {
             if (raiders[i].index == index) {
@@ -213,7 +212,7 @@ public class Dungeon extends Scene {
         }
     }
 
-    Timer waveTimer = new Timer(1000, new ActionListener() {
+    Timer waveTimer = new Timer(1000, new ActionListener() {          //Your timer but with third dick and thousand of tities
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -287,7 +286,7 @@ public class Dungeon extends Scene {
 
     @Override
     public void tick() {
-        if (getRaiders().length == 0) {
+        if (getRaiders().length == 0) {             //Mechanism of waves
             if (!waveTimer.isRunning()) {
                 waveTimerSeconds = 10;
                 level++;
@@ -311,7 +310,7 @@ public class Dungeon extends Scene {
             }
         }
 
-        player.tick();
+        player.tick();                          //Player is a HERO
 
         for (Bullet b : getBul()) {
             if (b != null) {
@@ -320,7 +319,7 @@ public class Dungeon extends Scene {
         }
 
         try {
-            mousing();
+            mousing();                      //Methods of control
             button();
         } catch (IllegalStateException ignored) {
         }
@@ -334,7 +333,7 @@ public class Dungeon extends Scene {
         flx = (int) player.x + mx - w;
         fly = (int) player.y + my - h;
         double msx = player.x + mx * 2 - w;
-        double msy = player.y + my * 2 - h;
+        double msy = player.y + my * 2 - h;             //Woooah, so big shit
 
         if (player.agr == null) {
             if (Mouse.isButtonDown(0)) {
@@ -362,11 +361,11 @@ public class Dungeon extends Scene {
         if (kk > 0) {
             kk--;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {              //Getting to Menu
             Game.currScene = Game.menu;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {        //actualy doing nothing, but must delete all items from boss
             if (player.items[0] != null) {
                 for (Item it : player.items) {
                     it = null;
@@ -397,7 +396,7 @@ public class Dungeon extends Scene {
 
     @Override
     public void render(Graphics g) {
-        int py = camy, px = camx;
+        int py = camy, px = camx;                       //Idk, but i'm too harriered to delete
 
         GL11.glTranslatef(px, py, 0);
 
