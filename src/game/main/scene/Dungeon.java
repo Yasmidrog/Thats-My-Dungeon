@@ -178,6 +178,7 @@ public class Dungeon extends Scene {
         player.initImages();
     }
 
+    
     public void spawn(Raider cr, Object... args) {          //Use this for spawn
         cr.dung = this;
         cr.initImages();
@@ -325,6 +326,11 @@ public class Dungeon extends Scene {
         }
     }
 
+    @Override
+    public void subtick() {
+        
+    }
+    
     public void mousing() {
         int w = Display.getWidth(), h = Display.getHeight();
         int mx = Mouse.getX(), my = h - Mouse.getY();

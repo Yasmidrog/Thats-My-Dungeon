@@ -41,7 +41,6 @@ public class Game extends BasicGame {
     Graphics g = new Graphics();
     public static JCFG conf = new JCFG();
     public static int times = 0;
-    public static boolean paused;
     public static Menu menu = new Menu();
     public static Scene currScene = menu;
     public static Dungeon dungeon;
@@ -69,9 +68,9 @@ public class Game extends BasicGame {
         }
         System.exit(0);
     }
-    
+
     @Override
-    public boolean closeRequested(){
+    public boolean closeRequested() {
         exit();
         return false;
     }
@@ -132,9 +131,7 @@ public class Game extends BasicGame {
         new java.util.Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!paused) {
-                    currScene.tick();
-                }
+                currScene.maintick();
             }
         }, 0, 10);
     }
@@ -146,7 +143,6 @@ public class Game extends BasicGame {
         }
     }
 
-    
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
