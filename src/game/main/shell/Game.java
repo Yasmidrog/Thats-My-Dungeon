@@ -43,6 +43,7 @@ public class Game extends BasicGame {
     public static int times = 0;
     public static boolean paused;
     public static Menu menu = new Menu();
+    public static Inventory inventory = new Inventory();
     public static Scene currScene = menu;
     public static Dungeon dungeon;
     public static TrueTypeFont font, chatfont;
