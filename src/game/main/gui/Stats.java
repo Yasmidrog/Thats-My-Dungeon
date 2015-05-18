@@ -40,8 +40,8 @@ public class Stats {
             Logger.getLogger(Stats.class.getName()).log(Level.SEVERE, null, ex);
         }
         font.drawString(x, y + 96, "Attack: " + aim.dmg, Color.green);
-        font.drawString(x, y + 96, "Health: " + aim.hp, Color.green);
-        font.drawString(x, y + 96, "Level : " + aim.level, Color.green);
+        font.drawString(x, y + 116, "Health: " + aim.hp, Color.green);
+        font.drawString(x, y + 136, "Level : " + aim.level, Color.green);
     }
 
     public void showForPlayer(Graphics g, int x, int y) {
