@@ -42,6 +42,7 @@ public class Game extends BasicGame {
     public static JCFG conf = new JCFG();
     public static int times = 0;
     public static Menu menu = new Menu();
+    public static Inventory inventory = new Inventory();
     public static Scene currScene = menu;
     public static Dungeon dungeon;
     public static TrueTypeFont font, chatfont;
@@ -122,7 +123,8 @@ public class Game extends BasicGame {
         awtFont = new Font("ITALIC", Font.TRUETYPE_FONT, 18);
         chatfont = new TrueTypeFont(awtFont, false);
         Textures.load();
-        currScene.init();
+        menu.init();
+        inventory.init();
         sceneTimer();
 
     }

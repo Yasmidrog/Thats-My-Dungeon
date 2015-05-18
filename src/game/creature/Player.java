@@ -64,7 +64,7 @@ public class Player extends Creature {
     public Player thisClass = this;
 
     public void initItems() {  //Oh, shi, pls, kill this Indian
-        items = new Item[3];
+        items = new Item[4];
         items[0] = new Item("pants") {
             @Override
             public void aply(Creature cr) {
@@ -83,6 +83,9 @@ public class Player extends Creature {
                 cr.dmg += 5;
             }
         };
+        for (int i = 0; i < 4; i++) {
+        Game.inventory.slots.get(i).item = items[i];
+        }
     }   
 
     @Override

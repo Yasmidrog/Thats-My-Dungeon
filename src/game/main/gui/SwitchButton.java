@@ -36,7 +36,7 @@ public abstract class SwitchButton extends Button {
             x=w/2;
         }else  if(state==buttonState.RIGHT) {
             x= Display.getWidth()-w/2;
-        }else if(state==buttonState.CENTRE) {
+        }else if(state==buttonState.CENTER) {
             x= cx;
         }
         else x=0;
@@ -47,7 +47,7 @@ public abstract class SwitchButton extends Button {
         sprite[0].setImageColor(color.r, color.g, color.b);
         sprite[1].setImageColor(color.r, color.g, color.b);
         sprite[2].setImageColor(color.r, color.g, color.b);
-        if(state==buttonState.CENTRE) {
+        if(state==buttonState.CENTER) {
             sprite[0].draw(x - w / 2 - 16, y);
             sprite[1].draw(x - w / 2, y, w, 50);
             sprite[2].draw(x + w / 2, y);
