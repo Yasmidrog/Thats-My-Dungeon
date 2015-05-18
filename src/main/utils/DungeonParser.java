@@ -32,7 +32,6 @@ public class DungeonParser {
     }
 
     public static void aply() {
-        System.out.println("WORKD");
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 switch (world[y][x]) {
@@ -40,11 +39,9 @@ public class DungeonParser {
                         break;
                     case ('*'):
                         dung.floor.set(x, y, 2);
-                        System.out.println("Wooool");
                         break;
                     case ('_'):
                         dung.floor.set(x, y, 1);
-                        System.out.println("FLooow");
                         break;
                 }
             }
