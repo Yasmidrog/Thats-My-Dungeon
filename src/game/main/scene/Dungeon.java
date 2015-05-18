@@ -41,7 +41,7 @@ import org.newdawn.slick.SlickException;
 public class Dungeon extends Scene {
 
     private boolean escape = true;
-    
+
     public Floor floor = new Floor();
     public Player player;
     public Flag flag = new Flag();              //Moving flag, for Player
@@ -345,8 +345,7 @@ public class Dungeon extends Scene {
         if (player.agr == null) {
             if (Mouse.isButtonDown(0)) {
                 if (player.focus != null) {
-                    player.focus.focused = false;
-                    player.focus = null;
+                    player.unfocus();
                 }
                 for (Raider cr : getRaiders()) {
                     if (!cr.dead) {
@@ -371,17 +370,16 @@ public class Dungeon extends Scene {
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {              //Getting to Menu
             Game.currScene = Game.menu;
         }
-        
-        
-        if(Keyboard.isKeyDown(Keyboard.KEY_I)){
-            if(escape){
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_I)) {
+            if (escape) {
                 Game.currScene = Game.inventory;
                 escape = false;
             }
-        }else{
+        } else {
             escape = true;
         }
-        
+
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {        //actualy doing nothing, but must delete all items from boss
             if (player.items[0] != null) {
                 for (Item it : player.items) {
@@ -448,6 +446,8 @@ public class Dungeon extends Scene {
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
         }
+        player.renderStats(g);
+
         for (int i = 0; i < player.abils.size(); i++) {
             player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 70 + i * 66, Display.getHeight() - 70);
         }

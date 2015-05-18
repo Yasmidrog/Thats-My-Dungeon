@@ -11,6 +11,7 @@ import game.main.Modifier;
 import game.main.Passive;
 import game.main.Target;
 import game.main.gui.Bar;
+import game.main.gui.Stats;
 import game.main.shell.Game;
 import game.main.sprite.Sprite;
 import game.object.Item;
@@ -39,6 +40,7 @@ public class Player extends Creature {
     public Bar healthbar;
     public RaiderWar agr;
     public Image ded;
+    public Stats stats, aim;
     public ArrayList<Ability> abils = new ArrayList<>();
     public Target cast;
     public int gold, xp;
@@ -59,6 +61,7 @@ public class Player extends Creature {
         setTimer("kick", 200);
         initAbils();
         initItems();
+        stats = new Stats(this);
     }
 
     public Player thisClass = this;
@@ -84,9 +87,9 @@ public class Player extends Creature {
             }
         };
         for (int i = 0; i < 4; i++) {
-        Game.inventory.slots.get(i).item = items[i];
+            Game.inventory.slots.get(i).item = items[i];
         }
-    }   
+    }
 
     @Override
     public void initAbils() {  //This is Indian Shit too.
@@ -223,6 +226,7 @@ public class Player extends Creature {
         }
         focus = r;
         focus.focused = true;
+        aim = new Stats(focus);
     }
 
     public void unfocus() {                 //Nah, nevermind, i duno what that was your faza
@@ -233,6 +237,7 @@ public class Player extends Creature {
             }
             focus.focused = false;
             focus = null;
+            aim = null;
         }
     }
 
@@ -258,6 +263,13 @@ public class Player extends Creature {
     public void abilsRender(Graphics g) {               //Rendering Ability icons
         for (Ability ab : abils) {
             ab.render(g);
+        }
+    }
+
+    public void renderStats(Graphics g) {
+        stats.showForPlayer(g, Display.getWidth() - 100, 40);
+        if (focus != null) {
+            aim.show(g, 5, 100);
         }
     }
 

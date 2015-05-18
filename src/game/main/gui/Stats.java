@@ -8,7 +8,13 @@ package game.main.gui;
 import game.creature.Creature;
 import game.creature.Player;
 import static game.main.shell.Game.font;
+import game.main.sprite.Side;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -28,16 +34,21 @@ public class Stats {
     }
 
     public void show(Graphics g, int x, int y) {
-        font.drawString(x, y, "Attack: " + aim.dmg);
-        font.drawString(x, y + 20, "Health: " + aim.hp);
-        font.drawString(x, y + 40, "Level : " + aim.level);
+        try {
+            aim.sprite.render(Side.FRONT, x, y);
+        } catch (SlickException ex) {
+            Logger.getLogger(Stats.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        font.drawString(x, y + 96, "Attack: " + aim.dmg, Color.green);
+        font.drawString(x, y + 96, "Health: " + aim.hp, Color.green);
+        font.drawString(x, y + 96, "Level : " + aim.level, Color.green);
     }
 
     public void showForPlayer(Graphics g, int x, int y) {
-        font.drawString(x, y, "Attack: " + pl.dmg);
-        font.drawString(x, y + 20, "Health: " + pl.hp);
-        font.drawString(x, y + 40, "Level : " + pl.level);
-        font.drawString(x, y + 60, "XP: " + pl.xp);
-        font.drawString(x, y + 80, "Gold : " + pl.gold);
+        font.drawString(x, y, "Attack: " + pl.dmg, Color.green);
+        font.drawString(x, y + 20, "Health: " + pl.hp, Color.green);
+        font.drawString(x, y + 40, "Level : " + pl.level, Color.green);
+        font.drawString(x, y + 60, "XP: " + pl.xp, Color.green);
+        font.drawString(x, y + 80, "Gold : " + pl.gold, Color.green);
     }
 }
