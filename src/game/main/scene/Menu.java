@@ -62,7 +62,7 @@ public class Menu extends Scene {
     public void initButtons(int h) {
         int start=h/7;
         int sx=-240;
-        for(int i=1;i<10;i++){
+        for(int i=1;i<4;i++){
             final String n=String.valueOf(i);
             final int j=i;
             if(start>Display.getHeight()-Display.getHeight()/4) {
@@ -94,6 +94,28 @@ public class Menu extends Scene {
             });
             start+=70;
         }
+        
+        abilitySettings.add(new ValueButton(sx,start,240,"Inventory",Color.blue) {
+                @Override
+                public  void initValue(){
+                    try{
+                        String val= ((String)Game.conf.get("Inventory").getValue());
+                        if(val.isEmpty()){
+                            value="I";
+                        }else{
+                            value=val;
+                        }
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+                @Override
+                public void changeSet() {
+                    Game.conf.set("Inventory", String.valueOf(value));
+                    Game.inventory.key = value;
+                }
+            });
+        
         abilitySettings.add(new Button(sx,start,150,"Exit",Color.green) {
             @Override
             public void click() {

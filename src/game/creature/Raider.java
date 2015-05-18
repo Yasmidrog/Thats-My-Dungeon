@@ -48,12 +48,12 @@ public class Raider extends Creature {
         if (getTimer("dying").is()) {
             dung.report(nick + " left the game!", 500);
             dung.delete(index);
-            dung.player.xp+=level*15;
+            dung.player.xp += level * 15;
         }
         if (dung.player.focus == this) {
             dung.player.unfocus();
         }
-        
+
     }
 
     @Override

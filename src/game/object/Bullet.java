@@ -10,8 +10,6 @@ import game.creature.Raider;
 import game.main.gui.FloatText;
 import game.main.scene.Dungeon;
 import static game.main.scene.Dungeon.sprites;
-import static game.main.shell.Game.font;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -34,7 +32,9 @@ public class Bullet extends game.creature.Entity {
         if (miss) {
             owner.dung.text.add(new FloatText((int) x, (int) y, "Missed", owner.dung));
         }
+
         damage = owner.dmg;
+        System.out.println(damage);
         if (owner.ranged) {
             type = 1;
             speed = 4;

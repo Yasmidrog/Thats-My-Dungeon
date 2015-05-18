@@ -37,6 +37,7 @@ public class Inventory extends Scene {
     public ArrayList<Slot> slots = new ArrayList<>();
     Name[] name = new Name[3];
     private int currentMenu = 0;
+    public String key = "I";
 
     @Override
     public void init() throws SlickException {

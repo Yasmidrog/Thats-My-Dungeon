@@ -104,7 +104,7 @@ public class Player extends Creature {
                     if (!r.dead) {
                         double dist = Math.sqrt(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2));
                         if (dist < 900) {
-                            r.hp -= 4;
+                            r.hp -= 6;
                         }
                     }
                 }
@@ -147,7 +147,7 @@ public class Player extends Creature {
                     @Override
                     public void aply(Creature unit) {
                         if (unit.hp < unit.maxhp) {
-                            unit.hp += 3;
+                            unit.hp += 1;
                         }
                         timer = 1;
                     }

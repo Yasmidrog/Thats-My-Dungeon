@@ -266,10 +266,10 @@ public class Dungeon extends Scene {
                     for (int i = 0; i < 4; i++) {
                         switch (r.nextInt(3)) {
                             case 0:
-                                spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, +(int) (level / 3), level);
+                                spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 4 + (int) (level / 3), level);
                                 break;
                             case 1:
-                                spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 4 + (int) (level / 5), level);
+                                spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 3 + (int) (level / 5), level);
                                 break;
                             case 2:
                                 spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40 + level * 4, 2 + (int) (level / 5), level);
@@ -371,7 +371,7 @@ public class Dungeon extends Scene {
             Game.currScene = Game.menu;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_I)) {
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
                 Game.currScene = Game.inventory;
                 escape = false;
