@@ -41,6 +41,7 @@ public class Player extends Creature {
     public Image ded;
     public ArrayList<Ability> abils = new ArrayList<>();
     public Target cast;
+    public int gold, xp;
 
     @Override
     public void initImages() {

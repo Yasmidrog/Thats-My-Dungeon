@@ -253,7 +253,7 @@ public class Creature extends Entity {
 
     @Override
     public void render(Graphics g) {
-        //Dong see there, THATS EMPTY !!!
+        //Don't see there, THATS EMPTY !!!
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
     }

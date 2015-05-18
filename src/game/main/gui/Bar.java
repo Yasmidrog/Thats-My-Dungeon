@@ -35,6 +35,6 @@ public class Bar {
     public void render(Graphics g, int x, int y, int value) {
         g.fillRect(x + 4, y + 17, (bar.getWidth() - 10) * value / maxvalue, scale.getHeight(), scale, 1, 1);
         bar.draw(x, y);
-        font.drawString(x + (bar.getWidth() / 2) - 10, y + bar.getHeight() - 18, value+"", Color.white );
+        font.drawString(x + (bar.getWidth() / 2) - 10, y + bar.getHeight() - 18, value + "|" + maxvalue, Color.white);
     }
 }
