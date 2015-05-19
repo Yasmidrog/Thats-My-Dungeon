@@ -62,7 +62,7 @@ public class Menu extends Scene {
 
     public void initButtons(int h) {
         int start = h / 7;
-        int sx = -240;
+        int sx = 0;
         for (int i = 1; i < 4; i++) {
             final String n = String.valueOf(i);
             final int j = i;
@@ -70,7 +70,7 @@ public class Menu extends Scene {
                 sx += 300;
                 start = h / 7;
             }
-            abilitySettings.add(new ValueButton(sx, start, 240, "Ability " + i, Color.blue) {
+            abilitySettings.add(new ValueButton(Button.buttonState.CENTER, start, 240, "Ability " + i, Color.blue) {
                 @Override
                 public void initValue() {
                     try {
@@ -100,14 +100,15 @@ public class Menu extends Scene {
             start += 70;
         }
 
-        abilitySettings.add(new ValueButton(sx, start, 240, "Inventory", Color.blue) {
+        abilitySettings.add(new ValueButton(Button.buttonState.CENTER, start, 240, "Inventory", Color.blue) {
             @Override
             public void initValue() {
                 try {
-                    if(Game.conf.get("Inventory") != null)
+                    if (Game.conf.get("Inventory") != null) {
                         value = Game.conf.get("Inventory").getValueAsString();
-                    else
+                    } else {
                         value = "I";
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -119,8 +120,8 @@ public class Menu extends Scene {
                 Game.inventory.key = value;
             }
         });
-
-        abilitySettings.add(new Button(sx, start, 150, "Exit", Color.green) {
+        start += 70;
+        abilitySettings.add(new Button(Button.buttonState.CENTER, start, 240, "Exit", Color.green) {
             @Override
             public void click() {
                 currentMenu = 0;

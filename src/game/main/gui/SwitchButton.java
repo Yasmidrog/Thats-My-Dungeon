@@ -38,7 +38,7 @@ public abstract class SwitchButton extends Button {
         } else if (state == buttonState.RIGHT) {
             x = Display.getWidth() - w / 2;
         } else if (state == buttonState.CENTER) {
-            x = cx;
+            x = cx + Display.getWidth() / 2;
         } else {
             x = 0;
         }

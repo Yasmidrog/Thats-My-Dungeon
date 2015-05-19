@@ -44,7 +44,7 @@ public abstract class Button {
 
     public Button(buttonState st, int y, int w, String text, Color c) {
         state = st;
-        cx = Display.getWidth() / 2 - w / 5;
+        cx = 0;
         this.y = y;
         this.w = w;
         this.text = text;

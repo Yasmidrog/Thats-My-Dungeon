@@ -42,7 +42,7 @@ public class Inventory extends Scene {
     @Override
     public void init() throws SlickException {
         for (int i = 0; i < 4; i++) {
-            slots.add(new Slot(64 * i - 140, 96) {
+            slots.add(new Slot(64 * i - 96, 96) {
 
                 @Override
                 public void render(Graphics g) {
@@ -53,8 +53,8 @@ public class Inventory extends Scene {
             });
         }
         for (int i = 0; i < 8; i++) {
-            slots.add(new Slot(64 * i - 268, 32));
-            slots.add(new Slot(64 * i - 268, 96));
+            slots.add(new Slot(64 * i - 224, 32));
+            slots.add(new Slot(64 * i - 224, 96));
         }
 
     }
