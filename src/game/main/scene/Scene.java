@@ -27,7 +27,7 @@ public class Scene {
     }
 
     public void maintick() {
-        if(!paused){
+        if (!paused) {
             tick();
         } else {
             subtick();
@@ -35,13 +35,13 @@ public class Scene {
     }
 
     public void subtick() {
-        
+
     }
-    
+
     public void tick() {
-        
+
     }
-    
+
     public void render(Graphics g) {
 
     }

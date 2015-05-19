@@ -25,7 +25,8 @@ public abstract class Active extends Ability {
             if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key)) && cd.is()) {
                 action();
             }
-        }catch (IllegalStateException ignored){}
+        } catch (IllegalStateException ignored) {
+        }
     }
 
 }

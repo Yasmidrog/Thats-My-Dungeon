@@ -40,7 +40,7 @@ import org.newdawn.slick.SlickException;
  */
 public class Dungeon extends Scene {
 
-    private boolean escape = true;
+    public boolean escape = true;
 
     public Floor floor = new Floor();
     public Player player;
@@ -366,13 +366,9 @@ public class Dungeon extends Scene {
     }
 
     public void button() {
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {              //Getting to Menu
-            if (escape) {
-                Game.currScene = Game.menu;
-            }
-        } else {
-            escape = true;
-        }
+        System.out.println("----");
+        System.out.println(escape);
+        System.out.println(Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key)));
 
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
@@ -410,8 +406,6 @@ public class Dungeon extends Scene {
                     };
                 }
             }
-        } else {
-            escape = true;
         }
     }
 

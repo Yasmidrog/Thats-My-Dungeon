@@ -30,7 +30,7 @@ public class RaiderPriest extends Raider {
 
     @Override
     public void initAbils() {
-        abils[0] = new Ability(1200-level*20, false, 0) {
+        abils[0] = new Ability(1200 - level * 20, false, 0) {
             @Override
             public void action() {
                 for (Raider raid : dung.getRaiders()) {
@@ -52,7 +52,7 @@ public class RaiderPriest extends Raider {
 
                 if (cd.is()) {
                     for (Raider raid : dung.getRaiders()) {
-                        if (!raid.dead && raid.hp < raid.maxhp ) {
+                        if (!raid.dead && raid.hp < raid.maxhp) {
                             heal((Raider) raid);
                         }
                     }
@@ -60,8 +60,8 @@ public class RaiderPriest extends Raider {
             }
 
             public void heal(Raider raid) {
-                raid.hp += level*3;
-                
+                raid.hp += level * 3;
+
                 start();
             }
 

@@ -51,17 +51,17 @@ public class Raider extends Creature {
             dung.delete(index);
             dung.objects.add(new Modificator((int) x + getWidth() / 2, (int) y + getHeight() / 2, 1, dung) {
                 @Override
-                public void aply () {
+                public void aply() {
                     dung.player.gold++;
                 }
             });
             dung.objects.add(new Modificator((int) x, (int) y, 2, dung) {
                 @Override
-                public void aply () {
+                public void aply() {
                     dung.player.xp++;
                 }
             });
-            
+
             if (dung.player.focus == this) {
                 dung.player.unfocus();
             }

@@ -40,11 +40,10 @@ public abstract class Ability {
     public void init(int but, boolean trg, int radius) {
         try {
             key = ((String) Game.conf.get(String.valueOf(but)).getValue()).toUpperCase();
-        }catch (ClassCastException ex){
+        } catch (ClassCastException ex) {
             key = String.valueOf((Game.conf.get(String.valueOf(but)).getValue())).toUpperCase();
-        }
-        catch (Exception e){
-           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         number = but;
         if (trg) {
@@ -99,7 +98,7 @@ public abstract class Ability {
             strip.draw(x + 1, y - i * 2 + 62);
         }
         icon.draw(x, y);
-        font.drawString(x,y+44,key+"    "+number, Color.white);
+        font.drawString(x, y + 44, key + "    " + number, Color.white);
         if (cd.is()) {
             g.setColor(Color.green);
             g.drawRect(x, y, 64, 64);

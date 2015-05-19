@@ -20,6 +20,7 @@ import org.newdawn.slick.Graphics;
 public abstract class Button {
 
     public static enum buttonState {
+
         LEFT, RIGHT, CENTER
     }
     public buttonState state;

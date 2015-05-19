@@ -16,6 +16,7 @@ import org.newdawn.slick.Graphics;
  * @author Whizzpered
  */
 public class Advert {
+
     public Timer vsbl;
     public String mess;
     Dungeon dung;

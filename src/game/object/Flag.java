@@ -20,7 +20,7 @@ public class Flag {
     public Flag() {
         done = true;
     }
-    
+
     public void set(double x, double y) {
         done = false;
         this.x = x;
@@ -29,7 +29,7 @@ public class Flag {
 
     public void render(Graphics g, Image spr) {
         if (!done) {
-            spr.draw((int) x-8, (int) y);
+            spr.draw((int) x - 8, (int) y);
         }
     }
 }

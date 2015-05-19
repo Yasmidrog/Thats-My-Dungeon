@@ -29,7 +29,8 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Menu extends Scene {
-    private ArrayList<Button> abilitySettings =new ArrayList<Button>();
+
+    private ArrayList<Button> abilitySettings = new ArrayList<Button>();
     ArrayList<Button> settingsButtons = new ArrayList<>();
     Name[] name = new Name[3];
     private int currentMenu = 0;
@@ -60,66 +61,69 @@ public class Menu extends Scene {
     }
 
     public void initButtons(int h) {
-        int start=h/7;
-        int sx=-240;
-        for(int i=1;i<4;i++){
-            final String n=String.valueOf(i);
-            final int j=i;
-            if(start>Display.getHeight()-Display.getHeight()/4) {
-                sx+=300; start=h/7;
+        int start = h / 7;
+        int sx = -240;
+        for (int i = 1; i < 4; i++) {
+            final String n = String.valueOf(i);
+            final int j = i;
+            if (start > Display.getHeight() - Display.getHeight() / 4) {
+                sx += 300;
+                start = h / 7;
             }
-            abilitySettings.add(new ValueButton(sx,start,240,"Ability "+i,Color.blue) {
+            abilitySettings.add(new ValueButton(sx, start, 240, "Ability " + i, Color.blue) {
                 @Override
-                public  void initValue(){
-                    try{
-                        String val= ((String)Game.conf.get(n).getValue());
-                        if(val.isEmpty()||val==null){
-                            value=n;
-                        }else{
-                            value=val;
+                public void initValue() {
+                    try {
+                        String val = ((String) Game.conf.get(n).getValue());
+                        if (val.isEmpty() || val == null) {
+                            value = n;
+                        } else {
+                            value = val;
                         }
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
+
                 @Override
                 public void changeSet() {
                     Game.conf.set(n, String.valueOf(value));
                     try {
-                        if (dungeon.player.abils.get(j - 1) != null)
+                        if (dungeon.player.abils.get(j - 1) != null) {
                             dungeon.player.abils.get(j - 1).key = value;
-                    } catch (IndexOutOfBoundsException ignored) {
-                    }catch (NullPointerException ignored){}
-                }
-            });
-            start+=70;
-        }
-        
-        abilitySettings.add(new ValueButton(sx,start,240,"Inventory",Color.blue) {
-                @Override
-                public  void initValue(){
-                    try{
-                        String val= ((String)Game.conf.get("Inventory").getValue());
-                        if(val.isEmpty()){
-                            value="I";
-                        }else{
-                            value=val;
                         }
-                    }catch (Exception ex){
-                        ex.printStackTrace();
+                    } catch (IndexOutOfBoundsException ignored) {
+                    } catch (NullPointerException ignored) {
                     }
                 }
-                @Override
-                public void changeSet() {
-                    Game.conf.set("Inventory", String.valueOf(value));
-                    Game.inventory.key = value;
-                }
             });
-        
-        abilitySettings.add(new Button(sx,start,150,"Exit",Color.green) {
+            start += 70;
+        }
+
+        abilitySettings.add(new ValueButton(sx, start, 240, "Inventory", Color.blue) {
+            @Override
+            public void initValue() {
+                try {
+                    if(Game.conf.get("Inventory") != null)
+                        value = Game.conf.get("Inventory").getValueAsString();
+                    else
+                        value = "I";
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void changeSet() {
+                Game.conf.set("Inventory", String.valueOf(value));
+                Game.inventory.key = value;
+            }
+        });
+
+        abilitySettings.add(new Button(sx, start, 150, "Exit", Color.green) {
             @Override
             public void click() {
-                currentMenu=0;
+                currentMenu = 0;
             }
         });
 
@@ -156,7 +160,7 @@ public class Menu extends Scene {
             }
         });
 
-        settingsButtons.add(new SwitchButton(Button.buttonState.CENTER, h / 2 - 82, 200, "Fullscreen",false) {
+        settingsButtons.add(new SwitchButton(Button.buttonState.CENTER, h / 2 - 82, 200, "Fullscreen", false) {
             @Override
             public void click() {
                 super.click();
@@ -198,7 +202,7 @@ public class Menu extends Scene {
                 but.render(g);
             }
         }
-        if(currentMenu == 2) {
+        if (currentMenu == 2) {
             for (Button but : abilitySettings) {
                 but.render(g);
             }

@@ -10,5 +10,5 @@ package game.main.gui;
  * @author Whizzpered
  */
 public class Inventory {
-    
+
 }

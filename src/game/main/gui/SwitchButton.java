@@ -24,6 +24,7 @@ public abstract class SwitchButton extends Button {
         super(x, y, w, text, value ? Color.green : Color.red);
         this.value = value;
     }
+
     public SwitchButton(buttonState st, int y, int w, String text, boolean value) {
         super(st, y, w, text, value ? Color.green : Color.red);
         this.value = value;
@@ -32,14 +33,15 @@ public abstract class SwitchButton extends Button {
     @Override
     public void render(Graphics g) {
         int x;
-        if(state==buttonState.LEFT){
-            x=w/2;
-        }else  if(state==buttonState.RIGHT) {
-            x= Display.getWidth()-w/2;
-        }else if(state==buttonState.CENTER) {
-            x= cx;
+        if (state == buttonState.LEFT) {
+            x = w / 2;
+        } else if (state == buttonState.RIGHT) {
+            x = Display.getWidth() - w / 2;
+        } else if (state == buttonState.CENTER) {
+            x = cx;
+        } else {
+            x = 0;
         }
-        else x=0;
         int y = this.y;
         int w = this.w + wp;
         int mx = Mouse.getX();
@@ -47,16 +49,16 @@ public abstract class SwitchButton extends Button {
         sprite[0].setImageColor(color.r, color.g, color.b);
         sprite[1].setImageColor(color.r, color.g, color.b);
         sprite[2].setImageColor(color.r, color.g, color.b);
-        if(state==buttonState.CENTER) {
+        if (state == buttonState.CENTER) {
             sprite[0].draw(x - w / 2 - 16, y);
             sprite[1].draw(x - w / 2, y, w, 50);
             sprite[2].draw(x + w / 2, y);
-        }else if(state==buttonState.LEFT){
+        } else if (state == buttonState.LEFT) {
             sprite[1].draw(x - w / 2, y, w, 50);
             sprite[2].draw(x + w / 2, y);
-        }else if(state==buttonState.RIGHT){
-            sprite[0].draw(x-w/2 , y, sprite[0].getWidth() , 50);
-            sprite[1].draw(x-w/2+sprite[0].getWidth() , y, w, 50);
+        } else if (state == buttonState.RIGHT) {
+            sprite[0].draw(x - w / 2, y, sprite[0].getWidth(), 50);
+            sprite[1].draw(x - w / 2 + sprite[0].getWidth(), y, w, 50);
         }
         g.setColor(Color.white);
         font.drawString(x - (text.length() * 8) / 2, y + 13, text, Color.white);

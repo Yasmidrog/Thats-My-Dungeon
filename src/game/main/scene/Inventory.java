@@ -56,7 +56,7 @@ public class Inventory extends Scene {
             slots.add(new Slot(64 * i - 268, 32));
             slots.add(new Slot(64 * i - 268, 96));
         }
-        
+
     }
 
     @Override
@@ -68,14 +68,14 @@ public class Inventory extends Scene {
         for (Slot s : slots) {
             s.render(g);
         }
-        if(Slot.inHand != null){
-            Slot.inHand.renderIcon(g, Mouse.getX(), Display.getHeight()-Mouse.getY());
+        if (Slot.inHand != null) {
+            Slot.inHand.renderIcon(g, Mouse.getX(), Display.getHeight() - Mouse.getY());
         }
         for (int i = 0; i < 4; i++) {
-        Game.dungeon.player.items[i] = slots.get(i).item;
+            Game.dungeon.player.items[i] = slots.get(i).item;
         }
-        if(Keyboard.isKeyDown(Keyboard.KEY_I)){
-            if(escape){
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
+            if (escape) {
                 Game.currScene = Game.dungeon;
                 escape = false;
             }
