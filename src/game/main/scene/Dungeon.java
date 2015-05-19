@@ -366,10 +366,7 @@ public class Dungeon extends Scene {
     }
 
     public void button() {
-        System.out.println("----");
-        System.out.println(escape);
-        System.out.println(Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key)));
-
+        
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
                 Game.currScene = Game.inventory;

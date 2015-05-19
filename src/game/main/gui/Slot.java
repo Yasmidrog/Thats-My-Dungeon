@@ -42,13 +42,13 @@ public class Slot extends Button {
     public void render(Graphics g) {
         int x;
         if (state == buttonState.LEFT) {
-            x = w / 2;
+            x = cx + w / 2;
         } else if (state == buttonState.RIGHT) {
-            x = Display.getWidth() - w / 2;
+            x = cx + Display.getWidth() - w / 2;
         } else if (state == buttonState.CENTER) {
             x = cx + Display.getWidth() / 2;
         } else {
-            x = 0;
+            x = cx;
         }
         int y = this.y;
         int w = this.w;
