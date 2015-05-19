@@ -47,11 +47,11 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();              //Moving flag, for Player
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly, level = 1, end = 5, kk;      //flx, fly - cam for floor, dont touch kk!!!
+    public int camx, camy, flx, fly, level = 1, end = 5;      //flx, fly - cam for floor, dont touch kk!!!
 
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
-    public ArrayList<Bullet> bullets = new ArrayList<>();
+    public ArrayList<Entity> objects = new ArrayList<>();
     public ArrayList<FloatText> text = new ArrayList<>();
 
     public Raider[] getRaiders() {
@@ -109,10 +109,10 @@ public class Dungeon extends Scene {
         return u;
     }
 
-    public Bullet[] getBul() {
-        Bullet[] u = new Bullet[bullets.size()];
+    public Entity[] getBul() {
+        Entity[] u = new Entity[objects.size()];
 
-        u = bullets.toArray(u);
+        u = objects.toArray(u);
         return u;
     }
 
@@ -155,10 +155,12 @@ public class Dungeon extends Scene {
 
     public void initSprites() {
         sprites.add(Textures.image("particles/sparkle3.png"));
-        sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));
+        sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));          //2
         sprites.add(Textures.image("particles/rip.png").getScaledCopy(2f));
-        sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));
-        sprites.add(Textures.image("particles/sparkle2.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));    //4
+        sprites.add(Textures.image("particles/sparkle2.png").getScaledCopy(2f));//5
+        sprites.add(Textures.image("particles/coin.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/exp.png").getScaledCopy(2f));
         for (Image im : sprites) {
             im.setFilter(GL11.GL_NEAREST);
         }
@@ -176,7 +178,7 @@ public class Dungeon extends Scene {
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(120.0, 120.0, 90, 9, 1);
+        player.init(120.0, 120.0, 900, 9, 1);
         player.initImages();
     }
 
@@ -314,9 +316,9 @@ public class Dungeon extends Scene {
 
         player.tick();                          //Player is a HERO
 
-        for (Bullet b : getBul()) {
+        for (Entity b : getBul()) {
             if (b != null) {
-                b.tick(this);
+                b.tick();
             }
         }
 
@@ -364,11 +366,12 @@ public class Dungeon extends Scene {
     }
 
     public void button() {
-        if (kk > 0) {
-            kk--;
-        }
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {              //Getting to Menu
-            Game.currScene = Game.menu;
+            if (escape) {
+                Game.currScene = Game.menu;
+            }
+        } else {
+            escape = true;
         }
 
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
@@ -380,32 +383,35 @@ public class Dungeon extends Scene {
             escape = true;
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && kk == 0) {        //actualy doing nothing, but must delete all items from boss
-            if (player.items[0] != null) {
-                for (Item it : player.items) {
-                    it = null;
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {        //actualy doing nothing, but must delete all items from boss
+            if (escape) {
+                if (player.items[0] != null) {
+                    for (Item it : player.items) {
+                        it = null;
+                    }
+                } else {
+                    player.items[0] = new Item("pants") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.maxhp += 20;
+                        }
+                    };
+                    player.items[1] = new Item("arms") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.maxhp += 10;
+                        }
+                    };
+                    player.items[2] = new Item("braces") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.dmg += 5;
+                        }
+                    };
                 }
-            } else {
-                player.items[0] = new Item("pants") {
-                    @Override
-                    public void aply(Creature cr) {
-                        cr.maxhp += 20;
-                    }
-                };
-                player.items[1] = new Item("arms") {
-                    @Override
-                    public void aply(Creature cr) {
-                        cr.maxhp += 10;
-                    }
-                };
-                player.items[2] = new Item("braces") {
-                    @Override
-                    public void aply(Creature cr) {
-                        cr.dmg += 5;
-                    }
-                };
             }
-            kk = 30;
+        } else {
+            escape = true;
         }
     }
 
@@ -427,7 +433,7 @@ public class Dungeon extends Scene {
                 player.abilsRender(g);
             }
         }
-        for (Bullet b : getBul()) {
+        for (Entity b : getBul()) {
             if (b != null) {
                 b.render(g);
 

@@ -9,6 +9,7 @@ import game.main.Ability;
 import game.main.shell.Game;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
+import game.object.Modificator;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +49,22 @@ public class Raider extends Creature {
         if (getTimer("dying").is()) {
             dung.report(nick + " left the game!", 500);
             dung.delete(index);
-            dung.player.xp += level * 15;
+            dung.objects.add(new Modificator((int) x + getWidth() / 2, (int) y + getHeight() / 2, 1, dung) {
+                @Override
+                public void aply () {
+                    dung.player.gold++;
+                }
+            });
+            dung.objects.add(new Modificator((int) x, (int) y, 2, dung) {
+                @Override
+                public void aply () {
+                    dung.player.xp++;
+                }
+            });
+            
+            if (dung.player.focus == this) {
+                dung.player.unfocus();
+            }
         }
         if (dung.player.focus == this) {
             dung.player.unfocus();

@@ -212,7 +212,7 @@ public class Creature extends Entity {
     }
 
     public void shoot() {
-        dung.bullets.add(new Bullet((int) x, (int) y, focus, this, miss()));
+        dung.objects.add(new Bullet((int) x, (int) y, focus, this, miss()));
         getTimer("kick").start();
     }
 

@@ -18,6 +18,7 @@ import org.newdawn.slick.Graphics;
  */
 public class Bullet extends game.creature.Entity {
 
+    Dungeon dung;
     public Creature owner, target;
     public int damage, type, tim = 0;
     public double angle, speed;
@@ -29,12 +30,11 @@ public class Bullet extends game.creature.Entity {
         this.miss = miss;
         this.owner = creature;
         this.target = target;
+        this.dung = owner.dung;
         if (miss) {
             owner.dung.text.add(new FloatText((int) x, (int) y, "Missed", owner.dung));
         }
-
         damage = owner.dmg;
-        System.out.println(damage);
         if (owner.ranged) {
             type = 1;
             speed = 4;
@@ -45,14 +45,15 @@ public class Bullet extends game.creature.Entity {
         angle = getAngle();
     }
 
-    public void move(Dungeon dung) {
-        tick(dung);
+    public void move() {
+        tick();
         if (x < 0 || x > 2000 || y < 0 || y > 2000) {
-            dung.bullets.remove(this);
+            dung.objects.remove(this);
         }
     }
 
-    public void tick(Dungeon dung) {
+    @Override
+    public void tick() {
         if (!miss) {
             angle = getAngle();
         }
@@ -78,13 +79,13 @@ public class Bullet extends game.creature.Entity {
             }
         }
         if (x < 0 || x > 2000 || y < 0 || y > 2000) {
-            dung.bullets.remove(this);
+            dung.objects.remove(this);
         }
     }
 
     public void hit(Dungeon dung) {
         vx = 0;
-        dung.bullets.remove(this);
+        dung.objects.remove(this);
         dung.text.add(new FloatText((int) x, (int) y, "-" + damage, owner.dung));
     }
 

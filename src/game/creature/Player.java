@@ -131,7 +131,7 @@ public class Player extends Creature {
             @Override
             public void casting() {
                 double angle = Math.atan2((Display.getHeight() - Mouse.getY()) - Display.getHeight() / 2, Mouse.getX() - Display.getWidth() / 2);
-                dung.bullets.add(new Magic((int) thisClass.x, (int) thisClass.y, thisClass, angle));
+                dung.objects.add(new Magic((int) thisClass.x, (int) thisClass.y, thisClass, angle));
                 super.casting();
             }
         });
