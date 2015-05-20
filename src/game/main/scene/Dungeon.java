@@ -369,8 +369,10 @@ public class Dungeon extends Scene {
 
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
-                Game.currScene = Game.inventory;
+                Game.currScene = Game.shop;
                 escape = false;
+                waveTimer.stop();
+
             }
         } else {
             escape = true;

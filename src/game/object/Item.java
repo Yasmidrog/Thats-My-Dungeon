@@ -18,7 +18,7 @@ import org.newdawn.slick.SlickException;
  */
 public abstract class Item {
 
-    public int type;
+    public int type, price;
     public Image icon;                              //For rendering on inventory or dropped on floor
     public Sprite sprite;                           //For rendering when weared on Creature
 
