@@ -5,11 +5,16 @@
  */
 package game.main;
 
+import game.main.gui.Button;
+import static game.main.scene.Scene.sprite;
 import static game.main.shell.Game.font;
 
 import game.main.shell.Game;
+import static game.main.shell.Game.font;
 import main.utils.Textures;
 import main.utils.Timer;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -23,6 +28,7 @@ public abstract class Ability {
     public Timer cd, duration;
     public boolean lng, trgt;
     public Image icon, strip;
+    public Button mouse;
     public int number;
     public String key;
     public int radius;
@@ -45,11 +51,43 @@ public abstract class Ability {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        initButton();
         number = but;
         if (trg) {
             trgt = trg;
             this.radius = radius;
         }
+    }
+
+    public void initButton() {
+        mouse = new Button(0, 0, 32, null, null) {
+            @Override
+            public void click() {
+                if (cd.is()) {
+                    action();
+                }
+                Game.dungeon.player.reset();
+            }
+
+            @Override
+            public void render(Graphics g) {
+                int x = cx;
+                int y = this.y;
+                int mx = Mouse.getX();
+                int my = Display.getHeight() - Mouse.getY();
+                icon.draw(x - w / 2, y - 32);
+
+                if (Math.abs(mx - x) < w && Math.abs(y - my) < 32) {
+                    color = Color.orange;
+                    if (bp && !Mouse.isButtonDown(0)) {
+                        click();
+                    }
+                } else {
+                    color = Color.white;
+                }
+                bp = Mouse.isButtonDown(0);
+            }
+        };
     }
 
     public Ability(int cd, boolean dur, int dura) {
@@ -97,7 +135,9 @@ public abstract class Ability {
         for (int i = 0; i < ((cd.period - cd.tick) * Math.pow(cd.period, -1)) * 31; i++) {
             strip.draw(x + 1, y - i * 2 + 62);
         }
-        icon.draw(x, y);
+        mouse.cx = x + 16;
+        mouse.y = y + 32;
+        mouse.render(g);
         font.drawString(x, y + 44, key + "    " + number, Color.white);
         if (cd.is()) {
             g.setColor(Color.green);

@@ -267,7 +267,7 @@ public class Player extends Creature {
     }
 
     public void renderStats(Graphics g) {
-        stats.showForPlayer(g, Display.getWidth() - 100, 40);
+        stats.showForPlayer(g, Display.getWidth() - 150, 40);
         if (focus != null & aim != null) {
             aim.show(g, 5, 100);
         }

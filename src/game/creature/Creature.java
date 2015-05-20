@@ -200,6 +200,8 @@ public class Creature extends Entity {
     public void reset() {
         vx = 0;
         vy = 0;
+        ex = 0;
+        ey = 0;
         //IDK just for fun
     }
 

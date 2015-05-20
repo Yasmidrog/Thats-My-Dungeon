@@ -144,7 +144,7 @@ public class Dungeon extends Scene {
     }
 
     public void initButtons() {
-        buttons.add(new Button(Display.getWidth() / 2 - 110, 20, 100, "Pause", Color.green) {
+        buttons.add(new Button(Button.buttonState.RIGHT, 20, 100, "Pause", Color.green) {
             @Override
             public void click() {
                 Game.currScene = Game.menu;
@@ -366,7 +366,7 @@ public class Dungeon extends Scene {
     }
 
     public void button() {
-        
+
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
                 Game.currScene = Game.inventory;
@@ -408,7 +408,7 @@ public class Dungeon extends Scene {
 
     @Override
     public void render(Graphics g) {
-        int py = camy, px = camx;                       //Idk, but i'm too harriered to delete
+        int py = camy, px = camx;                       //Idk, but i'm too lazy to delete
 
         GL11.glTranslatef(px, py, 0);
 
@@ -438,15 +438,22 @@ public class Dungeon extends Scene {
         }
         GL11.glTranslatef(-px, -py, 0);
 
+        renderGui(g);
+    }
+
+    public void renderGui(Graphics g) {
         player.healthbar.render(g, 20, 20, (int) player.hp);
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
         }
+        for (Button but : buttons) {
+            but.render(g);
+        }
         player.renderStats(g);
 
         for (int i = 0; i < player.abils.size(); i++) {
-            player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 70 + i * 66, Display.getHeight() - 70);
+            player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 96 + i * 66, Display.getHeight() - 70);
         }
     }
 }

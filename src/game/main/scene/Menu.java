@@ -43,7 +43,7 @@ public class Menu extends Scene {
     @Override
     public void init() throws SlickException {
 
-        sprite = new Image[4];
+        sprite = new Image[5];
         int w = Display.getWidth(), h = Display.getHeight();
 
         sprite[0] = Textures.image("gui/button_left.png");
@@ -52,12 +52,13 @@ public class Menu extends Scene {
         sprite[1].setFilter(GL11.GL_NEAREST);
         sprite[3] = Textures.image("gui/back.jpg");
         sprite[3].setFilter(GL11.GL_NEAREST);
-
+        sprite[4] = Textures.image("gui/logo.jpg");
+        
         initButtons(h);
 
-        name[0] = new Name(Display.getWidth() / 2 - 150, Display.getHeight() - 120, "Whizzpered", Color.white, "Founder, Teamleader", Color.magenta);
-        name[1] = new Name(Display.getWidth() / 2 - 100, Display.getHeight() - 80, "Yew_mentzaki", Color.white, "Programmister", Color.magenta);
-        name[2] = new Name(Display.getWidth() / 2 - 100, Display.getHeight() - 40, "Todo_Asano", Color.white, "Designer", Color.magenta);
+        name[0] = new Name(150, 120, "Whizzpered", Color.white, "Teamleader", Color.magenta);
+        name[1] = new Name(150, 80, "Yew_mentzaki", Color.white, "Programmer", Color.magenta);
+        name[2] = new Name(150, 40, "Todo_Asano", Color.white, "Designer", Color.magenta);
     }
 
     public void initButtons(int h) {
@@ -187,6 +188,7 @@ public class Menu extends Scene {
     public void render(Graphics g) {
         GL11.glDisable(GL11.GL_BLEND);
         sprite[3].draw(0, 0, Display.getWidth(), Display.getHeight());
+        sprite[4].draw(Display.getWidth()/2 - sprite[4].getWidth()/2, 50);
         GL11.glEnable(GL11.GL_BLEND);
         if (currentMenu == 0) {
             font.drawString(Display.getWidth() - 300, 0, "Welcome back in " + Game.times + " time!", Color.yellow);

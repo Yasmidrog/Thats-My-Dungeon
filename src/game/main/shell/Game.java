@@ -50,7 +50,7 @@ public class Game extends BasicGame {
     public static AppGameContainer app;
 
     public Game() {
-        super("");
+        super("Powered by SHeatrs");
     }
 
     public static void exit() {

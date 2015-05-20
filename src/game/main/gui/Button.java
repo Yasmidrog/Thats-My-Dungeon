@@ -26,9 +26,9 @@ public abstract class Button {
     public buttonState state;
     Game game = new Game();
     public int cx, y, w, wp = 1;
-    String text;
-    Color color;
-    boolean bp;
+    public String text;
+    public Color color;
+    public boolean bp;
 
     protected Button() {
     }
