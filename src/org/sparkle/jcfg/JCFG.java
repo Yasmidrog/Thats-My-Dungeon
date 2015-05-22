@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.sparkle.jcfg;
 
 import java.util.ArrayList;
@@ -30,14 +29,14 @@ public class JCFG {
     public JCFG() {
     }
 
-    public Parameter[] list(){
+    public Parameter[] list() {
         Parameter[] parameter = new Parameter[parameters.size()];
         for (int i = 0; i < parameter.length; i++) {
             parameter[i] = parameters.get(i);
         }
         return parameter;
     }
-    
+
     public boolean contains(String name) {
         int i = 0;
         while (i < parameters.size()) {
@@ -81,5 +80,5 @@ public class JCFG {
     public void set(String name, Object value) {
         set(new Parameter(name, value));
     }
-    
+
 }

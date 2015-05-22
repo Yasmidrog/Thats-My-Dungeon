@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.sparkle.jcfg;
 
 import java.io.File;
@@ -27,7 +26,7 @@ import java.util.Scanner;
  */
 public final class Parser {
 
-        public static JCFG parse(File file) throws FileNotFoundException {
+    public static JCFG parse(File file) throws FileNotFoundException {
         JCFG cfg = new JCFG();
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
@@ -106,7 +105,7 @@ public final class Parser {
         }
         return cfg;
     }
-    
+
     public static JCFG parse(String line) {
         JCFG cfg = new JCFG();
         String[] lines = line.split("\n");
@@ -185,5 +184,5 @@ public final class Parser {
         }
         return cfg;
     }
-    
+
 }

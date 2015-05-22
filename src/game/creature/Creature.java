@@ -6,17 +6,23 @@
 package game.creature;
 
 import game.main.Modifier;
+import game.main.gui.Stats;
 import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
+import game.object.Item;
+import game.world.Block;
 import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import main.utils.Timer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -26,13 +32,17 @@ public class Creature extends Entity {
 
     public Random missrand = new Random();
     public double ex, ey, hp;
-    public int maxhp, dmg, index, range, dmgDistance, speed, realhp, level, misschance = 0;
+    public int index, range, dmgDistance, speed, level, misschance = 0;
+    public int maxhp, dmg;
+    public int realhp, realdmg;
     public boolean dead, ranged, enemy, focused;
     public Sprite sprite;
     public String nick;
     public Creature focus;
     public Dungeon dung;
     public Side side = Side.FRONT;
+
+    public Item[] items = new Item[1];
 
     ArrayList<Timer> timers = new ArrayList<>();
     ArrayList<String> timnames = new ArrayList<>();
@@ -47,18 +57,19 @@ public class Creature extends Entity {
         return timers.get(timnames.indexOf(name));
     }
 
-    public Modifier[] getMods() {
+    public Modifier[] getMods() {           //Gettin' Array of Modifiers for executing
+        //CurrentModificator Esception
         Modifier[] a = new Modifier[mods.size()];
         mods.toArray(a);
         return a;
     }
 
     public int getWidth() {
-        return 128;
+        return 128;                           //Returns Size
     }
 
     public int getHeight() {
-        return 128;
+        return 128;                            //Returns Size
     }
 
     protected double distance(double x1, double y1, double x2, double y2) {
@@ -69,20 +80,20 @@ public class Creature extends Entity {
     public void init(Object... args) {
         x = (Double) args[0];
         y = (Double) args[1];
-        maxhp = (int) args[2];
-
-        realhp = maxhp;
+        realhp = (int) args[2];                 //For Modifiers
+        realdmg = (int) args[3];
+        dmg = realdmg;
+        maxhp = realhp;
         hp = maxhp;
-        dmg = (int) args[3];
-        level = (int) args[4];
-        if (level < 0) {
-            dmg = (int) (level * 1.7);
-            hp = (int) (level * 1.7);
-        }
         setTimer("dying", 1000);
     }
 
-    public void collision() {
+    public void collision() {               //Two kinds of Collision :
+        crCollision();                      //For other Creatures
+        objCollision();                     //For blocks and objects
+    }
+
+    public void crCollision() {
         for (Raider r : dung.getRaiders()) {
             if (!r.dead) {
                 double d = sqrt(Math.pow(r.x - x, 2) + pow(r.y - y, 2));
@@ -97,6 +108,25 @@ public class Creature extends Entity {
         }
     }
 
+    public void objCollision() {
+        for (int i = (int) ((y - getHeight() / 2) / Block.size); i < (y + getHeight() / 2) / Block.size; i++) {
+            if (Block.block[dung.floor.get((int) ((x - getWidth() / 2) / Block.size), (int) (i))].solid) {
+                x += 2;
+            }
+            if (Block.block[dung.floor.get((int) ((x + getWidth() / 2) / Block.size), (int) (i))].solid) {
+                x -= 2;
+            }
+        }
+        for (int i = (int) ((x - getWidth() / 2) / Block.size); i < (x + getWidth() / 2) / Block.size; i++) {
+            if (Block.block[dung.floor.get((int) (i), (int) ((y - getHeight() / 2) / Block.size))].solid) {
+                y += 2;
+            }
+            if (Block.block[dung.floor.get((int) (i), (int) ((y + getHeight() / 2) / Block.size))].solid) {
+                y -= 2;
+            }
+        }
+    }
+
     public void initImages() {
 
     }
@@ -106,34 +136,40 @@ public class Creature extends Entity {
     }
 
     public void setStats() {
-        maxhp = realhp;
-        double arr = hp / maxhp;
+        maxhp = realhp;             //Getting native Stats
+        dmg = realdmg;
+        for (Item item : items) {   //Apply items
+            if (item != null) {
+                item.aply(this);
+            }
+        }
 
-        for (Modifier mod : getMods()) {
+        for (Modifier mod : getMods()) {    //Aply Buffs and Debuffs
             mod.aply(this);
         }
-        if (maxhp > realhp) {
-            hp = arr * maxhp;
-        }
+
     }
 
     @Override
     public void tick() {
         setStats();
-        baseTick();
-        move();
+        baseTick();             //Base actions for Creature
+        move();                 //Method of Movings. For focusing and for just patrool
         collision();
         for (Modifier mod : getMods()) {
             mod.tick(this);
         }
+        if(focus !=null && focus.dead){
+            focus = null;
+        }
     }
 
     public void die() {
-
+        //DIIIIE MTHRFCKR
     }
 
     public void deadtick() {
-
+        //ARE YOU STILL ALIVE????WTF
     }
 
     public void move() {
@@ -168,6 +204,9 @@ public class Creature extends Entity {
     public void reset() {
         vx = 0;
         vy = 0;
+        ex = 0;
+        ey = 0;
+        //IDK just for fun
     }
 
     public void battle() {
@@ -175,10 +214,11 @@ public class Creature extends Entity {
         if (dist - 2 * speed < dmgDistance && getTimer("kick").is()) {
             shoot();
         }
+        //SHOOT THIS NIGGA IF YOU SEE HIM
     }
 
     public void shoot() {
-        dung.bullets.add(new Bullet((int) x, (int) y, focus, this, miss()));
+        dung.objects.add(new Bullet((int) x, (int) y, focus, this, miss()));
         getTimer("kick").start();
     }
 
@@ -191,6 +231,10 @@ public class Creature extends Entity {
             focused = false;
             getTimer("dying").start();
         }
+        if (hp >= maxhp) {
+            hp = maxhp;
+        }
+
         if (x < 0) {
             x = 0;
         }
@@ -205,6 +249,13 @@ public class Creature extends Entity {
         }
     }
 
+    public void focussmth(Creature r) {     //Look, nigga, he's gonna pick up yo mom!
+        if (focus != null) {
+            focus = null;
+        }
+        focus = r;
+    }
+    
     public void checkTimers() {
         for (Timer tim : timers) {
             if (!tim.is()) {
@@ -215,15 +266,29 @@ public class Creature extends Entity {
 
     @Override
     public void render(Graphics g) {
+        //Don't see there, THATS EMPTY !!!
         g.setColor(Color.red);
         g.drawRect((int) x, (int) y, 64, 64);
     }
 
     protected boolean miss() {
+
         return missrand.nextInt(100) <= misschance;
     }
 
-    public void deadrender(Graphics g) {
+    public void renderItems(Graphics g) {  //Rendering weared items
+        try {
+            for (Item item : items) {
+                if (item != null) {
+                    item.render(g, this);
+                }
+            }
+        } catch (SlickException ex) {
+            Logger.getLogger(Creature.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void deadrender(Graphics g) { //GRAAAAVE
         dung.sprites.get(2).draw((int) x - getWidth() / 2, (int) y - 32);
     }
 }

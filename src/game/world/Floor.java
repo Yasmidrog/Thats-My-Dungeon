@@ -14,7 +14,7 @@ import org.newdawn.slick.Graphics;
  */
 public class Floor {
 
-    public int w = 12, h = 22;
+    public int w, h;
     public int[][] floor = new int[w][h];
 
     public void init() {

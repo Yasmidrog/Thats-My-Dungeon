@@ -5,8 +5,10 @@
  */
 package game.main.gui;
 
+import static game.main.shell.Game.font;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -33,5 +35,7 @@ public class Bar {
     public void render(Graphics g, int x, int y, int value) {
         g.fillRect(x + 4, y + 17, (bar.getWidth() - 10) * value / maxvalue, scale.getHeight(), scale, 1, 1);
         bar.draw(x, y);
+        font.drawString(x + (bar.getWidth() / 2) - 33, y + bar.getHeight() / 2 - 5, value + "|" + maxvalue, Color.darkGray);
+        font.drawString(x + (bar.getWidth() / 2) - 35, y + bar.getHeight() / 2 - 8, value + "|" + maxvalue, Color.white);
     }
 }

@@ -6,9 +6,12 @@
 package game.main;
 
 import game.creature.Player;
+import game.main.shell.Game;
 import main.utils.Textures;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -40,7 +43,7 @@ public abstract class Target extends Ability {
         super.tick();
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(key)) && cd.is() && count == 0) {
             action();
-            count = 15;
+            count = 25;
         }
         if (Mouse.isButtonDown(1) && player.cast == this) {
             casting();
@@ -59,6 +62,7 @@ public abstract class Target extends Ability {
             player.cast = null;
             pressed = false;
         }
+
     }
 
     public void casting() {

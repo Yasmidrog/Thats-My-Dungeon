@@ -5,47 +5,58 @@
  */
 package game.main.scene;
 
+import game.creature.raider.RaiderArc;
+import game.creature.raider.RaiderPriest;
+import game.creature.raider.RaiderWar;
+import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
+import game.main.gui.Button;
 import game.main.gui.Chat;
+import game.main.gui.FloatText;
+import game.main.shell.Game;
 import game.object.Bullet;
-import game.object.Flag;
-import game.object.Object;
+import game.object.Item;
 import game.world.*;
-import main.utils.DungeonParser;
-import main.utils.Textures;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
+import main.utils.DungeonParser;
+import main.utils.Textures;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 /**
- * @author Юрий
+ *
+ * @author Whizzpered
  */
 public class Dungeon extends Scene {
 
-    public Player player;
-    public Flag flag = new Flag();
-    public Chat chat = new Chat();
+    public boolean escape = true;
+
     public Floor floor = new Floor();
+    public Player player;
+    public Flag flag = new Flag();              //Moving flag, for Player
+    public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
-    public int camx, camy, flx, fly, dunglevel = 1, wavenumber = 1;
-    public ArrayList<Object> objs = new ArrayList<>();
+    public Mob[] mobs = new Mob[50];
+    public int camx, camy, flx, fly, level = 1, end = 5;      //flx, fly - cam for floor, dont touch kk!!!
+
     public static ArrayList<Image> sprites = new ArrayList<>();
     public ArrayList<Advert> ads = new ArrayList<>();
-    public ArrayList<Bullet> bullets = new ArrayList<>();
-    private int w, h;
+    public ArrayList<Entity> objects = new ArrayList<>();
+    public ArrayList<FloatText> text = new ArrayList<>();
 
     public Raider[] getRaiders() {
         int i;
@@ -60,24 +71,41 @@ public class Dungeon extends Scene {
         return u;
     }
 
-    public Bullet[] getBullets() {
+    public Mob[] getMobs() {
         int i;
-        for (i = 0; i < bullets.size(); i++) {
-            if (bullets.get(i) == null) {
+        for (i = 0; i < mobs.length; i++) {
+            if (mobs[i] == null) {
                 break;
             }
         }
-        Bullet[] u = new Bullet[i];
-        System.arraycopy(bullets.toArray(), 0, u, 0, i);
+        Mob[] u = new Mob[i];
+        System.arraycopy(mobs, 0, u, 0, i);
+
+        return u;
+    }
+
+    public FloatText[] getText() {
+        FloatText[] u = new FloatText[text.size()];
+
+        try {
+            for (int i = 0; i < text.size(); i++) {
+                u[i] = text.get(i);
+            }
+        } catch (Exception e) {
+        }
         return u;
     }
 
     public Creature[] creaturesYSort() {
-        Creature[] u = new Creature[getRaiders().length + 1];
+        Creature[] u = new Creature[getRaiders().length + 1 + getMobs().length];
         u[0] = player;
-        for (int i = 1; i < u.length; i++) {
+        for (int i = 1; i < getRaiders().length + 1; i++) {
             u[i] = getRaiders()[i - 1];
         }
+        for (int i = getRaiders().length + 1; i < u.length; i++) {
+            u[i] = getMobs()[i - 1 - getRaiders().length];
+        }
+
         for (int i = 0; i < u.length - 1; i++) {
             for (int j = i + 1; j < u.length; j++) {
                 if (u[i].y > u[j].y) {
@@ -102,19 +130,19 @@ public class Dungeon extends Scene {
         return u;
     }
 
-    public Bullet[] getBul() {
-        Bullet[] u = new Bullet[bullets.size()];
+    public Entity[] getBul() {
+        Entity[] u = new Entity[objects.size()];
 
-        u = bullets.toArray(u);
+        u = objects.toArray(u);
         return u;
     }
 
     public int getWidth() {
-        return floor.h * Block.size;
+        return floor.w * Block.size;
     }
 
     public int getHeight() {
-        return floor.w * Block.size;
+        return floor.h * Block.size;
     }
 
     public void report(String s, int dur) {
@@ -123,58 +151,77 @@ public class Dungeon extends Scene {
 
     @Override
     public void init() {
-        DungeonParser d;
+        Block.setBlocks();      //Initializating blocks for building
         try {
-            d = new DungeonParser(this, dunglevel + "");
-            floor.w = d.w;
-            floor.h = d.h;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            chat.init(this);
+            DungeonParser dp = new DungeonParser(this, "1");    //Getting plan of level from file
+            dp.aply();                                          //aplying this plan
+            chat.init(this);                                    //Getting цитаты from file
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Dungeon.class.getName()).log(Level.SEVERE, null, ex);
         }
         initSprites();
+        initButtons();
         initCreatures();
+    }
+
+    public void initButtons() {
+        buttons.add(new Button(Button.buttonState.RIGHT, 20, 100, "Pause", Color.green) {
+            @Override
+            public void click() {
+                Game.currScene = Game.menu;
+            }
+        });
+
     }
 
     public void initSprites() {
         sprites.add(Textures.image("particles/sparkle3.png"));
-        sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));
+        sprites.add(Textures.image("gui/agro.png").getScaledCopy(2f));          //2
         sprites.add(Textures.image("particles/rip.png").getScaledCopy(2f));
-        sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));
-        sprites.add(Textures.image("particles/sparkle2.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/flag.png").getScaledCopy(2f));    //4
+        sprites.add(Textures.image("particles/sparkle2.png").getScaledCopy(2f));//5
+        sprites.add(Textures.image("particles/coin.png").getScaledCopy(2f));
+        sprites.add(Textures.image("particles/exp.png").getScaledCopy(2f));
         for (Image im : sprites) {
             im.setFilter(GL11.GL_NEAREST);
         }
+
+        Block.initSprites();
     }
 
     public void initCreatures() {
         player();
-        spawn(new RaiderArc(), 400.0, 240.0, 9, 4, 1);
-        spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
-        spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
     }
 
     public void player() {
         player = new Player();
         player.dung = this;
-        player.init(190.0, 190.0, 90, 9, 1);
+        player.init(120.0, 120.0, 900, 9, 1);
         player.initImages();
     }
 
-    public void spawn(Raider cr, java.lang.Object... args) {
-        cr.dung = this;
-        add(cr);
-        cr.init(args);
-        report(cr.nick + " joined the game!", 500);
-        cr.initImages();
+    public void summon(Mob mob, Object... args) {
+        mob.dung = this;
+        mob.initImages();
+        mob.init(args);
+        for (int i = 0; i < mobs.length; i++) {
+            if (mobs[i] == null) {
+                mobs[i] = mob;
+                mob.index = i;
+                break;
+            }
+        }
     }
 
-    public void add(Raider cr) {
+    public void spawn(Raider cr, Object... args) {          //Use this for spawn
+        cr.dung = this;
+        cr.initImages();
+        cr.init(args);
+        add(cr);
+        report(cr.nick + " joined the game!", 500);
+    }
+
+    public void add(Raider cr) {                            //Don't touch
         for (int i = 0; i < raiders.length; i++) {
             if (raiders[i] == null) {
                 raiders[i] = cr;
@@ -184,7 +231,7 @@ public class Dungeon extends Scene {
         }
     }
 
-    public void delete(int index) {
+    public void delete(int index) {                         //Yo, nigga, so good crap
         int s = 0;
         for (int i = 0; i < raiders.length; i++) {
             if (raiders[i].index == index) {
@@ -199,32 +246,76 @@ public class Dungeon extends Scene {
         }
     }
 
-    Timer waveTimer = new Timer(1000, new ActionListener() {
+    Timer waveTimer = new Timer(1000, new ActionListener() {          //Your timer but with third dick and thousand of tities
 
         @Override
         public void actionPerformed(ActionEvent ae) {
+
             Random r = new Random();
             if (waveTimerSeconds > 0) {
                 waveTimerSeconds--;
                 if (waveTimerSeconds > 0) {
-                    report(waveTimerSeconds + " seconds left!", 94);
+                    if (level > end) {
+                        report("YOU WON!!", 60);
+                    } else {
+                        report(waveTimerSeconds + " seconds left!", 94);
+                    }
                 } else {
-                    report("Let's go!", 300);
-                    wavenumber++;
+                    if (level > end) {
+                        report("No Go to hell, Loser :3", 60);
+                    } else {
+                        report("Lets Go", 60);
+                    }
                 }
             } else {
-                for (int i = 0; i < 4; i++) {
-                    switch (r.nextInt(3)) {
-                        case 0:
-                            spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, wavenumber);
-                            break;
-                        case 1:
-                            spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20, 4, wavenumber);
-                            break;
-                        case 2:
-                            spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40, 2, wavenumber);
-                            break;
+                if (level == end) {
+                    spawn(new RaiderWar() {
+                        @Override
+                        public void init(Object... args) {
+                            super.init(args);
+                            nick = "FUGKING CHEATER";
+                        }
+
+                        @Override
+                        public void render(Graphics g) {
+                            try {
+                                if (focused) {
+                                    bar.draw((int) x - getWidth() / 2, (int) y - getHeight() / 3);
+                                }
+                                sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+                                renderHP(g);
+                                Game.font.drawString((int) x - getWidth() / 2 - 12, (int) y - getHeight() / 2 - 40, nick);
+                            } catch (SlickException ex) {
+                                Logger.getLogger(Raider.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }, (double) (getWidth() / 2 + 48), (double) (getHeight() - 64), 200 + level * 3, 6 + level, level
+                    );
+                } else if (level > end) {
+                    Game.dungeon = null;
+                    Game.currScene = Game.menu;
+                } else {
+                    for(Mob m : getMobs()){
+                        m.delete();
                     }
+                    for (int i = 0; i < 4; i++) {
+                        switch (r.nextInt(3)) {
+                            case 0:
+                                spawn(new RaiderArc(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 4 + (int) (level / 3), level);
+                                break;
+                            case 1:
+                                spawn(new RaiderPriest(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 20 + level * 2, 3 + (int) (level / 5), level);
+                                break;
+                            case 2:
+                                spawn(new RaiderWar(), (double) (getWidth() / 2 - i * 48 + 48), (double) (getHeight() - 64), 40 + level * 4, 2 + (int) (level / 5), level);
+                                break;
+                        }
+
+                    }
+                    summon(new Mob(), 1200.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 1000.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 800.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 600.0, 1200.0, 30, 2, 3);
                 }
                 waveTimer.stop();
             }
@@ -236,9 +327,12 @@ public class Dungeon extends Scene {
 
     @Override
     public void tick() {
-        if (getRaiders().length == 0) {
+        if (getRaiders().length == 0) {             //Mechanism of waves
             if (!waveTimer.isRunning()) {
                 waveTimerSeconds = 10;
+                level++;
+                player.dmg++;
+                player.maxhp += 10;
                 waveTimer.start();
             }
         }
@@ -251,26 +345,34 @@ public class Dungeon extends Scene {
             cr.emulateChat();
         }
 
+        for (Mob cr : getMobs()) {
+            cr.tick();
+        }
+
         for (Advert ad : getAds()) {
             if (ad != null) {
                 ad.tick();
             }
         }
 
-        player.tick();
-        for (Object o : objs) {
-            o.collision();
-        }
-        for (Bullet b : getBul()) {
+        player.tick();                          //Player is a HERO
+
+        for (Entity b : getBul()) {
             if (b != null) {
-                b.tick(this);
+                b.tick();
             }
         }
 
         try {
-            mousing();
+            mousing();                      //Methods of control
+            button();
         } catch (IllegalStateException ignored) {
         }
+    }
+
+    @Override
+    public void subtick() {
+
     }
 
     public void mousing() {
@@ -281,13 +383,12 @@ public class Dungeon extends Scene {
         flx = (int) player.x + mx - w;
         fly = (int) player.y + my - h;
         double msx = player.x + mx * 2 - w;
-        double msy = player.y + my * 2 - h;
+        double msy = player.y + my * 2 - h;             //Woooah, so big shit
 
         if (player.agr == null) {
             if (Mouse.isButtonDown(0)) {
                 if (player.focus != null) {
-                    player.focus.focused = false;
-                    player.focus = null;
+                    player.unfocus();
                 }
                 for (Raider cr : getRaiders()) {
                     if (!cr.dead) {
@@ -305,41 +406,106 @@ public class Dungeon extends Scene {
         }
     }
 
+    public void button() {
+
+        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
+            if (escape) {
+                Game.currScene = Game.inventory;
+                escape = false;
+                waveTimer.stop();
+            }
+        } else {
+            escape = true;
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            if (Game.shop.escape) {
+                Game.currScene = Game.shop;
+                Game.shop.escape = false;
+                waveTimer.stop();
+            }
+        } else {
+            Game.shop.escape = true;
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {        //actualy doing nothing, but must delete all items from boss
+            if (escape) {
+                if (player.items[0] != null) {
+                    for (Item it : player.items) {
+                        it = null;
+                    }
+                } else {
+                    player.items[0] = new Item("pants") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.maxhp += 20;
+                        }
+                    };
+                    player.items[1] = new Item("arms") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.maxhp += 10;
+                        }
+                    };
+                    player.items[2] = new Item("braces") {
+                        @Override
+                        public void aply(Creature cr) {
+                            cr.dmg += 5;
+                        }
+                    };
+                }
+            }
+        }
+    }
+
     @Override
     public void render(Graphics g) {
-        int py = camy, px = camx;
+        int py = camy, px = camx;                       //Idk, but i'm too lazy to delete
+
         GL11.glTranslatef(px, py, 0);
+
         floor.render(g, flx, fly);
-        for (Object o : objs) {
-            o.render(g);
-        }
         for (Creature cr : creaturesYSort()) {
             if (cr.dead) {
                 cr.deadrender(g);
             } else {
                 cr.render(g);
             }
+
             if (cr == player) {
                 player.abilsRender(g);
             }
         }
-        for (Bullet b : getBul()) {
+        for (Entity b : getBul()) {
             if (b != null) {
                 b.render(g);
 
             }
         }
+        for (FloatText ft : getText()) {
+            ft.render(g);
+        }
         if (flag != null) {
             flag.render(g, sprites.get(3));
         }
         GL11.glTranslatef(-px, -py, 0);
+
+        renderGui(g);
+    }
+
+    public void renderGui(Graphics g) {
         player.healthbar.render(g, 20, 20, (int) player.hp);
         chat.render(g);
         for (int i = 0; i < getAds().length; i++) {
             getAds()[i].render(g, Display.getWidth() / 2 - 100, 150 + i * 30);
         }
+        for (Button but : buttons) {
+            but.render(g);
+        }
+        player.renderStats(g);
+
         for (int i = 0; i < player.abils.size(); i++) {
-            player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 70 + i * 66, Display.getHeight() - 70);
+            player.abils.get(i).renderIcon(g, Display.getWidth() / 2 - 96 + i * 66, Display.getHeight() - 70);
         }
     }
 }

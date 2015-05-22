@@ -35,8 +35,8 @@ public class Name {
     }
 
     public void render(Graphics g) {
-        int x = this.x + Display.getWidth() / 2;
-        int y = this.y;
+        int x = Display.getWidth() - this.x;
+        int y = Display.getHeight() - this.y;
         int w = this.w;
         int mx = Mouse.getX();
         int my = Display.getHeight() - Mouse.getY();

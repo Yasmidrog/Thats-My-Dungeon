@@ -40,9 +40,11 @@ public class Game extends BasicGame {
 
     Graphics g = new Graphics();
     public static JCFG conf = new JCFG();
+    public static File de_DE, en_US, ru_RU, cur;
     public static int times = 0;
-    public static boolean paused;
     public static Menu menu = new Menu();
+    public static Inventory inventory = new Inventory();
+    public static Shop shop = new Shop();
     public static Scene currScene = menu;
     public static Dungeon dungeon;
     public static TrueTypeFont font, chatfont;
@@ -50,7 +52,7 @@ public class Game extends BasicGame {
     public static AppGameContainer app;
 
     public Game() {
-        super("");
+        super("Powered by SHeatrs");
     }
 
     public static void exit() {
@@ -61,6 +63,7 @@ public class Game extends BasicGame {
         conf.set("x", Display.getX());
         conf.set("y", Display.getY());
         conf.set("times", times);
+        conf.set("locale", cur.getName());
         try {
             Writer.writeToFile(conf, cfg);
         } catch (FileNotFoundException ex) {
@@ -69,9 +72,9 @@ public class Game extends BasicGame {
         }
         System.exit(0);
     }
-    
+
     @Override
-    public boolean closeRequested(){
+    public boolean closeRequested() {
         exit();
         return false;
     }
@@ -90,9 +93,13 @@ public class Game extends BasicGame {
     }
 
     public static void setSources() throws SlickException {
+        int w = 1024, h = 700, x = 0, y = 0;
         try {
-            int w = 1024, h = 700, x = 0, y = 0;
+
             File cfg = new File("conf.cfg");
+            de_DE = new File("locale/de_DE.locale");
+            en_US = new File("locale/en_US.locale");
+            ru_RU = new File("locale/ru_RU.locale");
             if (cfg.exists()) {
                 conf = Parser.parse(cfg);
                 w = conf.get("w").getValueAsInteger();
@@ -102,13 +109,18 @@ public class Game extends BasicGame {
                 Game.times = conf.get("times").getValueAsInteger();
             } else {
                 conf.set("music", true);
+                cur = en_US;
             }
-            app.setDisplayMode(w, h, false);
-            Display.setResizable(true);
-            Display.setLocation(x, y);
+            cur = new File(conf.get("locale").getValueAsString());
+            conf = Parser.parse(cur);
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        app.setDisplayMode(w, h, false);
+        Display.setResizable(true);
+        Display.setLocation(x, y);
     }
 
     @Override
@@ -123,17 +135,19 @@ public class Game extends BasicGame {
         awtFont = new Font("ITALIC", Font.TRUETYPE_FONT, 18);
         chatfont = new TrueTypeFont(awtFont, false);
         Textures.load();
-        currScene.init();
+        menu.init();
+        shop.init();
+        inventory.init();
         sceneTimer();
+
     }
 
     public static void sceneTimer() {
         new java.util.Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!paused) {
-                    currScene.tick();
-                }
+                currScene.maintick();
+                FPScounter.tick();
             }
         }, 0, 10);
     }
@@ -167,7 +181,9 @@ public class Game extends BasicGame {
 
             Field fieldSysPath = ClassLoader.class
                     .getDeclaredField("sys_paths");
-            fieldSysPath.setAccessible(true);
+            fieldSysPath.setAccessible(
+                    true);
+
             try {
                 fieldSysPath.set(null, null);
             } catch (IllegalArgumentException ex) {

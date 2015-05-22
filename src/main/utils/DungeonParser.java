@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.Scanner;
 
 /**
- * Created by yasmidrog... DICK WAS THERE
+ * Created by yasmidrog... DICK WAS THERE, GUESS WHO??? `'`'`'`'`'`WHIZZPERED
  */
 public class DungeonParser {
 
@@ -18,16 +18,17 @@ public class DungeonParser {
         aim = new File("res/text/dungeons/" + name);
         this.dung = dung;
         Scanner sc = new Scanner(aim);
-
         w = sc.nextInt();
         h = sc.nextInt();
+        dung.floor.w = w;
+        dung.floor.h = h;
+        dung.floor.floor = new int[w][h];
         sc.nextLine();
         world = new char[h][w];
         for (int i = 0; i < h; i++) {
             String n = sc.nextLine();
             world[i] = n.toCharArray();
         }
-        aply();
     }
 
     public static void aply() {
@@ -37,7 +38,10 @@ public class DungeonParser {
                     case (' '):
                         break;
                     case ('*'):
-                        dung.objs.add(new game.object.Object(x*64,y*64,dung,true));
+                        dung.floor.set(x, y, 2);
+                        break;
+                    case ('_'):
+                        dung.floor.set(x, y, 1);
                         break;
                 }
             }

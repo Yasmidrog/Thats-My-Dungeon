@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.sparkle.jcfg;
 
 import java.io.File;
@@ -26,19 +25,21 @@ import java.io.PrintWriter;
  * @author yew_mentzaki
  */
 public class Writer {
-    public static String writeToString(JCFG jcfg){
+
+    public static String writeToString(JCFG jcfg) {
         String s = new String();
         for (Parameter p : jcfg.list()) {
             s += p.getName() + ": " + p.getValueAsString() + "\n";
         }
         return s;
     }
-    public static void writeToFile(JCFG jcfg, File f) throws FileNotFoundException{
+
+    public static void writeToFile(JCFG jcfg, File f) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter(f);
         for (Parameter p : jcfg.list()) {
             pw.println(p.getName() + ": " + p.getValueAsString().replace("#", "\\#").replace("\n", "\\n"));
         }
         pw.close();
     }
-    
+
 }

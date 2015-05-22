@@ -3,8 +3,10 @@
  * This program is proprietary software: decompiling, reverse engineering and
  * sharing of that code are denied.
  */
-package game.creature;
+package game.creature.raider;
 
+import game.creature.Player;
+import game.creature.Raider;
 import game.main.Ability;
 import game.main.sprite.Sprite;
 import game.object.Bullet;
@@ -14,6 +16,7 @@ import game.object.Bullet;
  * @author Whizzpered
  */
 public class RaiderArc extends Raider {
+
     @Override
     public void initImages() {
         super.initImages();
@@ -26,7 +29,7 @@ public class RaiderArc extends Raider {
         super.init(args);
         ranged = true;
         range = 200;
-        misschance=35;
+        misschance = 35;
     }
 
     Raider thisClass = this;
@@ -44,9 +47,9 @@ public class RaiderArc extends Raider {
                 double dist = Math.sqrt(Math.pow(thisClass.x - dung.player.x, 2) + Math.pow(thisClass.y - dung.player.y, 2));
                 Player pl = dung.player;
                 if (dist < range + 96 && cd.is()) {
-                    dung.bullets.add(new Bullet((int) thisClass.x, (int) thisClass.y, pl, thisClass,false));
-                    dung.bullets.add(new Bullet((int) (thisClass.x - 10), (int) thisClass.y - 10, pl, thisClass,false));
-                    dung.bullets.add(new Bullet((int) (thisClass.x - 20), (int) thisClass.y - 20, pl, thisClass,false));
+                    dung.objects.add(new Bullet((int) thisClass.x, (int) thisClass.y, pl, thisClass, false));
+                    dung.objects.add(new Bullet((int) (thisClass.x - 10), (int) thisClass.y - 10, pl, thisClass, false));
+                    dung.objects.add(new Bullet((int) (thisClass.x - 20), (int) thisClass.y - 20, pl, thisClass, false));
                 }
             }
         };

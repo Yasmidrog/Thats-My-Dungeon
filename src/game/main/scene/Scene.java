@@ -20,9 +20,21 @@ public class Scene {
     ArrayList<Button> buttons = new ArrayList<>();
 
     public static Image[] sprite;
-    //public Player player;
+    public boolean paused;
 
     public void init() throws SlickException {
+
+    }
+
+    public void maintick() {
+        if (!paused) {
+            tick();
+        } else {
+            subtick();
+        }
+    }
+
+    public void subtick() {
 
     }
 

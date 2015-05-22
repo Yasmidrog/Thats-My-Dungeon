@@ -20,21 +20,22 @@ import org.newdawn.slick.Graphics;
 public abstract class Button {
 
     public static enum buttonState {
-        LEFT, RIGHT, CENTRE
+
+        LEFT, RIGHT, CENTER
     }
     public buttonState state;
     Game game = new Game();
-    int cx, y, w, wp = 1;
-    String text;
-    Color color;
-    boolean bp;
+    public int cx, y, w, wp = 1;
+    public String text;
+    public Color color;
+    public boolean bp;
 
     protected Button() {
     }
 
     public Button(int x, int y, int w, String text, Color c) {
-        state = buttonState.CENTRE;
-        cx = x + Display.getWidth() / 2;
+        state = buttonState.CENTER;
+        cx = x;
         this.y = y;
         this.w = w;
         this.text = text;
@@ -43,7 +44,7 @@ public abstract class Button {
 
     public Button(buttonState st, int y, int w, String text, Color c) {
         state = st;
-        cx = Display.getWidth() / 2 - w / 5;
+        cx = 0;
         this.y = y;
         this.w = w;
         this.text = text;
@@ -53,13 +54,13 @@ public abstract class Button {
     public void render(Graphics g) {
         int x;
         if (state == buttonState.LEFT) {
-            x = w / 2;
+            x = cx + w / 2;
         } else if (state == buttonState.RIGHT) {
-            x = Display.getWidth() - w / 2;
-        } else if (state == buttonState.CENTRE) {
-            x = cx;
+            x = cx + Display.getWidth() - w / 2;
+        } else if (state == buttonState.CENTER) {
+            x = cx + Display.getWidth() / 2;
         } else {
-            x = 0;
+            x = cx;
         }
         int y = this.y;
         int w = this.w + wp;
@@ -68,7 +69,7 @@ public abstract class Button {
         sprite[0].setImageColor(color.r, color.g, color.b);
         sprite[1].setImageColor(color.r, color.g, color.b);
         sprite[2].setImageColor(color.r, color.g, color.b);
-        if (state == buttonState.CENTRE) {
+        if (state == buttonState.CENTER) {
             sprite[0].draw(x - w / 2 - 16, y);
             sprite[1].draw(x - w / 2, y, w, 50);
             sprite[2].draw(x + w / 2, y);

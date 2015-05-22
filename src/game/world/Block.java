@@ -19,21 +19,26 @@ public class Block {
     public static int size = 48;
     public static Block[] block;
     public Image sprite;
+    public boolean solid;
+
+    public Block(String sprite, boolean solid) {
+        this.sprite = Textures.image(sprite).getScaledCopy(2f);
+        this.sprite.setFilter(GL11.GL_NEAREST);
+        this.solid = solid;
+        size = this.sprite.getHeight();
+    }
+
+    public Block() {
+    }
 
     public static void setBlocks() {
         block = new Block[128];
-        for (int i = 0; i < block.length; i++) {
-            block[i] = new Block();
-        }
     }
 
     public static void initSprites() {
-        block[1].sprite = Textures.image("floor/some.png");
-        block[2].sprite = Textures.image("floor/wall.png");
-
-        for (int i = 1; i < 2; i++) {
-            block[i].sprite.setFilter(GL11.GL_NEAREST);
-        }
+        block[0] = new Block();
+        block[1] = new Block("floor/some.png", false);
+        block[2] = new Block("floor/wall.png", true);
     }
 
     public void render(Graphics g, int x, int y) {

@@ -5,14 +5,17 @@
  */
 package game.creature;
 
+import game.creature.raider.RaiderWar;
 import game.main.Ability;
 import game.main.Active;
 import game.main.Modifier;
 import game.main.Passive;
 import game.main.Target;
 import game.main.gui.Bar;
+import game.main.gui.Stats;
 import game.main.shell.Game;
 import game.main.sprite.Sprite;
+import game.object.Item;
 import game.object.Magic;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,16 +37,19 @@ import org.newdawn.slick.SlickException;
  * @author Whizzpered
  */
 public class Player extends Creature {
+
     public Bar healthbar;
     public RaiderWar agr;
-    public static Image ded;
+    public Image ded;
+    public Stats stats, aim;
     public ArrayList<Ability> abils = new ArrayList<>();
     public Target cast;
+    public int gold, xp;
 
     @Override
     public void initImages() {
         sprite = new Sprite("warrior/");
-        ded = Textures.image("warrior/dead.png").getScaledCopy(2f);
+        ded = Textures.image("warrior/dead.png").getScaledCopy(2f);   //This GrandPa overriding dead sprite of Creature
         healthbar = new Bar(maxhp, "Bar.png", "health.png");
     }
 
@@ -55,23 +61,51 @@ public class Player extends Creature {
         range = getWidth() / 4;
         setTimer("kick", 200);
         initAbils();
+        initItems();
+        stats = new Stats(this);
     }
 
     public Player thisClass = this;
 
+    public void initItems() {  //Oh, shi, pls, kill this Indian
+        items = new Item[4];
+        items[0] = new Item("pants") {
+            @Override
+            public void aply(Creature cr) {
+                cr.maxhp += 20;
+            }
+        };
+        items[1] = new Item("arms") {
+            @Override
+            public void aply(Creature cr) {
+                cr.maxhp += 10;
+            }
+        };
+        items[2] = new Item("braces") {
+            @Override
+            public void aply(Creature cr) {
+                cr.dmg += 5;
+            }
+        };
+        for (int i = 0; i < 4; i++) {
+            Game.inventory.slots.get(i).item = items[i];
+        }
+    }
+
     @Override
-    public void initAbils() {
+    public void initAbils() {  //This is Indian Shit too.
         abils.add(new Active(1000, false, 0) {
             int d = -10;
+
             @Override
             public void action() {
-                System.out.println("Did Ability №1");
+
                 unfocus();
                 for (Raider r : dung.getRaiders()) {
                     if (!r.dead) {
                         double dist = Math.sqrt(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2));
                         if (dist < 900) {
-                            r.hp -= 4;
+                            r.hp -= 6;
                         }
                     }
                 }
@@ -98,31 +132,32 @@ public class Player extends Creature {
             @Override
             public void casting() {
                 double angle = Math.atan2((Display.getHeight() - Mouse.getY()) - Display.getHeight() / 2, Mouse.getX() - Display.getWidth() / 2);
-                dung.bullets.add(new Magic((int) thisClass.x, (int) thisClass.y, thisClass, angle));
+                dung.objects.add(new Magic((int) thisClass.x, (int) thisClass.y, thisClass, angle));
                 super.casting();
             }
         });
         abils.get(1).init(2, false, 0);
-        abils.get(1).initImages("regen.png", "energy.png");
+        abils.get(1).initImages("throw.png", "energy.png");
 
         abils.add(new Passive() {
             int n = 0;
+
             @Override
             public void action() {
                 mods.add(new Modifier() {
                     @Override
                     public void aply(Creature unit) {
                         if (unit.hp < unit.maxhp) {
-                            unit.hp += 3;
+                            unit.hp += 1;
                         }
                         timer = 1;
                     }
                 });
             }
-            
+
             @Override
             public void tick() {
-                if(n>0){
+                if (n > 0) {
                     n--;
                 } else {
                     action();
@@ -131,16 +166,16 @@ public class Player extends Creature {
             }
         });
         abils.get(2).init(3, false, 0);
-        abils.get(2).initImages("charge.png", "energy.png");
+        abils.get(2).initImages("regen.png", "energy.png");
     }
 
     @Override
-    public void reset() {
+    public void reset() { //Reseting of Moving to delete move flag
         super.reset();
         dung.flag.done = true;
     }
 
-    Timer deathTimer = new Timer(1000, new ActionListener() {
+    Timer deathTimer = new Timer(1000, new ActionListener() {  //Timer of death to agony and letting stupid user know what he died
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -169,6 +204,7 @@ public class Player extends Creature {
     public void tick() {
         if (!dead) {
             super.tick();
+            healthbar.maxvalue = maxhp;                 //cause we have a tons of modificators
             if (focus != null) {
                 battle();
             }
@@ -184,16 +220,18 @@ public class Player extends Creature {
         }
     }
 
-    public void focussmth(Raider r) {
+    @Override
+    public void focussmth(Creature r) {     //Look, nigga, he's gonna pick up yo mom!
         if (focus != null) {
             focus.focused = false;
             focus = null;
         }
         focus = r;
         focus.focused = true;
+        aim = new Stats(focus);
     }
 
-    public void unfocus() {
+    public void unfocus() {                 //Nah, nevermind, i duno what that was your faza
         if (focus != null) {
             if (agr != null) {
                 agr.agro = false;
@@ -201,6 +239,7 @@ public class Player extends Creature {
             }
             focus.focused = false;
             focus = null;
+            aim = null;
         }
     }
 
@@ -208,6 +247,11 @@ public class Player extends Creature {
     public void render(Graphics g) {
         try {
             sprite.render(side, (int) x - getWidth() / 2, (int) y - getHeight() / 2);
+            for (Item item : items) {
+                if (item != null) {
+                    item.render(g, this);
+                }
+            }
         } catch (SlickException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -218,9 +262,16 @@ public class Player extends Creature {
         ded.draw((int) x - getWidth() / 2, (int) y - 32);
     }
 
-    public void abilsRender(Graphics g) {
+    public void abilsRender(Graphics g) {               //Rendering Ability icons
         for (Ability ab : abils) {
             ab.render(g);
+        }
+    }
+
+    public void renderStats(Graphics g) {
+        stats.showForPlayer(g, Display.getWidth() - 150, 40);
+        if (focus != null & aim != null) {
+            aim.show(g, 5, 100);
         }
     }
 
