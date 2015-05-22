@@ -5,6 +5,7 @@
  */
 package game.creature;
 
+import game.creature.raider.RaiderWar;
 import game.main.Ability;
 import game.main.Active;
 import game.main.Modifier;
@@ -219,7 +220,8 @@ public class Player extends Creature {
         }
     }
 
-    public void focussmth(Raider r) {     //Look, nigga, he's gonna pick up yo mom!
+    @Override
+    public void focussmth(Creature r) {     //Look, nigga, he's gonna pick up yo mom!
         if (focus != null) {
             focus.focused = false;
             focus = null;

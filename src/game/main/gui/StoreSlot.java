@@ -7,6 +7,7 @@ package game.main.gui;
 
 import game.main.shell.Game;
 import static game.main.shell.Game.font;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -23,7 +24,7 @@ public class StoreSlot extends Slot {
     public StoreSlot(buttonState st, int y) {
         super(st, y);
     }
-    
+
     @Override
     public void click() {
         if (Slot.inHand == null && Game.dungeon.player.gold >= item.price) {
@@ -33,12 +34,16 @@ public class StoreSlot extends Slot {
     }
 
     @Override
+    public void rclick() {
+
+    }
+
+    @Override
     public void render(Graphics g) {
         super.render(g);
         if (item != null) {
             g.setColor(Color.white);
-            font.drawString(cx, y + 13, item.price + "", Color.white);
-            item.renderIcon(g, cx, y);
+            font.drawString(cx + Display.getWidth() / 2 - 4, y + 32, item.price + "", Color.white);
         }
     }
 }

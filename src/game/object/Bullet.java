@@ -6,6 +6,7 @@
 package game.object;
 
 import game.creature.Creature;
+import game.creature.Mob;
 import game.creature.Raider;
 import game.main.gui.FloatText;
 import game.main.scene.Dungeon;
@@ -66,7 +67,15 @@ public class Bullet extends game.creature.Entity {
                     dung.player.hp -= owner.dmg;
                     hit(owner.dung);
                 }
-
+                for (Mob mob : dung.getMobs()) {
+                    if (mob != owner && !mob.dead) {
+                        if (Math.abs(x - mob.x) < mob.getWidth() / 2 && Math.abs(y - mob.y) < mob.getHeight() / 2) {
+                            mob.hp -= owner.dmg;
+                            hit(owner.dung);
+                        }
+                    }
+                }
+                
             } else {
                 for (Raider raid : dung.getRaiders()) {
                     if (raid != owner && !raid.dead) {

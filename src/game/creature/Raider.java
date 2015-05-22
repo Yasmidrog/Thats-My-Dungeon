@@ -88,7 +88,8 @@ public class Raider extends Creature {
     @Override
     public void tick() {
         super.tick();
-        if (!focus.dead) {
+
+        if (focus !=null &&!focus.dead) {
             for (Ability ab : abils) {
                 if (ab != null) {
                     ab.tick();
@@ -132,6 +133,17 @@ public class Raider extends Creature {
         if (dist > dmgDistance || dist < Math.max(dmgDistance / 2, focus.dmgDistance / 3 * 2)) {
             ex = focus.x - Math.cos(angle) * dmgDistance;
             ey = focus.y - Math.sin(angle) * dmgDistance;
+        }
+
+        if (focus == null) {
+            for (Mob m : dung.getMobs()) {
+                double d = Math.sqrt(Math.pow(m.x - x, 2) + Math.pow(m.y - y, 2));
+
+                if (d < 500) {
+                    focus = m;
+                    break;
+                }
+            }
         }
     }
 

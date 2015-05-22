@@ -78,6 +78,7 @@ public class Inventory extends Scene {
             if (escape) {
                 Game.currScene = Game.dungeon;
                 escape = false;
+                Game.dungeon.waveTimer.start();
             }
         }else{
             escape = true;

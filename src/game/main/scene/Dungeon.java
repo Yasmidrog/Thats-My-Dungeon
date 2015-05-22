@@ -5,6 +5,9 @@
  */
 package game.main.scene;
 
+import game.creature.raider.RaiderArc;
+import game.creature.raider.RaiderPriest;
+import game.creature.raider.RaiderWar;
 import game.object.Flag;
 import game.creature.*;
 import game.main.gui.Advert;
@@ -47,6 +50,7 @@ public class Dungeon extends Scene {
     public Flag flag = new Flag();              //Moving flag, for Player
     public Chat chat = new Chat();
     public Raider[] raiders = new Raider[25];
+    public Mob[] mobs = new Mob[50];
     public int camx, camy, flx, fly, level = 1, end = 5;      //flx, fly - cam for floor, dont touch kk!!!
 
     public static ArrayList<Image> sprites = new ArrayList<>();
@@ -67,6 +71,19 @@ public class Dungeon extends Scene {
         return u;
     }
 
+    public Mob[] getMobs() {
+        int i;
+        for (i = 0; i < mobs.length; i++) {
+            if (mobs[i] == null) {
+                break;
+            }
+        }
+        Mob[] u = new Mob[i];
+        System.arraycopy(mobs, 0, u, 0, i);
+
+        return u;
+    }
+
     public FloatText[] getText() {
         FloatText[] u = new FloatText[text.size()];
 
@@ -80,11 +97,15 @@ public class Dungeon extends Scene {
     }
 
     public Creature[] creaturesYSort() {
-        Creature[] u = new Creature[getRaiders().length + 1];
+        Creature[] u = new Creature[getRaiders().length + 1 + getMobs().length];
         u[0] = player;
-        for (int i = 1; i < u.length; i++) {
+        for (int i = 1; i < getRaiders().length + 1; i++) {
             u[i] = getRaiders()[i - 1];
         }
+        for (int i = getRaiders().length + 1; i < u.length; i++) {
+            u[i] = getMobs()[i - 1 - getRaiders().length];
+        }
+
         for (int i = 0; i < u.length - 1; i++) {
             for (int j = i + 1; j < u.length; j++) {
                 if (u[i].y > u[j].y) {
@@ -170,9 +191,6 @@ public class Dungeon extends Scene {
 
     public void initCreatures() {
         player();
-        //spawn(new RaiderArc(), 120.0, 240.0, 9, 4, 1);
-        //spawn(new RaiderPriest(), 240.0, 240.0, 9, 3, 1);
-        //spawn(new RaiderWar(), 240.0, 360.0, 20, 2, 1);
     }
 
     public void player() {
@@ -182,13 +200,25 @@ public class Dungeon extends Scene {
         player.initImages();
     }
 
+    public void summon(Mob mob, Object... args) {
+        mob.dung = this;
+        mob.initImages();
+        mob.init(args);
+        for (int i = 0; i < mobs.length; i++) {
+            if (mobs[i] == null) {
+                mobs[i] = mob;
+                mob.index = i;
+                break;
+            }
+        }
+    }
+
     public void spawn(Raider cr, Object... args) {          //Use this for spawn
         cr.dung = this;
         cr.initImages();
         cr.init(args);
         add(cr);
         report(cr.nick + " joined the game!", 500);
-
     }
 
     public void add(Raider cr) {                            //Don't touch
@@ -265,6 +295,9 @@ public class Dungeon extends Scene {
                     Game.dungeon = null;
                     Game.currScene = Game.menu;
                 } else {
+                    for(Mob m : getMobs()){
+                        m.delete();
+                    }
                     for (int i = 0; i < 4; i++) {
                         switch (r.nextInt(3)) {
                             case 0:
@@ -279,6 +312,10 @@ public class Dungeon extends Scene {
                         }
 
                     }
+                    summon(new Mob(), 1200.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 1000.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 800.0, 1200.0, 30, 2, 3);
+                    summon(new Mob(), 600.0, 1200.0, 30, 2, 3);
                 }
                 waveTimer.stop();
             }
@@ -306,6 +343,10 @@ public class Dungeon extends Scene {
                 cr.tick();
             }
             cr.emulateChat();
+        }
+
+        for (Mob cr : getMobs()) {
+            cr.tick();
         }
 
         for (Advert ad : getAds()) {
@@ -369,13 +410,22 @@ public class Dungeon extends Scene {
 
         if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
             if (escape) {
-                Game.currScene = Game.shop;
+                Game.currScene = Game.inventory;
                 escape = false;
                 waveTimer.stop();
-
             }
         } else {
             escape = true;
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            if (Game.shop.escape) {
+                Game.currScene = Game.shop;
+                Game.shop.escape = false;
+                waveTimer.stop();
+            }
+        } else {
+            Game.shop.escape = true;
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {        //actualy doing nothing, but must delete all items from boss

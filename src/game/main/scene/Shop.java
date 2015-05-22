@@ -26,27 +26,32 @@ import org.newdawn.slick.Graphics;
 public class Shop extends Scene {
 
     public ArrayList<StoreSlot> slots = new ArrayList<>();
-    public boolean escape;
+    public boolean escape = false;
 
     @Override
     public void init() {
         int w = Display.getWidth();
 
         slots.add(new StoreSlot(64, 32));
+        slots.get(0).state = Button.buttonState.CENTER;
         slots.get(0).item = new Item("pants") {
             @Override
             public void aply(Creature cr) {
                 cr.maxhp += 20;
             }
         };
+
         slots.add(new StoreSlot(128, 32));
+        slots.get(1).state = Button.buttonState.CENTER;
         slots.get(1).item = new Item("arms") {
             @Override
             public void aply(Creature cr) {
                 cr.maxhp += 10;
             }
         };
+
         slots.add(new StoreSlot(172, 32));
+        slots.get(2).state = Button.buttonState.CENTER;
         slots.get(2).item = new Item("braces") {
             @Override
             public void aply(Creature cr) {
@@ -54,19 +59,15 @@ public class Shop extends Scene {
             }
         };
 
-        for (int i = 0; i < slots.size(); i++) {
-            slots.get(i).state = Button.buttonState.CENTER;
-        }
     }
 
     @Override
-    public void render(Graphics g
-    ) {
+    public void render(Graphics g) {
         Game.dungeon.render(g);
         GL11.glLoadIdentity();
         g.setColor(new Color(0, 0, 0, 0.5f));
         g.fillRect(0, 0, Display.getWidth(), Display.getHeight());
-        for (Slot s : slots) {
+        for (StoreSlot s : slots) {
             s.render(g);
         }
         if (Slot.inHand != null) {
@@ -76,7 +77,7 @@ public class Shop extends Scene {
             Game.dungeon.player.items[i] = Game.inventory.slots.get(i).item;
             Game.inventory.slots.get(i).render(g);
         }
-        if (Keyboard.isKeyDown(Keyboard.getKeyIndex(Game.inventory.key))) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             if (escape) {
                 Game.dungeon.waveTimer.start();
                 Game.currScene = Game.dungeon;
@@ -85,5 +86,6 @@ public class Shop extends Scene {
         } else {
             escape = true;
         }
+
     }
 }

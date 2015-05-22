@@ -20,13 +20,17 @@ public class FPScounter {
     static public int fps, frames;
     static int old = Calendar.getInstance().get(Calendar.SECOND);
 
-    public static void render(Graphics g) {
-        frames++;
+    public static void tick() {
+       frames++;
         if (old != Calendar.getInstance().get(Calendar.SECOND)) {
             fps = frames;
             frames = 0;
             old = Calendar.getInstance().get(Calendar.SECOND);
-        }
+        } 
+    }
+    
+    public static void render(Graphics g) {
+        
         g.setColor(fps < 100 ? Color.yellow : Color.green);
         font.drawString(Display.getWidth() / 2 - 80, 10, "FPS:" + fps, fps < 100 ? Color.yellow : Color.green);
     }

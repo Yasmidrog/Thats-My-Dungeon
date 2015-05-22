@@ -3,8 +3,10 @@
  * This program is proprietary software: decompiling, reverse engineering and
  * sharing of that code are denied.
  */
-package game.creature;
+package game.creature.raider;
 
+import game.creature.Player;
+import game.creature.Raider;
 import game.main.Ability;
 import static game.main.scene.Dungeon.sprites;
 import game.main.sprite.Sprite;
@@ -48,11 +50,16 @@ public class RaiderWar extends Raider {
         abils[0] = new Ability(1000, true, 200) {
             @Override
             public void action() {
-                dung.player.agr = thisClass;
-                agro = true;
-                dung.flag.done = true;
-                dung.player.focussmth(thisClass);
-                start();
+                if (focus.getClass() == Player.class) {
+                    dung.player.agr = thisClass;
+                    agro = true;
+                    dung.flag.done = true;
+                    dung.player.focussmth(thisClass);
+                    start();
+                } else {
+                    agro = true;
+                    focus.focussmth(thisClass);
+                }
             }
 
             @Override

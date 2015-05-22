@@ -6,6 +6,7 @@
 package game.creature;
 
 import game.main.Modifier;
+import game.main.gui.Stats;
 import game.main.scene.Dungeon;
 import game.main.sprite.Side;
 import game.main.sprite.Sprite;
@@ -158,6 +159,9 @@ public class Creature extends Entity {
         for (Modifier mod : getMods()) {
             mod.tick(this);
         }
+        if(focus !=null && focus.dead){
+            focus = null;
+        }
     }
 
     public void die() {
@@ -245,6 +249,13 @@ public class Creature extends Entity {
         }
     }
 
+    public void focussmth(Creature r) {     //Look, nigga, he's gonna pick up yo mom!
+        if (focus != null) {
+            focus = null;
+        }
+        focus = r;
+    }
+    
     public void checkTimers() {
         for (Timer tim : timers) {
             if (!tim.is()) {

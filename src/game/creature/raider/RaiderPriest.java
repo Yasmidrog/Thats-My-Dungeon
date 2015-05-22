@@ -3,8 +3,9 @@
  * This program is proprietary software: decompiling, reverse engineering and
  * sharing of that code are denied.
  */
-package game.creature;
+package game.creature.raider;
 
+import game.creature.Raider;
 import game.main.Ability;
 import game.main.sprite.Sprite;
 
